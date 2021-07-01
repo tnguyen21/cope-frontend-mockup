@@ -1,36 +1,34 @@
-import React from 'react';
+import React from "react";
 import Header from "./Header";
 import { Container } from "@material-ui/core";
-import { Route, Switch } from 'react-router-dom';
-
+import { CssBaseline } from "@material-ui/core";
+import { Route, Switch } from "react-router-dom";
+import { AmplifyAuthenticator } from "@aws-amplify/ui-react";
 
 function App() {
   return (
-    <Container>
+    <AmplifyAuthenticator>
+      <CssBaseline />
       <Header />
-      <Switch>
-        <Route exact path="/">
-          <h1>Home</h1>
-        </Route>
-        <Route path="/about">
-          <h1>About</h1>
-        </Route>
-        <Route path="/nested/route">
-          <h1>Nested Route</h1>
-        </Route>
-      </Switch>
-      <p>
-        Edit <code>src/App.tsx</code> and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-    </Container>
+      <Container>
+        <Switch>
+          <Route exact path="/collections">
+            <h1>Collections</h1>
+          </Route>
+        </Switch>
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </Container>
+    </AmplifyAuthenticator>
   );
 }
 
