@@ -6,7 +6,7 @@ import { Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
 interface RouteParams {
-  collection: string;
+  collection?: string;
 }
 
 function Collections() {

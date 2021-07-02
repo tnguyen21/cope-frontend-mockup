@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Card, Button } from "@material-ui/core";
+import { Card } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const CollectionHeaderCard = styled(Card)`
   margin: 8px 8px 32px;
@@ -16,19 +17,21 @@ const SidebarCardHeading = styled.h1`
   font-size: 1.125rem;
 `;
 
-const StyledButton = styled(Button)`
+const StyledLink = styled(Link)`
   display: inline-block;
   padding: 2px 12px;
   float: right;
 `;
 
 // collection prop passed in from Collection.tsx
-function CollectionHeader({ collection }: { collection: string }) {
+function CollectionHeader({ collection }: { collection?: string }) {
   return (
     <CollectionHeaderCard>
       <CollectionHeaderCardContent>
         <SidebarCardHeading>Collection Name</SidebarCardHeading>
-        <StyledButton color="primary">Add New</StyledButton>
+        {collection && (
+          <StyledLink to={`/collections/${collection}/new`}>Add New</StyledLink>
+        )}
       </CollectionHeaderCardContent>
     </CollectionHeaderCard>
   );
