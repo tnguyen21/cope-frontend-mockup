@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./Header";
+import Collections from "../Collections";
 import { Container } from "@material-ui/core";
 import { CssBaseline } from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
@@ -12,22 +13,12 @@ function App() {
       <Header />
       <Container>
         <Switch>
-          <Route exact path="/collections">
-            <h1>Collections</h1>
+          <Route path="/collections/:collection">
+            <Collections />
           </Route>
         </Switch>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </Container>
+      <CssBaseline />
     </AmplifyAuthenticator>
   );
 }
