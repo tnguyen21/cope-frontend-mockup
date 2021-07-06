@@ -28,7 +28,9 @@ function CollectionHeader({ collection }: { collection?: string }) {
   return (
     <CollectionHeaderCard>
       <CollectionHeaderCardContent>
-        <SidebarCardHeading>Collection Name</SidebarCardHeading>
+        <SidebarCardHeading>
+          {collection ? collection.toUpperCase() : "Collection Name"}
+        </SidebarCardHeading>
         {collection && (
           <StyledLink to={`/collections/${collection}/new`}>Add New</StyledLink>
         )}
