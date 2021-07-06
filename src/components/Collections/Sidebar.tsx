@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { Card } from "@material-ui/core";
+import { NodeType } from "cope-client-utils/lib/graphql/API";
 
 const SidebarCard = styled(Card)`
   max-width: 275px;
@@ -35,25 +36,24 @@ const SidebarNavLink = styled(NavLink)`
   text-decoration: none;
 `;
 
-// TODO
-// introspect api and get node types from api?
-// build slugs based on names of node enums?
-const dummyLinks = [
-  { collectionName: "Data Gems", collectionSlug: "datagems" },
-  { collectionName: "Webinars", collectionSlug: "webinars" },
-  { collectionName: "Courses", collectionSlug: "courses" },
-];
-
 function Sidebar() {
+  let linksAndSlugs = [];
+  for (let type in NodeType) {
+    linksAndSlugs.push({
+      typeName: type,
+      typeSlug: type.toLowerCase(),
+    });
+  }
+
   return (
     <SidebarCard variant="outlined">
       <SidebarCardContent>
         <SidebarCardHeading>Collections</SidebarCardHeading>
         <SidebarNavList>
-          {dummyLinks.map((dummyLink) => (
-            <li key={dummyLink.collectionSlug}>
-              <SidebarNavLink to={`/collections/${dummyLink.collectionSlug}`}>
-                {dummyLink.collectionName}
+          {linksAndSlugs.map((type) => (
+            <li key={type.typeSlug}>
+              <SidebarNavLink to={`/collections/${type.typeSlug}`}>
+                {type.typeName}
               </SidebarNavLink>
             </li>
           ))}
