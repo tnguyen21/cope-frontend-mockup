@@ -31,7 +31,7 @@ function CollectionList({ collection }: { collection?: string }) {
       node
         .list(query)
         .then((result: any) => {
-          setNodesList(result.nodesByStatusType.items);
+          setNodesList(result);
         })
         .catch((error: any) => console.error(error));
     };
