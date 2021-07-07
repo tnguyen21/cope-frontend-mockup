@@ -90,8 +90,6 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
       updatedAt: null,
     };
 
-    console.log(data);
-
     node
       .create(data)
       .then((result: any) => {
