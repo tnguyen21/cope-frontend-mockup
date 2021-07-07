@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Auth from "@aws-amplify/auth";
 import styled from "styled-components";
 import SplitPane from "react-split-pane";
 import { EditorState } from "draft-js";
@@ -48,8 +49,22 @@ const useStyles = makeStyles({
 function Editor({ newNode = false }: { newNode?: boolean }) {
   const classes = useStyles();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [nodeStatus, setStatus] = useState(NodeStatus);
-  const [nodeType, setNodeType] = useState(NodeType);
+  const [nodeStatus, setStatus] = useState(NodeStatus.DRAFT);
+  const [nodeType, setNodeType] = useState(NodeType.A_PAGE);
+  const [userData, setUserData] = useState<any>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        Auth.currentSession().then((res) =>
+          setUserData(res.getIdToken().payload)
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const onEditorStateChange = (editorState: any) => {
     setEditorState(editorState);
@@ -63,24 +78,29 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
     setNodeType(event.target.value);
   };
 
-  // const createNode = () => {
-  //   let data = {
-  //     id: null,
-  //     status: NodeStatus.DRAFT,
-  //     type: NodeType.A_GEM,
-  //     createdAt: null,
-  //     owner: null,
-  //     updatedAt: null,
-  //   };
-  //   node
-  //     .create(data)
-  //     .then((result) => {
-  //       console.log(result);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
+  const createNode = () => {
+    let data = {
+      id: null,
+      status: nodeStatus,
+      type: nodeType,
+      createdAt: null,
+      // getting user is async operation
+      // TODO: disable save draft button until all required info is loaded?
+      owner: userData ? userData.email : "",
+      updatedAt: null,
+    };
+
+    console.log(data);
+
+    node
+      .create(data)
+      .then((result: any) => {
+        console.log(result);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  };
 
   return (
     <SplitPane split="vertical" minSize="25%" defaultSize="50%">
@@ -134,10 +154,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
             <StyledButton variant="contained">Add Asset</StyledButton>
           </Wrapper>
 
-          <Button
-            variant="contained"
-            onClick={() => console.log("Save Draft was clicked")}
-          >
+          <Button variant="contained" onClick={createNode}>
             Save Draft
           </Button>
         </Wrapper>
