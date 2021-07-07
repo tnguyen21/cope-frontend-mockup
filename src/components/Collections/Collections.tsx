@@ -23,7 +23,7 @@ function Collections() {
         </Grid>
         <Grid item xs={8}>
           <CollectionHeader collection={collection} />
-          <CollectionList />
+          <CollectionList collection={collection} />
         </Grid>
       </Grid>
     </Container>

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Card } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { node } from "cope-client-utils";
 
 const CollectionListCard = styled(Card)`
   margin: 8px 8px;
@@ -17,30 +18,33 @@ const CollectionListCardHeading = styled(Link)`
   font-weight: 400;
 `;
 
-// query for nodes in node type
-const dummyData = [
-  {
-    title: "Data Gem Title 1",
-    slug: "exampleslug1",
-  },
-  {
-    title: "Data Gem Title 2",
-    slug: "exampleslug2",
-  },
-  {
-    title: "Data Gem Title 3",
-    slug: "exampleslug3",
-  },
-];
+function CollectionList({ collection }: { collection?: string }) {
+  const [nodesList, setNodesList] = useState<any[]>([]);
 
-function CollectionList() {
+  let query = {
+    status: "DRAFT",
+    type: collection?.toUpperCase(),
+  };
+
+  useEffect(() => {
+    const fetchNodes = async () => {
+      node
+        .list(query)
+        .then((result: any) => {
+          setNodesList(result.nodesByStatusType.items);
+        })
+        .catch((error: any) => console.error(error));
+    };
+    fetchNodes();
+  });
+
   return (
     <div>
-      {dummyData.map((data) => (
+      {nodesList.map((data) => (
         <CollectionListCard>
           <CollectionListCardContent>
-            <CollectionListCardHeading to={`/collections/edit/${data.slug}`}>
-              {data.title}
+            <CollectionListCardHeading to={`/collections/edit/${data.id}`}>
+              {data.id}
             </CollectionListCardHeading>
           </CollectionListCardContent>
         </CollectionListCard>
