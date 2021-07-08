@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
+import AddAssetDialog from "./AddAssetDialog";
 
 const Wrapper = styled.div`
   margin: 24px 8px;
@@ -52,6 +53,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
   const [nodeStatus, setStatus] = useState(NodeStatus.DRAFT);
   const [nodeType, setNodeType] = useState(NodeType.A_PAGE);
   const [userData, setUserData] = useState<any>();
+  const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -149,12 +151,23 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
             <StyledButton variant="contained">Add Parent</StyledButton>
             <StyledButton variant="contained">Add Sibling</StyledButton>
             <StyledButton variant="contained">Add Child</StyledButton>
-            <StyledButton variant="contained">Add Asset</StyledButton>
+            <StyledButton
+              variant="contained"
+              onClick={() => setAddAssetDialogOpen(true)}
+            >
+              Add Asset
+            </StyledButton>
           </Wrapper>
 
           <Button variant="contained" onClick={createNode}>
             Save Draft
           </Button>
+
+          <AddAssetDialog
+            open={addAssetDialogOpen}
+            setOpen={setAddAssetDialogOpen}
+            nodeId={node.id}
+          />
         </Wrapper>
       </Wrapper>
       <Wrapper>
