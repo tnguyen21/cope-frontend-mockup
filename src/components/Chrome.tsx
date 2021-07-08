@@ -3,8 +3,7 @@ import { getIn } from "@thi.ng/paths"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
 import { navigate } from "../commands"
-import { Link } from "../components"
-
+import { Link, Header } from "../components"
 //import { log } from "../utils"
 
 //const { SubMenu } = Menu
@@ -32,6 +31,7 @@ export const Chrome = ({ children }) => {
                 }}
             >
                 <div style={{ minHeight: "100vh" }}>
+                    <Header/>
                     <ul>
                         <Link to="page1">page1</Link>
                         <Link to="page2">page2</Link>
@@ -44,12 +44,12 @@ export const Chrome = ({ children }) => {
                             overflow: "hidden"
                         }}
                     >
-                        {children}
+                        { children }
                     </div>
                 </div>
             </div>
             <div style={{ textAlign: "center" }}>
-                ©2020 US CENSUS BUREAU: Digital Marketing Team (Chief: Anthony Calabrese)
+                ©2021 US Census Bureau Civic Digital Fellows Team: Tommy Nguyen | Logan Powell
             </div>
         </div>
     )

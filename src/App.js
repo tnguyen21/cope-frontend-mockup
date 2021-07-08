@@ -37,7 +37,7 @@ import { routerCfg } from "./router"
 
 //export const root = document.getElementById("root")
 const router = {
-    [K.RTR.RUTR]: routerCfg,
+    [K.CFG_RUTR]: routerCfg,
     [K.RTR_PRFX]: "staging/",
     [K.RTR_POST]: INJECT_HEAD
 }

@@ -28,26 +28,22 @@ export const View = () => {
     const store = $store$.deref()
     //log({ store })
 
-    const RenderPage =
-        {
-            gems: Page1,
-            page2: Page2,
-            page3: Page3
-        }[Page] ||
-        (() => (
-            <div className="spinner_container">
-                <div className="spinner">
-                    <h1> fetching data... </h1>
-                </div>
-            </div>
-        ))
-
-    return loading ? (
+    const loader = (
         <div className="spinner_container">
             <div className="spinner">
                 <h1> fetching data... </h1>
             </div>
         </div>
+    )
+    const RenderPage =
+        {
+            gems: Page1,
+            page2: Page2,
+            page3: Page3
+        }[Page] || (() => loader)
+
+    return loading ? (
+        loader
     ) : (
         // @ts-ignore
         <RenderPage data={getIn(store, store[K.$$_PATH])} />
