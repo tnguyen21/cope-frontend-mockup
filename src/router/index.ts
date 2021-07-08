@@ -63,7 +63,8 @@ export const routerCfg = async url => {
                 {
                     [K.URL_DATA]: async () => {
                         const list = await node.list({
-                            type: API.NodeType.A_GEM
+                            type: API.NodeType.A_GEM,
+                            status: API.NodeStatus.DRAFT
                         })
                         return {
                             [K.DOM_HEAD]: {

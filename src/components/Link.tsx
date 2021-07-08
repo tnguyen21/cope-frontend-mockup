@@ -6,7 +6,7 @@ import { log } from "../utils/data"
 export const Link = ({ to, children }) => {
     const { run$ } = useContext(CTX)
     const path = `/${to}`
-    log({ path })
+    //log({ path })
     return (
         <a
             href={path}
