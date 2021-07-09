@@ -109,12 +109,14 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
             <StyledButton variant="contained">Add Parent</StyledButton>
             <StyledButton variant="contained">Add Sibling</StyledButton>
             <StyledButton variant="contained">Add Child</StyledButton>
-            <StyledButton
-              variant="contained"
-              onClick={() => setAddAssetDialogOpen(true)}
-            >
-              Add Asset
-            </StyledButton>
+            {!newNode && (
+              <StyledButton
+                variant="contained"
+                onClick={() => setAddAssetDialogOpen(true)}
+              >
+                Add Asset
+              </StyledButton>
+            )}
           </Wrapper>
 
           <Button variant="contained" onClick={createNode}>
