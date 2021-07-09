@@ -1,6 +1,6 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: { main: "hsl(213 65% 19%)" },
     secondary: { main: "hsl(199deg 19% 36%)" },
