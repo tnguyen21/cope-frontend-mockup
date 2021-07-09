@@ -35,6 +35,7 @@ const sort_by_campaign_id_fn = (a, b) => (a.campaign_id.toUpperCase() < b.campai
  * TODO: Graphql Example
  */
 
+// TODO: return types expected for routerCfg
 export const routerCfg = async url => {
     const match = URL2obj(url)
     const { URL_DOMN, URL_FULL, URL_HASH, URL_PATH, URL_QERY, URL_SUBD } = match
@@ -67,15 +68,24 @@ export const routerCfg = async url => {
                             status: API.NodeStatus.DRAFT
                         })
                         return {
+                            /*
+    [HD_TITL]: title = defalt_cfg[HD_TITL],
+    [OG_DESC]: description = defalt_cfg[HD_META]["og:description"],
+    [OG_IMGU]: img_url = defalt_cfg[HD_META]["og:image"],
+    [OG_IMGH]: img_height = defalt_cfg[HD_META]["og:image:height"],
+    [OG_IMGW]: img_width = defalt_cfg[HD_META]["og:image:width"],
+    [OG_TYPE]: type = defalt_cfg[HD_META]["og:type"],
+    [HD_ICON]: favicon = defalt_cfg[HD_ICON]
+                             */
                             [K.DOM_HEAD]: {
-                                title: "Subscription Metrics",
-                                description: "Subscription Metrics"
+                                [K.HD_TITL]: "Subscription Metrics",
+                                [K.OG_DESC]: "Subscription Metrics"
                                 //img_url,
                             },
                             [K.DOM_BODY]: { data: list }
                         }
                     },
-                    [K.URL_PAGE]: "gems"
+                    [K.URL_PAGE]: "home"
                 }
             ]
 

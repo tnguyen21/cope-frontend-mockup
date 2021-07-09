@@ -37,15 +37,17 @@ export const View = () => {
     )
     const RenderPage =
         {
-            gems: Page1,
+            home: Page1,
             page2: Page2,
             page3: Page3
         }[Page] || (() => loader)
+
+    const is_home = Page === "home"
 
     return loading ? (
         loader
     ) : (
         // @ts-ignore
-        <RenderPage data={getIn(store, store[K.$$_PATH])} />
+        <RenderPage data={is_home ? getIn(store, [ "data" ]) : getIn(store, store[K.$$_PATH])} />
     )
 }
