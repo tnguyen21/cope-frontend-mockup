@@ -21,7 +21,9 @@ function SelectInput({
       <InputLabel>{inputLabel}</InputLabel>
       <Select value={selectState} onChange={onSelectChange}>
         {Object.keys(itemsAndValues).map((key) => (
-          <MenuItem value={itemsAndValues[key]}>{key}</MenuItem>
+          <MenuItem key={key} value={itemsAndValues[key]}>
+            {key}
+          </MenuItem>
         ))}
       </Select>
     </>
