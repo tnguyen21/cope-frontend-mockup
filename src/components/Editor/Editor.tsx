@@ -3,18 +3,10 @@ import Auth from "@aws-amplify/auth";
 import styled from "styled-components";
 import SplitPane from "react-split-pane";
 import { EditorState } from "draft-js";
-import { Editor as MarkdownEditor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import {
-  makeStyles,
-  Card,
-  InputLabel,
-  Button,
-  Select,
-  MenuItem,
-} from "@material-ui/core";
+import { Card, InputLabel, Button, Select, MenuItem } from "@material-ui/core";
 import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
+import { MarkdownInput } from "./InputWidgets";
 import AddAssetDialog from "./AddAssetDialog";
 
 const Wrapper = styled.div`
@@ -34,21 +26,9 @@ const PreviewHeading = styled.h2`
   font-size: 1.125rem;
 `;
 
-const useStyles = makeStyles({
-  textEditor: {
-    backgroundColor: "white",
-    color: "black",
-    border: "thin solid black",
-    borderRadius: "5px",
-    minHeight: "400px",
-    maxHeight: "400px",
-  },
-});
-
 // TODO: useEffect should be called to populate editor with
 // info from an existing node given that newNode is false
 function Editor({ newNode = false }: { newNode?: boolean }) {
-  const classes = useStyles();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [nodeStatus, setStatus] = useState(NodeStatus.DRAFT);
   const [nodeType, setNodeType] = useState(NodeType.A_PAGE);
@@ -139,12 +119,10 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
           </Wrapper>
 
           <Wrapper>
-            <InputLabel>Markdown</InputLabel>
-            <MarkdownEditor
+            <MarkdownInput
               editorState={editorState}
               onEditorStateChange={onEditorStateChange}
-              editorClassName={classes.textEditor}
-            ></MarkdownEditor>
+            />
           </Wrapper>
 
           <Wrapper>
