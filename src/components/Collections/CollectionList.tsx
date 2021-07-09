@@ -18,6 +18,12 @@ const CollectionListCardHeading = styled(Link)`
   font-weight: 400;
 `;
 
+const CollectionListCardType = styled.div`
+  display: inline;
+  float: right;
+  color: gray;
+`;
+
 function CollectionList({ collection }: { collection?: string }) {
   const [nodesList, setNodesList] = useState<any[]>([]);
 
@@ -46,6 +52,7 @@ function CollectionList({ collection }: { collection?: string }) {
             <CollectionListCardHeading to={`/collections/edit/${data.id}`}>
               {data.id}
             </CollectionListCardHeading>
+            <CollectionListCardType>{data.type}</CollectionListCardType>
           </CollectionListCardContent>
         </CollectionListCard>
       ))}
