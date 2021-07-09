@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Auth from "@aws-amplify/auth";
+import { useParams } from "react-router";
 import styled from "styled-components";
 import SplitPane from "react-split-pane";
 import { EditorState } from "draft-js";
@@ -9,6 +10,7 @@ import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
 import { MarkdownInput, SelectInput } from "./InputWidgets";
 import { NODE_TYPES, NODE_STATUSES } from "./utils";
 import AddAssetDialog from "./AddAssetDialog";
+import DeleteNodeDialog from "./DeleteNodeDialog";
 
 const Wrapper = styled.div`
   margin: 24px 8px;
@@ -27,6 +29,10 @@ const PreviewHeading = styled.h2`
   font-size: 1.125rem;
 `;
 
+interface RouteParams {
+  nodeId?: string;
+}
+
 // TODO: useEffect should be called to populate editor with
 // info from an existing node given that newNode is false
 function Editor({ newNode = false }: { newNode?: boolean }) {
@@ -35,6 +41,8 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
   const [nodeType, setNodeType] = useState(NodeType.A_PAGE);
   const [userData, setUserData] = useState<any>();
   const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
+  const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false);
+  const { nodeId } = useParams<RouteParams>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,14 +127,29 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
             )}
           </Wrapper>
 
-          <Button variant="contained" onClick={createNode}>
-            Save Draft
-          </Button>
+          <Wrapper>
+            <StyledButton variant="contained" onClick={createNode}>
+              Save Node
+            </StyledButton>
+
+            {!newNode && (
+              <StyledButton
+                variant="contained"
+                onClick={() => setDeleteNodeDialogOpen(true)}
+              >
+                Delete Node
+              </StyledButton>
+            )}
+          </Wrapper>
 
           <AddAssetDialog
             open={addAssetDialogOpen}
             setOpen={setAddAssetDialogOpen}
-            nodeId={node.id}
+          />
+          <DeleteNodeDialog
+            open={deleteNodeDialogOpen}
+            setOpen={setDeleteNodeDialogOpen}
+            nodeId={nodeId}
           />
         </Wrapper>
       </Wrapper>
