@@ -3,10 +3,11 @@ import Auth from "@aws-amplify/auth";
 import styled from "styled-components";
 import SplitPane from "react-split-pane";
 import { EditorState } from "draft-js";
-import { Card, InputLabel, Button, Select, MenuItem } from "@material-ui/core";
+import { Card, Button } from "@material-ui/core";
 import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
-import { MarkdownInput } from "./InputWidgets";
+import { MarkdownInput, SelectInput } from "./InputWidgets";
+import { NODE_TYPES, NODE_STATUSES } from "./utils";
 import AddAssetDialog from "./AddAssetDialog";
 
 const Wrapper = styled.div`
@@ -30,7 +31,7 @@ const PreviewHeading = styled.h2`
 // info from an existing node given that newNode is false
 function Editor({ newNode = false }: { newNode?: boolean }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [nodeStatus, setStatus] = useState(NodeStatus.DRAFT);
+  const [nodeStatus, setNodeStatus] = useState(NodeStatus.DRAFT);
   const [nodeType, setNodeType] = useState(NodeType.A_PAGE);
   const [userData, setUserData] = useState<any>();
   const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
@@ -50,14 +51,6 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
 
   const onEditorStateChange = (editorState: any) => {
     setEditorState(editorState);
-  };
-
-  const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
-    setStatus(event.target.value);
-  };
-
-  const onNodeTypeChange = (event: React.ChangeEvent<{ value: any }>) => {
-    setNodeType(event.target.value);
   };
 
   const createNode = () => {
@@ -88,34 +81,21 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
         <Wrapper>
           {/* These are hardcoded -- should come up with a way to create these based on enums from GraphQL */}
           <Wrapper>
-            <InputLabel>Node Type</InputLabel>
-            <Select value={nodeType} onChange={onNodeTypeChange}>
-              <MenuItem value={NodeType.H_AUTHOR}>H_AUTHOR</MenuItem>
-              <MenuItem value={NodeType.H_TEAM}>H_TEAM</MenuItem>
-              <MenuItem value={NodeType.A_ARTICLE}>A_ARTICLE</MenuItem>
-              <MenuItem value={NodeType.A_PAGE}>A_PAGE</MenuItem>
-              <MenuItem value={NodeType.A_APPLICATION}>A_APPLICATION</MenuItem>
-              <MenuItem value={NodeType.A_GEM}>A_GEM</MenuItem>
-              <MenuItem value={NodeType.S_ACS}>S_ACS</MenuItem>
-              <MenuItem value={NodeType.S_CBP}>S_CBP</MenuItem>
-              <MenuItem value={NodeType.V_1990}>V_1990</MenuItem>
-              <MenuItem value={NodeType.V_2000}>V_2000</MenuItem>
-              <MenuItem value={NodeType.V_2010}>V_2010</MenuItem>
-              <MenuItem value={NodeType.V_2020}>V_2020</MenuItem>
-              <MenuItem value={NodeType.C_SERIES}>C_SERIES</MenuItem>
-              <MenuItem value={NodeType.C_LIST}>C_LIST</MenuItem>
-            </Select>
+            <SelectInput
+              itemsAndValues={NODE_TYPES}
+              inputLabel="Node Type"
+              selectState={nodeType}
+              setSelectState={setNodeType}
+            />
           </Wrapper>
 
           <Wrapper>
-            <InputLabel>Status</InputLabel>
-            <Select value={nodeStatus} onChange={onStatusChange}>
-              <MenuItem value={NodeStatus.DRAFT}>Draft</MenuItem>
-              <MenuItem value={NodeStatus.REVIEWED}>Reviewed</MenuItem>
-              <MenuItem value={NodeStatus.PUBLISHED}>Published</MenuItem>
-              <MenuItem value={NodeStatus.EDITED}>Edited</MenuItem>
-              <MenuItem value={NodeStatus.DELETED}>Deleted</MenuItem>
-            </Select>
+            <SelectInput
+              itemsAndValues={NODE_STATUSES}
+              inputLabel="Node Status"
+              selectState={nodeStatus}
+              setSelectState={setNodeStatus}
+            />
           </Wrapper>
 
           <Wrapper>
