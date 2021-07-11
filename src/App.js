@@ -1,5 +1,6 @@
 import React from "react" //useMemo, //useLayoutEffect, //useEffect, //useContext, //createElement,
-import { AmplifyAuthenticator } from "@aws-amplify/ui-react"
+import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp, AmplifySignOut } from "@aws-amplify/ui-react"
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
 
 //import { getIn } from "@thi.ng/paths"
 //import { isObject } from "@thi.ng/checks"
@@ -10,8 +11,8 @@ import { AmplifyAuthenticator } from "@aws-amplify/ui-react"
 // import scrolly from "@mapbox/scroll-restorer"
 // scrolly.start()
 
-import { out$ } from "@-0/spool"
-import { INJECT_HEAD } from "@-0/browser"
+import { out$, registerCMD } from "@-0/spool"
+import { cmd_inject_head } from "@-0/browser"
 import * as K from "@-0/keys"
 
 import { log } from "./utils"
@@ -35,27 +36,51 @@ import { routerCfg } from "./router"
 
 // default value ({ run$  }) is applied when no Provider is found in the inheritance tree of the component (orphans)
 
-//export const root = document.getElementById("root")
+export const INJECT_HEAD = registerCMD(cmd_inject_head)
+
+const App = () => {
+    const [ authState, setAuthState ] = React.useState()
+    const [ user, setUser ] = React.useState()
+
+    React.useEffect(() => {
+        return onAuthUIStateChange((nextAuthState, authData) => {
+            setAuthState(nextAuthState)
+            setUser(authData)
+        })
+    }, [])
+
+    return authState === AuthState.SignedIn && user ? (
+        <div className="App">
+            <Provider
+                CFG={{
+                    //count: 0,
+                    [K.CFG_RUTR]: router /* circular dep!! [K.CFG_ROOT]: root*/
+                }}
+            >
+                <Chrome>
+                    <View />
+                </Chrome>
+            </Provider>
+            <AmplifySignOut />
+        </div>
+    ) : (
+        <AmplifyAuthenticator>
+            <AmplifySignUp
+                slot="sign-up"
+                formFields={[
+                    { type: "username", placeholder: "john@email.com", required: true, label: "Email Address" },
+                    { type: "password", required: true }
+                ]}
+            />
+        </AmplifyAuthenticator>
+    )
+}
+
 const router = {
     [K.CFG_RUTR]: routerCfg,
     [K.RTR_PRFX]: "staging/",
     [K.RTR_POST]: INJECT_HEAD
 }
-
-const App = () => (
-    <AmplifyAuthenticator>
-        <Provider
-            CFG={{
-                //count: 0,
-                [K.CFG_RUTR]: router /* circular dep!! [K.CFG_ROOT]: root*/
-            }}
-        >
-            <Chrome>
-                <View />
-            </Chrome>
-        </Provider>
-    </AmplifyAuthenticator>
-)
 
 log("registered Commands:", out$.topics.entries())
 

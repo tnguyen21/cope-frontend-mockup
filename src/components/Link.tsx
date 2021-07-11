@@ -1,7 +1,10 @@
 import React, { useContext } from "react"
-import { HURL } from "@-0/browser"
+import { registerCMD } from "@-0/spool"
+import { cmd_nav, DOMnavigated$ } from "@-0/browser"
 import { CTX } from "../context"
 import { log } from "../utils/data"
+
+const NAV = registerCMD(cmd_nav)
 
 export const Link = ({ to, children }) => {
     const { run$ } = useContext(CTX)
@@ -12,7 +15,7 @@ export const Link = ({ to, children }) => {
             href={path}
             onClick={e => {
                 e.preventDefault()
-                run$.next({ ...HURL, args: e })
+                run$.next({ ...NAV, args: e })
             }}
         >
             {children}

@@ -78,8 +78,8 @@ export const routerCfg = async url => {
     [HD_ICON]: favicon = defalt_cfg[HD_ICON]
                              */
                             [K.DOM_HEAD]: {
-                                [K.HD_TITL]: "Subscription Metrics",
-                                [K.OG_DESC]: "Subscription Metrics"
+                                [K.HD_TITL]: "COPE frontend",
+                                [K.OG_DESC]: "COPE frontend tinkering"
                                 //img_url,
                             },
                             [K.DOM_BODY]: { data: list }

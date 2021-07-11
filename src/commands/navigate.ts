@@ -1,7 +1,7 @@
 import { CMD_SUB$, CMD_ARGS, CMD_WORK, URL_PATH } from "@-0/keys"
 import { registerCMD, run$ } from "@-0/spool"
 import { URL2obj } from "@-0/utils"
-import { HURL, DOMnavigated$ } from "@-0/browser"
+import { DOMnavigated$ } from "@-0/browser"
 
 export const pushState = ({ key, domEvent }) => {
     const href = key

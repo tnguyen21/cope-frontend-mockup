@@ -1,8 +1,7 @@
 import React from "react"
-import { registerCMD, cmd$, out$, run$ } from "@-0/spool"
-import { INJECT_HEAD, HURL, $store$, HURLer, DOMnavigated$, set$$tate, registerRouterDOM } from "@-0/browser"
+import { run$ } from "@-0/spool"
+import { $store$, registerRouterDOM } from "@-0/browser"
 import { URL2obj, diff_keys } from "@-0/utils"
-import {} from "@-0/browser"
 import * as K from "@-0/keys"
 
 import { CTX } from "../context"
