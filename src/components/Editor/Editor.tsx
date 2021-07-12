@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Auth from "@aws-amplify/auth";
-import { useParams } from "react-router";
 import styled from "styled-components";
 import SplitPane from "react-split-pane";
-import { EditorState } from "draft-js";
-import { Card, Button } from "@material-ui/core";
+import { Card, Button, Select, InputLabel, MenuItem } from "@material-ui/core";
 import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
-import { MarkdownInput, SelectInput } from "../InputWidgets";
-import { NODE_TYPES, NODE_STATUSES } from "./utils";
 import AddAssetDialog from "./AddAssetDialog";
 import DeleteNodeDialog from "./DeleteNodeDialog";
 
@@ -37,17 +33,17 @@ interface RouteParams {
 // TODO: useEffect should be called to populate editor with
 // info from an existing node given that newNode is false
 function Editor({ newNode = false }: { newNode?: boolean }) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [nodeStatus, setNodeStatus] = useState(NodeStatus.DRAFT);
-  const [nodeType, setNodeType] = useState(NodeType.A_PAGE);
+  const [nodeType, setNodeType] = useState(NodeType.A_ARTICLE);
   const [userData, setUserData] = useState<any>();
+  const [nodeData, setNodeData] = useState<any>();
   const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
   const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false);
   const { nodeId } = useParams<RouteParams>();
   const history = useHistory();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       try {
         Auth.currentSession().then((res) =>
           setUserData(res.getIdToken().payload)
@@ -56,11 +52,30 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
         console.error(error);
       }
     };
-    fetchData();
+    const fetchNodeData = async () => {
+      try {
+        node.read({ id: nodeId }).then((res: any) => {
+          setNodeData(res);
+          setNodeStatus(res.status);
+          setNodeType(res.type);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserData();
+
+    if (nodeId) {
+      fetchNodeData();
+    }
   }, []);
 
-  const onEditorStateChange = (editorState: any) => {
-    setEditorState(editorState);
+  const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setNodeStatus(event.target.value);
+  };
+
+  const onNodeTypeChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setNodeType(event.target.value);
   };
 
   const createNode = () => {
@@ -71,7 +86,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
       createdAt: null,
       // getting user is async operation
       // TODO: disable save draft button until all required info is loaded?
-      owner: userData ? userData.email : "",
+      owner: userData ? userData.email : null,
       updatedAt: null,
     };
 
@@ -86,34 +101,50 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
       });
   };
 
+  const updateNode = () => {
+    node
+      .update(nodeData)
+      .then((result: any) => {
+        console.log(result);
+      })
+      .catch((error: any) => {
+        console.error(error);
+      });
+  };
+
   return (
     <SplitPane split="vertical" minSize="25%" defaultSize="50%">
       <Wrapper>
         <Wrapper>
-          {/* These are hardcoded -- should come up with a way to create these based on enums from GraphQL */}
           <Wrapper>
-            <SelectInput
-              itemsAndValues={NODE_TYPES}
-              inputLabel="Node Type"
-              selectState={nodeType}
-              setSelectState={setNodeType}
-            />
+            <InputLabel>Node Type</InputLabel>
+            <Select value={nodeType} onChange={onNodeTypeChange}>
+              <MenuItem value={NodeType.H_AUTHOR}>H_AUTHOR</MenuItem>
+              <MenuItem value={NodeType.H_TEAM}>H_TEAM</MenuItem>
+              <MenuItem value={NodeType.A_ARTICLE}>A_ARTICLE</MenuItem>
+              <MenuItem value={NodeType.A_PAGE}>A_PAGE</MenuItem>
+              <MenuItem value={NodeType.A_APPLICATION}>A_APPLICATION</MenuItem>
+              <MenuItem value={NodeType.A_GEM}>A_GEM</MenuItem>
+              <MenuItem value={NodeType.S_ACS}>S_ACS</MenuItem>
+              <MenuItem value={NodeType.S_CBP}>S_CBP</MenuItem>
+              <MenuItem value={NodeType.V_1990}>V_1990</MenuItem>
+              <MenuItem value={NodeType.V_2000}>V_2000</MenuItem>
+              <MenuItem value={NodeType.V_2010}>V_2010</MenuItem>
+              <MenuItem value={NodeType.V_2020}>V_2020</MenuItem>
+              <MenuItem value={NodeType.C_SERIES}>C_SERIES</MenuItem>
+              <MenuItem value={NodeType.C_LIST}>C_LIST</MenuItem>
+            </Select>
           </Wrapper>
 
           <Wrapper>
-            <SelectInput
-              itemsAndValues={NODE_STATUSES}
-              inputLabel="Node Status"
-              selectState={nodeStatus}
-              setSelectState={setNodeStatus}
-            />
-          </Wrapper>
-
-          <Wrapper>
-            <MarkdownInput
-              editorState={editorState}
-              onEditorStateChange={onEditorStateChange}
-            />
+            <InputLabel>Status</InputLabel>
+            <Select value={nodeStatus} onChange={onStatusChange}>
+              <MenuItem value={NodeStatus.DRAFT}>Draft</MenuItem>
+              <MenuItem value={NodeStatus.REVIEWED}>Reviewed</MenuItem>
+              <MenuItem value={NodeStatus.PUBLISHED}>Published</MenuItem>
+              <MenuItem value={NodeStatus.EDITED}>Edited</MenuItem>
+              <MenuItem value={NodeStatus.DELETED}>Deleted</MenuItem>
+            </Select>
           </Wrapper>
 
           <Wrapper>
@@ -131,9 +162,15 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
           </Wrapper>
 
           <Wrapper>
-            <StyledButton variant="contained" onClick={createNode}>
-              Save Node
-            </StyledButton>
+            {newNode ? (
+              <StyledButton variant="contained" onClick={createNode}>
+                Save Node
+              </StyledButton>
+            ) : (
+              <StyledButton variant="contained" onClick={updateNode}>
+                Update Node
+              </StyledButton>
+            )}
 
             {!newNode && (
               <StyledButton
@@ -148,6 +185,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
           <AddAssetDialog
             open={addAssetDialogOpen}
             setOpen={setAddAssetDialogOpen}
+            nodeId={nodeId}
           />
           <DeleteNodeDialog
             open={deleteNodeDialogOpen}
@@ -164,7 +202,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
                 be able to parse out content from editor state and 
                 convert to necessary HTML/Markdown to create content preview
             */}
-            <div>{editorState.getCurrentContent().getPlainText()}</div>
+            <div>Content Preview goes here</div>
           </PreviewContent>
         </Card>
       </Wrapper>
