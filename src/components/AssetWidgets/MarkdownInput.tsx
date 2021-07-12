@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
+import { EditorState } from "draft-js";
 import { makeStyles, InputLabel } from "@material-ui/core";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
@@ -14,14 +15,14 @@ const useStyles = makeStyles({
   },
 });
 
-function MarkdownInput({
-  editorState,
-  onEditorStateChange,
-}: {
-  editorState: any;
-  onEditorStateChange: any;
-}) {
+function MarkdownInput() {
   const classes = useStyles();
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = (editorState: any) => {
+    setEditorState(editorState);
+  };
+
   return (
     <>
       <InputLabel>Markdown</InputLabel>

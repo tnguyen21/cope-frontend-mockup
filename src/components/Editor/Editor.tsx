@@ -8,6 +8,7 @@ import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
 import AddAssetDialog from "./AddAssetDialog";
 import DeleteNodeDialog from "./DeleteNodeDialog";
+import { RenderAssetWidget } from "../AssetWidgets";
 
 const Wrapper = styled.div`
   margin: 24px 8px;
@@ -52,23 +53,26 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
         console.error(error);
       }
     };
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
     const fetchNodeData = async () => {
       try {
         node.read({ id: nodeId }).then((res: any) => {
           setNodeData(res);
           setNodeStatus(res.status);
           setNodeType(res.type);
+          console.log(res);
         });
       } catch (error) {
         console.error(error);
       }
     };
-    fetchUserData();
-
-    if (nodeId) {
-      fetchNodeData();
-    }
-  }, []);
+    fetchNodeData();
+    // conditionally call this hook every time add asset dialog is opened
+    // or closed (i.e. a user has added an asset)
+  }, [addAssetDialogOpen, nodeId]);
 
   const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
     setNodeStatus(event.target.value);
@@ -146,6 +150,11 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
               <MenuItem value={NodeStatus.DELETED}>Deleted</MenuItem>
             </Select>
           </Wrapper>
+
+          {nodeData &&
+            nodeData.assets.items.map((asset: any) => (
+              <Wrapper>{RenderAssetWidget(asset)}</Wrapper>
+            ))}
 
           <Wrapper>
             <StyledButton variant="contained">Add Parent</StyledButton>

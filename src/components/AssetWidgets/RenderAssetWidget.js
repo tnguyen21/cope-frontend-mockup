@@ -6,10 +6,13 @@ const AssetTypesToComponentMap = {
   T_BODY: MarkdownInput,
 };
 
-function renderer(asset, props) {
+function RenderAssetWidget(asset) {
   if (typeof AssetTypesToComponentMap[asset.type] !== "undefined") {
-    return React.createElement(AssetTypesToComponentMap[asset.type], props);
+    return React.createElement(AssetTypesToComponentMap[asset.type], {
+      label: asset.name,
+      assetId: asset.id,
+    });
   }
 }
 
-export default renderer;
+export default RenderAssetWidget;

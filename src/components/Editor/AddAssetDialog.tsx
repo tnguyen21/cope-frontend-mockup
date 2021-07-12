@@ -7,9 +7,10 @@ import {
   DialogContent,
   DialogTitle,
   Button,
+  TextField,
 } from "@material-ui/core";
 import { ASSET_TYPES } from "./utils";
-import { SelectInput, TextInput } from "../InputWidgets";
+import { SelectInput } from "../AssetWidgets";
 
 const Wrapper = styled.div`
   margin: 24px 8px;
@@ -26,6 +27,7 @@ function AddAssetDialog({
 }) {
   const [assetType, setAssetType] = useState(ASSET_TYPES.A_IMAGE); // random default -- think of better way to set this
   const [assetName, setAssetName] = useState("");
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -34,6 +36,17 @@ function AddAssetDialog({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setAssetName(event.target.value);
+  };
+
+  const addAsset = () => {
+    const assetData = {
+      name: assetName,
+      type: assetType,
+      node_id: nodeId,
+    };
+    asset.create(assetData).then(() => {
+      handleClose();
+    });
   };
 
   return (
@@ -55,10 +68,11 @@ function AddAssetDialog({
           />
         </Wrapper>
         <Wrapper>
-          <TextInput
-            value={assetName}
-            handleChange={handleAssetNameChange}
+          <TextField
+            id="standard-basic"
             label="Asset Name"
+            value={assetName}
+            onChange={handleAssetNameChange}
           />
         </Wrapper>
       </DialogContent>
@@ -66,8 +80,8 @@ function AddAssetDialog({
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleClose} color="primary">
-          Save Asset
+        <Button onClick={addAsset} color="primary">
+          Add Asset
         </Button>
       </DialogActions>
     </Dialog>
