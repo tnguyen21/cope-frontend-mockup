@@ -2,6 +2,7 @@
     "name": "cope-frontend",
     "version": "0.1.0",
     "private": true,
+    "homepage": ".",
     "dependencies": {
         "@-0/browser": "^0.3.10",
         "@aws-amplify/ui-components": "^1.6.1",
@@ -21,27 +22,16 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "react-scripts build && mv build docs",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
+        "extends": [ "react-app", "react-app/jest" ]
     },
     "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+        "production": [ ">0.2%", "not dead", "not op_mini all" ],
+        "development": [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version" ]
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.14.1",

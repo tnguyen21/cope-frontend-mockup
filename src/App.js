@@ -18,21 +18,7 @@ import * as K from "@-0/keys"
 import { log } from "./utils"
 import { Chrome, View } from "./components"
 import { Provider } from "./context"
-import { routerCfg } from "./router"
-
-// ⚠ <=> API SURFACE AREA TOO LARGE <=> ⚠ .
-// import { button_x } from "./components"
-// import { THEME } from "./theme"
-
-//trace$("run$ ->", run$)
-//trace$("command$ ->", command$)
-//trace$("out$ ->", out$)
-
-//const logger = registerCMD({
-//    sub$: "logger",
-//    args: ({ x }) => x,
-//    work: log,
-//})
+import { router } from "./router"
 
 // default value ({ run$  }) is applied when no Provider is found in the inheritance tree of the component (orphans)
 
@@ -74,12 +60,6 @@ const App = () => {
             />
         </AmplifyAuthenticator>
     )
-}
-
-const router = {
-    [K.CFG_RUTR]: routerCfg,
-    [K.RTR_PRFX]: "staging/",
-    [K.RTR_POST]: INJECT_HEAD
 }
 
 log("registered Commands:", out$.topics.entries())

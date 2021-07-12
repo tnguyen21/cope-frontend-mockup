@@ -3,6 +3,8 @@ import { EquivMap } from "@thi.ng/associative"
 
 import { URL2obj } from "@-0/utils"
 import * as K from "@-0/keys"
+import { out$, registerCMD } from "@-0/spool"
+import { cmd_inject_head } from "@-0/browser"
 
 //import { Chrome } from "../layout"
 import { log, JL } from "../utils"
@@ -22,19 +24,6 @@ import { CTX } from "../context"
 //
 //
 
-const sort_by_campaign_id_fn = (a, b) => (a.campaign_id.toUpperCase() < b.campaign_id.toUpperCase() ? -1 : 1)
-/**
- *
- * Even if you don't end up using `spule` - you may find the
- * [`@thi.ng/associative`](https://github.com/thi-ng/umbrella/tree/develop/packages/associative)
- * library __very handy__ indeed!
- *
- * Value semantics have so many benefits. As a router,
- * here's one.
- *
- * TODO: Graphql Example
- */
-
 // TODO: return types expected for routerCfg
 export const routerCfg = async url => {
     const match = URL2obj(url)
@@ -45,21 +34,12 @@ export const routerCfg = async url => {
     //limit = parseInt(limit)
     const path = match[K.URL_PATH]
 
-    log({ match })
+    log(JSON.stringify(match, null, 2))
 
     const RES = new EquivMap(
         [
-            //
-            //  888
-            //  888-~88e  e88~-_  888-~88e-~88e  e88~~8e
-            //  888  888 d888   i 888  888  888 d888  88b
-            //  888  888 8888   | 888  888  888 8888__888
-            //  888  888 Y888   ' 888  888  888 Y888    ,
-            //  888  888  "88_-~  888  888  888  "88___/
-            //
-            //
-
             [
+                // home page (path = [])
                 { ...match, [K.URL_PATH]: [] },
                 {
                     [K.URL_DATA]: async () => {
@@ -68,15 +48,6 @@ export const routerCfg = async url => {
                             status: API.NodeStatus.DRAFT
                         })
                         return {
-                            /*
-    [HD_TITL]: title = defalt_cfg[HD_TITL],
-    [OG_DESC]: description = defalt_cfg[HD_META]["og:description"],
-    [OG_IMGU]: img_url = defalt_cfg[HD_META]["og:image"],
-    [OG_IMGH]: img_height = defalt_cfg[HD_META]["og:image:height"],
-    [OG_IMGW]: img_width = defalt_cfg[HD_META]["og:image:width"],
-    [OG_TYPE]: type = defalt_cfg[HD_META]["og:type"],
-    [HD_ICON]: favicon = defalt_cfg[HD_ICON]
-                             */
                             [K.DOM_HEAD]: {
                                 [K.HD_TITL]: "COPE frontend",
                                 [K.OG_DESC]: "COPE frontend tinkering"
@@ -87,25 +58,33 @@ export const routerCfg = async url => {
                     },
                     [K.URL_PAGE]: "home"
                 }
+            ],
+            [
+                { ...match, URL_PATH: [ "page1" ] },
+                {
+                    URL_DATA: async () => {
+                        const list = await node.list({
+                            owner: "PostConfirmTriggerLambda"
+                        })
+                        return {
+                            DOM_HEAD: {
+                                title: "Page 1",
+                                og_description: "Description for Open Graph/sharing"
+                            },
+                            DOM_BODY: { data: list }
+                        }
+                    },
+                    URL_PAGE: "page1"
+                }
             ]
-
-            //
-            //    d8                      d8
-            //  _d88__  e88~~8e   d88~\ _d88__
-            //   888   d888  88b C888    888
-            //   888   8888__888  Y88b   888
-            //   888   Y888    ,   888D  888
-            //   "88_/  "88___/  \_88P   "88_/
-            //
-            //
         ]
     ).get(match) || { [K.URL_DATA]: () => 404, [K.URL_PAGE]: "test" }
 
-    const data = RES[K.URL_DATA]
+    const data = await RES[K.URL_DATA]()
     const page = RES[K.URL_PAGE]
-    //log("routed:", { page, data })
+    log("routed:", { page, data })
 
-    return { [K.URL.DATA]: await data(), [K.URL.PAGE]: page }
+    return { [K.URL.DATA]: data, [K.URL.PAGE]: page }
 }
 
 //const Page2 = ({ data }) => {
@@ -116,3 +95,10 @@ export const routerCfg = async url => {
 //        JSON.stringify(data, null, 2)
 //    )
 //}
+export const INJECT_HEAD = registerCMD(cmd_inject_head)
+
+export const router = {
+    [K.CFG_RUTR]: routerCfg,
+    //[K.RTR_PRFX]: "staging/",
+    [K.RTR_POST]: INJECT_HEAD
+}

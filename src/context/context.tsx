@@ -10,5 +10,8 @@ export const CTX = createContext({
     useCursor,
     $store$,
     parse: URL2obj,
-    DefaultView: Pre
+    DefaultView: Pre,
+    page: null,
+    loading: true,
+    path: []
 })

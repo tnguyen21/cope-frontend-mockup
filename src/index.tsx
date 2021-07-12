@@ -9,7 +9,7 @@ import App from "./App"
 import awsconfig from "./aws-exports"
 import { configureWith } from "cope-client-utils"
 // additional configurations in cope-client-utils provided
-// to enable access to GraphQL API
+// to properly assign ownership to created Nodes/Assets
 configureWith(awsconfig)
 
 //ReactDOM.render(
@@ -23,4 +23,9 @@ configureWith(awsconfig)
 //    document.getElementById("root")
 //)
 
-ReactDOM.render(<App />, document.getElementById("root"))
+ReactDOM.render(
+    <ThemeProvider theme={theme}>
+        <App />
+    </ThemeProvider>,
+    document.getElementById("root")
+)

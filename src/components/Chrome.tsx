@@ -9,18 +9,18 @@ import { Link, Header } from "../components"
 //const { SubMenu } = Menu
 
 export const Chrome = ({ children }) => {
-    const { useCursor } = useContext(CTX)
-    const [ path, pathCursor ] = useCursor([ K.$$_PATH ], "Route Path")
+    //const { useCursor } = useContext(CTX)
+    //const [ path, pathCursor ] = useCursor([ K.$$_PATH ], "Route Path")
 
-    //log({ path })
+    ////log({ path })
 
-    useEffect(
-        () => {
-            pathCursor?.release()
-            return
-        },
-        [ path, pathCursor ]
-    )
+    //useEffect(
+    //    () => {
+    //        pathCursor?.release()
+    //        return
+    //    },
+    //    [ path, pathCursor ]
+    //)
 
     return (
         <div>
@@ -31,7 +31,7 @@ export const Chrome = ({ children }) => {
                 }}
             >
                 <div style={{ minHeight: "100vh" }}>
-                    <Header/>
+                    <Header />
                     <ul>
                         <Link to="page1">page1</Link>
                         <Link to="page2">page2</Link>
@@ -44,7 +44,7 @@ export const Chrome = ({ children }) => {
                             overflow: "hidden"
                         }}
                     >
-                        { children }
+                        {children}
                     </div>
                 </div>
             </div>
