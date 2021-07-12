@@ -8,7 +8,7 @@
         "@aws-amplify/ui-react": "^1.2.5",
         "@material-ui/core": "^4.12.1",
         "aws-amplify": "^4.1.3",
-        "cope-client-utils": "^0.1.8",
+        "cope-client-utils": "^0.1.10",
         "draft-js": "^0.11.7",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
