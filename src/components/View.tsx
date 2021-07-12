@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useEffect, useState } from "react"
+import React, { useContext, useLayoutEffect } from "react"
 import { getIn } from "@thi.ng/paths"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
@@ -7,6 +7,7 @@ import {} from "../hooks"
 
 /**
  * TODO: Abstract away
+ * // PRIORITY: API
  * @params = {
  *      key: value
  *      page_key_returned_from_equivmap: ActualPageComponent
@@ -21,8 +22,8 @@ export const View = () => {
     useLayoutEffect(
         () => {
             // re-render when loading state changes
-            console.log("re-rendered Page:", { loading, page, path })
-            console.log("store:", $store$.deref())
+            console.log("re-rendered Page:", { loading })
+            //console.log("store:", $store$.deref())
             // cleanup
             return () => {
                 //log("cleaning up:", { loading, Page })
@@ -31,7 +32,7 @@ export const View = () => {
                 pageCursor.release()
             }
         },
-        [ page, pageCursor, path, pathCursor, loading, loadingCursor, $store$ ]
+        [ loading, loadingCursor, page, pageCursor, path, pathCursor ]
     )
 
     const store = $store$.deref()
@@ -54,9 +55,7 @@ export const View = () => {
 
     const is_home = store[K.$$_PATH].length === 0
 
-    return loading === null ? (
-        <div>initializing.. </div>
-    ) : loading === true ? (
+    return loading ? (
         loader
     ) : (
         // @ts-ignore

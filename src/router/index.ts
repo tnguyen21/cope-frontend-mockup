@@ -99,6 +99,6 @@ export const INJECT_HEAD = registerCMD(cmd_inject_head)
 
 export const router = {
     [K.CFG_RUTR]: routerCfg,
-    //[K.RTR_PRFX]: "staging/",
+    [K.RTR_PRFX]: "cope-frontend-mockup/",
     [K.RTR_POST]: INJECT_HEAD
 }

@@ -1,4 +1,4 @@
-import React from "react" //useMemo, //useLayoutEffect, //useEffect, //useContext, //createElement,
+import React, { useEffect } from "react" //useMemo, //useLayoutEffect, //useEffect, //useContext, //createElement,
 import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp, AmplifySignOut } from "@aws-amplify/ui-react"
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
 
@@ -11,8 +11,8 @@ import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
 // import scrolly from "@mapbox/scroll-restorer"
 // scrolly.start()
 
-import { out$, registerCMD } from "@-0/spool"
-import { cmd_inject_head } from "@-0/browser"
+import { DOMnavigated$ } from "@-0/browser"
+import { out$ } from "@-0/spool"
 import * as K from "@-0/keys"
 
 import { log } from "./utils"
@@ -22,18 +22,24 @@ import { router } from "./router"
 
 // default value ({ run$  }) is applied when no Provider is found in the inheritance tree of the component (orphans)
 
-export const INJECT_HEAD = registerCMD(cmd_inject_head)
-
 const App = () => {
     const [ authState, setAuthState ] = React.useState()
     const [ user, setUser ] = React.useState()
 
-    React.useEffect(() => {
-        return onAuthUIStateChange((nextAuthState, authData) => {
-            setAuthState(nextAuthState)
-            setUser(authData)
-        })
-    }, [])
+    useEffect(
+        () => {
+            // PRIORITY: API
+            DOMnavigated$.next({
+                target        : document,
+                currentTarget : document
+            })
+            return onAuthUIStateChange((nextAuthState, authData) => {
+                setAuthState(nextAuthState)
+                setUser(authData)
+            })
+        },
+        [ user ]
+    )
 
     return authState === AuthState.SignedIn && user ? (
         <div className="App">

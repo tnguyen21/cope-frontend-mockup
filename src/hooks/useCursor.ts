@@ -1,5 +1,5 @@
 import { $store$ } from "@-0/browser"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Cursor } from "@thi.ng/atom"
 import { log } from "../utils/data"
 

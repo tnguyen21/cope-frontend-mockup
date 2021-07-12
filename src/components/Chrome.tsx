@@ -2,31 +2,17 @@ import React, { useState, useContext, useEffect } from "react"
 import { getIn } from "@thi.ng/paths"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
-import { navigate } from "../commands"
 import { Link, Header } from "../components"
 //import { log } from "../utils"
 
 //const { SubMenu } = Menu
 
 export const Chrome = ({ children }) => {
-    //const { useCursor } = useContext(CTX)
-    //const [ path, pathCursor ] = useCursor([ K.$$_PATH ], "Route Path")
-
-    ////log({ path })
-
-    //useEffect(
-    //    () => {
-    //        pathCursor?.release()
-    //        return
-    //    },
-    //    [ path, pathCursor ]
-    //)
-
     return (
         <div>
             <div
                 style={{
-                    minHeight: "100vh"
+                    minHeight: "100vh",
                     //overflow: "hidden",
                 }}
             >
@@ -41,7 +27,7 @@ export const Chrome = ({ children }) => {
                         style={{
                             padding: "0 24px",
                             minHeight: 280,
-                            overflow: "hidden"
+                            overflow: "hidden",
                         }}
                     >
                         {children}
