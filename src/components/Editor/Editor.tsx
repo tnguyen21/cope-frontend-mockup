@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Auth from "@aws-amplify/auth";
 import { useParams } from "react-router";
 import styled from "styled-components";
@@ -7,7 +8,7 @@ import { EditorState } from "draft-js";
 import { Card, Button } from "@material-ui/core";
 import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
-import { MarkdownInput, SelectInput } from "./InputWidgets";
+import { MarkdownInput, SelectInput } from "../InputWidgets";
 import { NODE_TYPES, NODE_STATUSES } from "./utils";
 import AddAssetDialog from "./AddAssetDialog";
 import DeleteNodeDialog from "./DeleteNodeDialog";
@@ -43,6 +44,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
   const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
   const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false);
   const { nodeId } = useParams<RouteParams>();
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,6 +79,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
       .create(data)
       .then((result: any) => {
         console.log(result);
+        history.push(`/collections/edit/${result.id}`);
       })
       .catch((error: any) => {
         console.error(error);

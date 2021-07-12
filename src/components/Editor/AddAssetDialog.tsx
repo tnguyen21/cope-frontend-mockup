@@ -9,7 +9,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { ASSET_TYPES } from "./utils";
-import { SelectInput, TextInput } from "./InputWidgets";
+import { SelectInput, TextInput } from "../InputWidgets";
 
 const Wrapper = styled.div`
   margin: 24px 8px;
