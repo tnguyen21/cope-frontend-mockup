@@ -47,7 +47,7 @@ function CollectionList({ collection }: { collection?: string }) {
   return (
     <div>
       {nodesList.map((data) => (
-        <CollectionListCard>
+        <CollectionListCard key={data.id}>
           <CollectionListCardContent>
             <CollectionListCardHeading to={`/collections/edit/${data.id}`}>
               {data.id}

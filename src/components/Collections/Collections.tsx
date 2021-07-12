@@ -17,7 +17,7 @@ function Collections() {
 
   return (
     <Container>
-      <Grid justify="space-between" container xs={12}>
+      <Grid justifyContent="space-between" container>
         <Grid item xs={4}>
           <Sidebar />
         </Grid>
