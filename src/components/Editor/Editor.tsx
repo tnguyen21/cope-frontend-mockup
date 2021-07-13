@@ -8,6 +8,7 @@ import { node } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
 import AddAssetDialog from "./AddAssetDialog";
 import DeleteNodeDialog from "./DeleteNodeDialog";
+import DeleteAssetDialog from "./DeleteAssetDialog";
 import { RenderAssetWidget } from "../AssetWidgets";
 
 const Wrapper = styled.div`
@@ -39,6 +40,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
   const [userData, setUserData] = useState<any>();
   const [nodeData, setNodeData] = useState<any>();
   const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
+  const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState(false);
   const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false);
   const { nodeId } = useParams<RouteParams>();
   const history = useHistory();
@@ -72,7 +74,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
     fetchNodeData();
     // conditionally call this hook every time add asset dialog is opened
     // or closed (i.e. a user has added an asset)
-  }, [addAssetDialogOpen, nodeId]);
+  }, [nodeId, addAssetDialogOpen, deleteAssetDialogOpen]);
 
   const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
     setNodeStatus(event.target.value);
@@ -153,7 +155,20 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
 
           {nodeData &&
             nodeData.assets.items.map((asset: any) => (
-              <Wrapper>{RenderAssetWidget(asset)}</Wrapper>
+              <Wrapper>
+                {RenderAssetWidget(asset)}
+                <Button
+                  variant="contained"
+                  onClick={() => setDeleteAssetDialogOpen(true)}
+                >
+                  Delete Asset
+                </Button>
+                <DeleteAssetDialog
+                  open={deleteAssetDialogOpen}
+                  setOpen={setDeleteAssetDialogOpen}
+                  assetId={asset.id}
+                />
+              </Wrapper>
             ))}
 
           <Wrapper>

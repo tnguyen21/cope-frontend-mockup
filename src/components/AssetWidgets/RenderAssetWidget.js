@@ -1,5 +1,5 @@
 import React from "react";
-import { SelectInput, MarkdownInput, TextInput } from ".";
+import { MarkdownInput, TextInput } from ".";
 
 const AssetTypesToComponentMap = {
   T_OG_TITLE: TextInput,
