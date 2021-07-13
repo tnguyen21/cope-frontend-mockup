@@ -62,7 +62,12 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
     const fetchNodeData = async () => {
       try {
         node.read({ id: nodeId }).then((res: any) => {
-          setNodeData(res);
+          // reverse items here such that oldest assets
+          // are displayed first
+          setNodeData({
+            ...res,
+            assets: { ...res.assets, items: res.assets.items.reverse() },
+          });
           setNodeStatus(res.status);
           setNodeType(res.type);
           console.log(res);
