@@ -8,3 +8,4 @@ export const Page1 = ({ data = [] }) => (
         </div>
     </>
 )
+

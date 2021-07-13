@@ -1,47 +1,46 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true,
-    "jest": true
-  },
-  "rules": {
-    "no-unused-vars": 1,
-    "no-console": "error",
-    "import/first": "error",
-    "react/prop-types": 0,
-    "no-native-reassign": 0,
-    "no-negated-in-lhs": 0,
-    "@typescript-eslint/explicit-function-return-type": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/ban-ts-comment": 0,
-    "@typescript-eslint/no-unused-vars": 0,
-    "no-console": 0,
-    "no-use-before-define": 0
-
-  },
-  "extends": [
-    "react-app",
-    "react-app/jest",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "root": true,
-  "plugins": ["react", "@typescript-eslint"],
-  "parserOptions": {
-    "ecmaVersion": 11,
-    "ecmaFeatures": {
-      "jsx": true
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true
     },
-    "project": "./tsconfig.json"
-  },
-  "settings": {
-    "react": {
-      "pragma": "React",
-      "version": "detect"
+    "rules": {
+        "no-unused-vars": 0,
+        "import/first": 1,
+        "react/prop-types": 0,
+        "no-native-reassign": 0,
+        "no-negated-in-lhs": 0,
+        "no-unreachable": 1,
+        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-unused-expressions": 1,
+        "@typescript-eslint/ban-ts-comment": 0,
+        "@typescript-eslint/no-unused-vars": 0,
+        "no-console": 0,
+        "no-use-before-define": 0
+
+    },
+    "extends": [
+        "react-app",
+        "react-app/jest",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "root": true,
+    "plugins": ["react", "@typescript-eslint"],
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "settings": {
+        "react": {
+            "pragma": "React",
+            "version": "detect"
+        }
     }
-  }
 }

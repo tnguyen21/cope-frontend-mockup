@@ -1,6 +1,5 @@
 import React from "react"
 import styled from "styled-components"
-import { NavLink } from "react-router-dom"
 import { AmplifySignOut } from "@aws-amplify/ui-react"
 import { Link } from "./Link"
 const AppHeader = styled.header`

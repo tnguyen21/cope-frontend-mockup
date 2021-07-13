@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect } from "react"
+import React, { useContext, useLayoutEffect, useEffect } from "react"
 import { getIn } from "@thi.ng/paths"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
@@ -22,8 +22,7 @@ export const View = () => {
     useLayoutEffect(
         () => {
             // re-render when loading state changes
-            console.log("re-rendered Page:", { loading })
-            //console.log("store:", $store$.deref())
+            //console.log("re-rendered Page:", { loading })
             // cleanup
             return () => {
                 //log("cleaning up:", { loading, Page })
@@ -32,11 +31,12 @@ export const View = () => {
                 pageCursor.release()
             }
         },
-        [ loading, loadingCursor, page, pageCursor, path, pathCursor ]
+        [ loadingCursor, pathCursor, pageCursor ],
     )
 
     const store = $store$.deref()
-    //log({ store })
+
+    //console.log({ store })
 
     const loader = (
         <div className="spinner_container">
@@ -45,20 +45,24 @@ export const View = () => {
             </div>
         </div>
     )
-    const RenderPage =
+
+    const RenderedPage = 
         {
             home: Page1,
             page1: Page1,
             page2: Page2,
-            page3: Page3
+            page3: Page3,
         }[page] || (() => loader)
 
-    const is_home = store[K.$$_PATH].length === 0
+    const is_home = store[K.$$_PATH]?.length === 0
 
-    return loading ? (
-        loader
-    ) : (
-        // @ts-ignore
-        <RenderPage data={is_home ? getIn(store, [ "data" ]) : getIn(store, path)} />
-    )
+    // prettier-ignore
+    return loading ? loader :
+        <RenderedPage
+            data={
+                // @ts-ignore
+                is_home ? getIn(store, [ "data" ]) :
+                getIn(store, path)
+            }
+        />
 }

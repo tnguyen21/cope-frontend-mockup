@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { run$ } from "@-0/spool"
 import { $store$, registerRouterDOM } from "@-0/browser"
 import { URL2obj, diff_keys } from "@-0/utils"
@@ -6,7 +6,6 @@ import * as K from "@-0/keys"
 
 import { CTX } from "../context"
 import { log } from "../utils"
-import { Link, Pre } from "../components"
 import { Page1 } from "../pages"
 import { useCursor } from "../hooks"
 
@@ -31,7 +30,7 @@ export const Provider = ({ children, CFG = {} }) => {
     else throw new Error(`no \`${K.CFG_RUTR}\`: router found in Provider CFG`)
     
     // Prime store with CFG state
-    //$store$.swap(x => ({...CFG, ...x}))
+    $store$.swap(x => ({...CFG, ...x}))
 
     // FIXME: log
     log("$store$.deref():", $store$.deref() )

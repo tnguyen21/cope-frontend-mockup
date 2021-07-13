@@ -1,11 +1,5 @@
-import React, { useState, useContext, useEffect } from "react"
-import { getIn } from "@thi.ng/paths"
-import * as K from "@-0/keys"
-import { CTX } from "../context"
+import React from "react"
 import { Link, Header } from "../components"
-//import { log } from "../utils"
-
-//const { SubMenu } = Menu
 
 export const Chrome = ({ children }) => {
     return (

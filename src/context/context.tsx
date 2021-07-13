@@ -1,4 +1,4 @@
-import React, { createContext } from "react"
+import { createContext } from "react"
 import { run$ } from "@-0/spool"
 import { $store$ } from "@-0/browser"
 import { URL2obj } from "@-0/utils"
@@ -13,5 +13,5 @@ export const CTX = createContext({
     DefaultView: Pre,
     page: null,
     loading: true,
-    path: []
+    path: [],
 })
