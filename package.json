@@ -17,7 +17,7 @@
     "@types/node": "^16.3.1",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
-    "cope-client-utils": "^0.1.8",
+    "cope-client-utils": "^0.2.1",
     "draft-js": "^0.11.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

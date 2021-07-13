@@ -43,6 +43,7 @@ function AddAssetDialog({
       name: assetName,
       type: assetType,
       node_id: nodeId,
+      content: "",
     };
     asset.create(assetData).then(() => {
       handleClose();

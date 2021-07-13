@@ -6,11 +6,13 @@ const AssetTypesToComponentMap = {
   T_BODY: MarkdownInput,
 };
 
-function RenderAssetWidget(asset) {
+function RenderAssetWidget(asset, nodeData, setNodeData) {
   if (typeof AssetTypesToComponentMap[asset.type] !== "undefined") {
     return React.createElement(AssetTypesToComponentMap[asset.type], {
       label: asset.name,
       assetId: asset.id,
+      value: nodeData,
+      setValue: setNodeData,
     });
   }
 }

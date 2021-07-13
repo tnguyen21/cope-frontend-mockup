@@ -4,7 +4,7 @@ import Auth from "@aws-amplify/auth";
 import styled from "styled-components";
 import SplitPane from "react-split-pane";
 import { Card, Button, Select, InputLabel, MenuItem } from "@material-ui/core";
-import { node } from "cope-client-utils";
+import { node, asset } from "cope-client-utils";
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API";
 import AddAssetDialog from "./AddAssetDialog";
 import DeleteNodeDialog from "./DeleteNodeDialog";
@@ -73,7 +73,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
     };
     fetchNodeData();
     // conditionally call this hook every time add asset dialog is opened
-    // or closed (i.e. a user has added an asset)
+    // or closed (i.e. a user has added an asset) to force re-render
   }, [nodeId, addAssetDialogOpen, deleteAssetDialogOpen]);
 
   const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
@@ -116,6 +116,24 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
       .catch((error: any) => {
         console.error(error);
       });
+    for (const i in nodeData.assets.items) {
+      let _asset = nodeData.assets.items[i];
+      let data = {
+        id: _asset.id,
+        content: _asset.content,
+        createdAt: _asset.createdAt,
+        editors: _asset.editors,
+        name: _asset.name,
+        node_id: _asset.node_id,
+        owner: _asset.owner,
+        type: _asset.type,
+      };
+
+      asset
+        .update(data)
+        .then((result: any) => console.log(result))
+        .catch((error: any) => console.error(error));
+    }
   };
 
   return (
@@ -156,7 +174,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
           {nodeData &&
             nodeData.assets.items.map((asset: any) => (
               <Wrapper>
-                {RenderAssetWidget(asset)}
+                {RenderAssetWidget(asset, nodeData, setNodeData)}
                 <Button
                   variant="contained"
                   onClick={() => setDeleteAssetDialogOpen(true)}

@@ -1,11 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextField } from "@material-ui/core";
 
-function TextInput({ label, assetId }: { label: string; assetId: string }) {
-  const [value, setValue] = useState("");
-
+function TextInput({
+  label,
+  assetId,
+  value,
+  setValue,
+}: {
+  label: string;
+  assetId: string;
+  value: any;
+  setValue: Function;
+}) {
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    let updatedAssetState = value.assets.items.filter(
+      (item: any) => item.id === assetId
+    )[0];
+    updatedAssetState = { ...updatedAssetState, content: event.target.value };
+    console.log(updatedAssetState);
+    let newValue = {
+      ...value,
+      assets: {
+        ...value.assets,
+        items: value.assets.items.map((item: any) => {
+          if (item.id === assetId) {
+            return updatedAssetState;
+          }
+          return item;
+        }),
+      },
+    };
+    setValue(newValue);
   };
 
   return (
@@ -13,7 +38,10 @@ function TextInput({ label, assetId }: { label: string; assetId: string }) {
       <TextField
         id="standard-basic"
         label={label}
-        value={value}
+        value={
+          value.assets.items.filter((item: any) => item.id === assetId)[0]
+            .content
+        }
         onChange={handleValueChange}
       />
     </>
