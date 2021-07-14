@@ -1,27 +1,47 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
+    "target": "ES6",
     "module": "esnext",
-    "moduleResolution": "node",
+    "lib": [
+      "ES2017",
+      "ES7",
+      "ES6",
+      "DOM"
+    ],
+    "declaration": true,
+    "importHelpers": true,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "rootDir": "src",
+    "outDir": "lib",
     "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "watch": true,
+    "jsx": "react-jsx",
+    "strict": false,
+    "forceConsistentCasingInFileNames": false,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"
   ],
-  "exclude": ["node_modules", "build"]
+  "exclude": [
+    "**/*.test.js",
+    "**/*.repl.js",
+    "**/*.test.ts",
+    "**/*.repl.ts",
+    "src/aws-exports.js",
+    "node_modules",
+    "src/misc"
+  ]
 }

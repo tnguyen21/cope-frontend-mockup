@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Card } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { node } from "cope-client-utils";
+import { node, API } from "cope-client-utils";
 
 const CollectionListCard = styled(Card)`
   margin: 8px 8px;
@@ -27,14 +27,15 @@ const CollectionListCardType = styled.div`
 function CollectionList({ collection }: { collection?: string }) {
   const [nodesList, setNodesList] = useState<any[]>([]);
 
-  let query = {
-    status: "DRAFT",
+  const query = {
+    status: API.NodeStatus.DRAFT,
     type: collection?.toUpperCase(),
   };
 
   useEffect(() => {
     const fetchNodes = async () => {
       node
+      //@ts-ignore
         .list(query)
         .then((result: any) => {
           setNodesList(result);
@@ -46,8 +47,10 @@ function CollectionList({ collection }: { collection?: string }) {
 
   return (
     <div>
-      {nodesList.map((data) => (
-        <CollectionListCard key={data.id}>
+      {nodesList.map((data, i) => (
+          <div key={i}>
+
+        <CollectionListCard>
           <CollectionListCardContent>
             <CollectionListCardHeading to={`/collections/edit/${data.id}`}>
               {data.id}
@@ -55,6 +58,7 @@ function CollectionList({ collection }: { collection?: string }) {
             <CollectionListCardType>{data.type}</CollectionListCardType>
           </CollectionListCardContent>
         </CollectionListCard>
+          </div>
       ))}
     </div>
   );
