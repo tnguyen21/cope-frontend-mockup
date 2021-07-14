@@ -40,7 +40,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
   const [userData, setUserData] = useState<any>();
   const [nodeData, setNodeData] = useState<any>();
   const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false);
-  const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState(false);
+  const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState("");
   const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false);
   const { nodeId } = useParams<RouteParams>();
   const history = useHistory();
@@ -172,7 +172,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
                 {RenderAssetWidget(asset, nodeData, setNodeData)}
                 <Button
                   variant="contained"
-                  onClick={() => setDeleteAssetDialogOpen(true)}
+                  onClick={() => setDeleteAssetDialogOpen(asset.id)}
                 >
                   Delete Asset
                 </Button>

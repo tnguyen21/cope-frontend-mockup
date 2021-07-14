@@ -14,7 +14,7 @@ function DeleteNodeDialog({
   setOpen,
   assetId,
 }: {
-  open: boolean;
+  open: string;
   setOpen: Function;
   assetId?: string;
 }) {
@@ -37,12 +37,14 @@ function DeleteNodeDialog({
   return (
     <div>
       <Dialog
-        open={open}
+        open={assetId === open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Delete this Asset?</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Delete this {assetId}?
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Deleting this asset will remove this asset from the database. As a
