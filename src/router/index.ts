@@ -57,7 +57,7 @@ export const routerCfg = async url => {
                       },
                   ],
                   [
-                      { ...match, URL_PATH: [ "page1" ] },
+                      { ...match, URL_PATH: ["page1"] },
                       {
                           URL_DATA: async () => {
                               const list = await node.list({
@@ -74,7 +74,22 @@ export const routerCfg = async url => {
                           URL_PAGE: "page1",
                       },
                   ],
-              ],
+                  [
+                      { ...match, URL_PATH: ["admin", "collections"] },
+                      {
+                          URL_DATA: () => {
+                              return {
+                                  DOM_HEAD: {
+                                      title: "View Collections",
+                                      og_description: "Authoring side of COPE",
+                                  },
+                                  DOM_BODY: { data: [] },
+                              }
+                          },
+                          URL_PAGE: "admin/collections",
+                      },
+                  ],
+              ]
               // TODO: create actual 404 Page
           ).get(match) || {
               [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" } }),
