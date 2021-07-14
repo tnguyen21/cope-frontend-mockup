@@ -10,10 +10,10 @@ function Collections() {
     // be used to query for node type?
     return (
         <Grid justifyContent="space-between" container>
-            <Grid item xs={4}>
+            <Grid item md={3}>
                 <Sidebar />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item md={9}>
                 <CollectionHeader collection={"A_GEM"} />
                 <CollectionList collection={"A_GEM"} />
             </Grid>
