@@ -12,10 +12,11 @@ import * as K from "@-0/keys"
 import { router } from "./router"
 import { Provider } from "./components"
 import { configureWith } from "cope-client-utils"
+
 // additional configurations in cope-client-utils provided
 // to properly assign ownership to created Nodes/Assets
 configureWith(awsconfig)
-//registerRouterDOM(router)
+
 ReactDOM.render(
     <Provider
         CFG={{

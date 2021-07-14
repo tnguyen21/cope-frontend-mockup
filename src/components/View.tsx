@@ -31,7 +31,7 @@ export const View = () => {
                 pageCursor.release()
             }
         },
-        [ loadingCursor, pathCursor, pageCursor ],
+        [ loadingCursor, pathCursor, pageCursor, page, loading, path ],
     )
 
     const store = $store$.deref()

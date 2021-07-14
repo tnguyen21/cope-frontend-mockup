@@ -51,7 +51,7 @@ const App = () => {
         return (
             <div className="App">
                 <Chrome>
-                    <View user={user} />
+                    <View />
                 </Chrome>
             </div>
         )
