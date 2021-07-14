@@ -5,11 +5,13 @@ import { Card } from "@material-ui/core"
 import { NodeType } from "cope-client-utils/lib/graphql/API"
 
 const SidebarCard = styled(Card)`
-  max-width: 275px;
-  margin-top: 8px;
+    max-width: 275px;
+    margin-top: 8px;
 `
 
-const SidebarCardContent = styled.div`padding: 8px;`
+const SidebarCardContent = styled.div`
+    padding: 8px;
+`
 
 const SidebarCardHeading = styled.h2`
     margin: 0;
@@ -24,14 +26,14 @@ const SidebarNavList = styled.ul`
 `
 
 const SidebarNavLink = styled(NavLink)`
-  display: flex;
-  font-size: 14px;
-  font-weight: 500;
-  align-items: center;
-  padding: 8px 0px;
-  border-left: 2px solid #fff;
-  z-index: -1;
-  text-decoration: none;
+    display: flex;
+    font-size: 14px;
+    font-weight: 500;
+    align-items: center;
+    padding: 8px 0px;
+    border-left: 2px solid #fff;
+    z-index: -1;
+    text-decoration: none;
 `
 
 function Sidebar() {
@@ -40,7 +42,7 @@ function Sidebar() {
         //@ts-ignore
         linksAndSlugs.push({
             typeName: type,
-            typeSlug: type.toLowerCase()
+            typeSlug: type.toLowerCase(),
         })
     }
 
@@ -51,7 +53,9 @@ function Sidebar() {
                 <SidebarNavList>
                     {linksAndSlugs.map(type => (
                         <li key={type.typeSlug}>
-                            <SidebarNavLink to={`/collections/${type.typeSlug}`}>{type.typeName}</SidebarNavLink>
+                            <SidebarNavLink to={`/collections/${type.typeSlug}`}>
+                                {type.typeName}
+                            </SidebarNavLink>
                         </li>
                     ))}
                 </SidebarNavList>
