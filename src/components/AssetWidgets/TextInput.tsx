@@ -17,7 +17,6 @@ function TextInput({
       (item: any) => item.id === assetId
     )[0];
     updatedAssetState = { ...updatedAssetState, content: event.target.value };
-    console.log(updatedAssetState);
     let newValue = {
       ...value,
       assets: {

@@ -30,14 +30,9 @@ function DeleteNodeDialog({
       id: nodeId,
     };
 
-    node
-      .delete(data)
-      .then((result: any) => {
-        console.log(result);
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
+    node.delete(data).catch((error: any) => {
+      console.error(error);
+    });
 
     handleClose();
     history.push("/collections");

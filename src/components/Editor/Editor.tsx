@@ -70,7 +70,6 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
           });
           setNodeStatus(res.status);
           setNodeType(res.type);
-          console.log(res);
         });
       } catch (error) {
         console.error(error);
@@ -104,7 +103,6 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
     node
       .create(data)
       .then((result: any) => {
-        console.log(result);
         history.push(`/collections/edit/${result.id}`);
       })
       .catch((error: any) => {
@@ -113,14 +111,9 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
   };
 
   const updateNode = () => {
-    node
-      .update(nodeData)
-      .then((result: any) => {
-        console.log(result);
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
+    node.update(nodeData).catch((error: any) => {
+      console.error(error);
+    });
     for (const i in nodeData.assets.items) {
       let _asset = nodeData.assets.items[i];
       let data = {
@@ -134,10 +127,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
         type: _asset.type,
       };
 
-      asset
-        .update(data)
-        .then((result: any) => console.log(result))
-        .catch((error: any) => console.error(error));
+      asset.update(data).catch((error: any) => console.error(error));
     }
   };
 
@@ -178,7 +168,7 @@ function Editor({ newNode = false }: { newNode?: boolean }) {
 
           {nodeData &&
             nodeData.assets.items.map((asset: any) => (
-              <Wrapper>
+              <Wrapper key={asset.id}>
                 {RenderAssetWidget(asset, nodeData, setNodeData)}
                 <Button
                   variant="contained"

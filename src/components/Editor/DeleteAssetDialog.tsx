@@ -27,14 +27,9 @@ function DeleteNodeDialog({
       id: assetId,
     };
 
-    asset
-      .delete(data)
-      .then((result: any) => {
-        console.log(result);
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
+    asset.delete(data).catch((error: any) => {
+      console.error(error);
+    });
 
     handleClose();
   };
