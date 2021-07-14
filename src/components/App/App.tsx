@@ -20,7 +20,7 @@ function App() {
                     <Collections />
                 </Route>
                 <Route path="/collections/:collection/new">
-                    <Editor newNode={true} />
+                    <Editor />
                 </Route>
                 <Route path="/collections/edit/:nodeId">
                     <Editor />

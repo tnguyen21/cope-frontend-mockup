@@ -89,6 +89,25 @@ export const routerCfg = async url => {
                           URL_PAGE: "admin/collections",
                       },
                   ],
+                  [
+                      { ...match, URL_PATH: ["admin", "edit"] },
+                      {
+                          URL_DATA: async () => {
+                              const list = await node.list({
+                                  type: API.NodeType.A_GEM,
+                                  status: API.NodeStatus.DRAFT,
+                              })
+                              return {
+                                  DOM_HEAD: {
+                                      title: "Edit",
+                                      og_description: "Authoring side of COPE",
+                                  },
+                                  DOM_BODY: { data: [] },
+                              }
+                          },
+                          URL_PAGE: "admin/edit",
+                      },
+                  ],
               ]
               // TODO: create actual 404 Page
           ).get(match) || {

@@ -1,5 +1,4 @@
 import React from "react"
-import { useHistory } from "react-router"
 import {
     Dialog,
     DialogTitle,
@@ -19,8 +18,6 @@ function DeleteNodeDialog({
     setOpen: any
     nodeId?: string
 }) {
-    const history = useHistory()
-
     const handleClose = () => {
         setOpen(false)
     }
@@ -35,7 +32,6 @@ function DeleteNodeDialog({
         })
 
         handleClose()
-        history.push("/collections")
     }
 
     return (
