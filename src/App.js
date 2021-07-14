@@ -30,7 +30,9 @@ const App = () => {
                 setUser(authData)
             })
         },
-        [ user ],
+        // authState is a string, so equality checks don't
+        // fire arbitrary rerenderings
+        [ authState ],
     )
 
     const required_fields = [
