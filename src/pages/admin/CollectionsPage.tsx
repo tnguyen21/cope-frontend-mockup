@@ -8,7 +8,7 @@ interface QueryParams {
 export const CollectionsPage = ({ data }: { data: QueryParams }) => {
     return (
         <div>
-            <Collections type={data.type} />
+            <Collections type={data ? data.type : null} />
         </div>
     )
 }

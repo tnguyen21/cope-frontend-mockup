@@ -78,7 +78,15 @@ export const routerCfg = async url => {
                   [
                       { ...match, URL_PATH: ["admin", "collections"] },
                       {
-                          URL_DATA: () => {
+                          // TODO
+                          // these async operations are not needed for the page
+                          // but without them, we cannot navigate to a deep link
+                          // without causing the page to stall
+                          URL_DATA: async () => {
+                              const list = await node.list({
+                                  type: API.NodeType.A_GEM,
+                                  status: API.NodeStatus.DRAFT,
+                              })
                               return {
                                   DOM_HEAD: {
                                       title: "View Collections",
@@ -93,7 +101,15 @@ export const routerCfg = async url => {
                   [
                       { ...match, URL_PATH: ["admin", "collections", "edit"] },
                       {
-                          URL_DATA: () => {
+                          // TODO
+                          // these async operations are not needed for the page
+                          // but without them, we cannot navigate to a deep link
+                          // without causing the page to stall
+                          URL_DATA: async () => {
+                              const list = await node.list({
+                                  type: API.NodeType.A_GEM,
+                                  status: API.NodeStatus.DRAFT,
+                              })
                               return {
                                   DOM_HEAD: {
                                       title: "Edit",

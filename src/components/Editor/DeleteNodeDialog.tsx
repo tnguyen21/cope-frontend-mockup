@@ -8,6 +8,7 @@ import {
     Button,
 } from "@material-ui/core"
 import { node } from "cope-client-utils"
+import { DOMnavigated$ } from "@-0/browser"
 
 function DeleteNodeDialog({
     open,
@@ -32,6 +33,10 @@ function DeleteNodeDialog({
         })
 
         handleClose()
+        DOMnavigated$.next({
+            target: { location: { href: "admin/collections" } },
+            currentTarget: document,
+        })
     }
 
     return (

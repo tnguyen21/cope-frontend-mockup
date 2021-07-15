@@ -7,6 +7,6 @@ interface QueryParams {
 
 export const EditorPage = ({ data }: { data: QueryParams }) => (
     <div>
-        <Editor nodeId={data.nodeId} />
+        <Editor nodeId={data ? data.nodeId : null} />
     </div>
 )

@@ -8,6 +8,7 @@ import AddAssetDialog from "./AddAssetDialog"
 import DeleteNodeDialog from "./DeleteNodeDialog"
 import DeleteAssetDialog from "./DeleteAssetDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
+import { DOMnavigated$ } from "@-0/browser"
 
 const Wrapper = styled.div`
     margin: 24px 8px;
@@ -88,9 +89,16 @@ function Editor({ nodeId }: { nodeId?: string }) {
             updatedAt: null,
         }
 
-        node.create(data).catch((error: any) => {
-            console.error(error)
-        })
+        node.create(data)
+            .then((res: any) => {
+                DOMnavigated$.next({
+                    target: { location: { href: `admin/collections/edit?nodeId=${res.id}` } },
+                    currentTarget: document,
+                })
+            })
+            .catch((error: any) => {
+                console.error(error)
+            })
     }
 
     const updateNode = () => {
