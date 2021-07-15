@@ -34,7 +34,7 @@ function DeleteNodeDialog({
 
         handleClose()
         DOMnavigated$.next({
-            target: { location: { href: "admin/collections" } },
+            target: { location: { href: "/admin/collections" } },
             currentTarget: document,
         })
     }
