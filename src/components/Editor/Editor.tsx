@@ -92,7 +92,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
         node.create(data)
             .then((res: any) => {
                 DOMnavigated$.next({
-                    target: { location: { href: `admin/collections/edit?nodeId=${res.id}` } },
+                    target: { location: { href: `/admin/collections/edit?nodeId=${res.id}` } },
                     currentTarget: document,
                 })
             })
