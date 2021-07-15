@@ -44,6 +44,7 @@ export const routerCfg = async url => {
                                   status: API.NodeStatus.DRAFT,
                               })
                               //  console.log({ list })
+                              console.log(match)
                               return {
                                   [K.DOM_HEAD]: {
                                       [K.HD_TITL]: "COPE frontend",
@@ -83,14 +84,14 @@ export const routerCfg = async url => {
                                       title: "View Collections",
                                       og_description: "Authoring side of COPE",
                                   },
-                                  DOM_BODY: { data: [] },
+                                  DOM_BODY: { type: match.URL_QERY.type },
                               }
                           },
                           URL_PAGE: "admin/collections",
                       },
                   ],
                   [
-                      { ...match, URL_PATH: ["admin", "edit"] },
+                      { ...match, URL_PATH: ["admin", "collections", "edit"] },
                       {
                           URL_DATA: async () => {
                               const list = await node.list({
@@ -105,7 +106,7 @@ export const routerCfg = async url => {
                                   DOM_BODY: { data: [] },
                               }
                           },
-                          URL_PAGE: "admin/edit",
+                          URL_PAGE: "admin/collections/edit",
                       },
                   ],
               ]

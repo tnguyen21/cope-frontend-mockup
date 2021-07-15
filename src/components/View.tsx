@@ -50,7 +50,7 @@ export const View = () => {
             page2: Page2,
             page3: Page3,
             "admin/collections": CollectionsPage,
-            "admin/edit": EditorPage,
+            "admin/collections/edit": EditorPage,
         }[page] || (() => loader)
 
     const is_home = store[K.$$_PATH]?.length === 0
