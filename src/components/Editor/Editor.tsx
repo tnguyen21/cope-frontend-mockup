@@ -180,12 +180,12 @@ function Editor({ nodeId }: { nodeId?: string }) {
                         </Wrapper>
                         <Wrapper>
                             {nodeId ? (
-                                <StyledButton variant="contained" onClick={createNode}>
-                                    Save Node
-                                </StyledButton>
-                            ) : (
                                 <StyledButton variant="contained" onClick={updateNode}>
                                     Update Node
+                                </StyledButton>
+                            ) : (
+                                <StyledButton variant="contained" onClick={createNode}>
+                                    Save Node
                                 </StyledButton>
                             )}
                             {nodeId && (

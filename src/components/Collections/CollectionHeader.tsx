@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { Card } from "@material-ui/core"
+import { Link } from ".."
 
 const CollectionHeaderCard = styled(Card)`
     margin: 8px 8px 32px;
@@ -15,6 +16,11 @@ const SidebarCardHeading = styled.h1`
     margin: 0;
     font-size: 1.125rem;
 `
+const AddNewButton = styled(Link)`
+    display: inline-block;
+    font-size: 1.125rem;
+    float: right;
+`
 
 // collection prop passed in from Collection.tsx
 function CollectionHeader({ collection }: { collection?: string }) {
@@ -24,6 +30,7 @@ function CollectionHeader({ collection }: { collection?: string }) {
                 <SidebarCardHeading>
                     {collection ? collection.toUpperCase() : "Collection Name"}
                 </SidebarCardHeading>
+                <AddNewButton to={`admin/collections/edit`}>Add New</AddNewButton>
             </CollectionHeaderCardContent>
         </CollectionHeaderCard>
     )

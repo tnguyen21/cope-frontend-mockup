@@ -93,17 +93,13 @@ export const routerCfg = async url => {
                   [
                       { ...match, URL_PATH: ["admin", "collections", "edit"] },
                       {
-                          URL_DATA: async () => {
-                              const list = await node.list({
-                                  type: API.NodeType.A_GEM,
-                                  status: API.NodeStatus.DRAFT,
-                              })
+                          URL_DATA: () => {
                               return {
                                   DOM_HEAD: {
                                       title: "Edit",
                                       og_description: "Authoring side of COPE",
                                   },
-                                  DOM_BODY: { data: [] },
+                                  DOM_BODY: { nodeId: match.URL_QERY.nodeId },
                               }
                           },
                           URL_PAGE: "admin/collections/edit",
