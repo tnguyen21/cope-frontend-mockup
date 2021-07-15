@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { Card } from "@material-ui/core"
-import { Link } from "react-router-dom"
+import { Link } from ".."
 
 const CollectionHeaderCard = styled(Card)`
     margin: 8px 8px 32px;
@@ -16,10 +16,9 @@ const SidebarCardHeading = styled.h1`
     margin: 0;
     font-size: 1.125rem;
 `
-
-const StyledLink = styled(Link)`
+const AddNewButton = styled(Link)`
     display: inline-block;
-    padding: 2px 12px;
+    font-size: 1.125rem;
     float: right;
 `
 
@@ -31,9 +30,7 @@ function CollectionHeader({ collection }: { collection?: string }) {
                 <SidebarCardHeading>
                     {collection ? collection.toUpperCase() : "Collection Name"}
                 </SidebarCardHeading>
-                {collection && (
-                    <StyledLink to={`/collections/${collection}/new`}>Add New</StyledLink>
-                )}
+                <AddNewButton to={`admin/collections/edit`}>Add New</AddNewButton>
             </CollectionHeaderCardContent>
         </CollectionHeaderCard>
     )

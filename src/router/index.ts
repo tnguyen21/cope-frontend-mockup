@@ -44,6 +44,7 @@ export const routerCfg = async url => {
                                   status: API.NodeStatus.DRAFT,
                               })
                               //  console.log({ list })
+                              console.log(match)
                               return {
                                   [K.DOM_HEAD]: {
                                       [K.HD_TITL]: "COPE frontend",
@@ -57,7 +58,7 @@ export const routerCfg = async url => {
                       },
                   ],
                   [
-                      { ...match, URL_PATH: [ "page1" ] },
+                      { ...match, URL_PATH: ["page1"] },
                       {
                           URL_DATA: async () => {
                               const list = await node.list({
@@ -74,7 +75,53 @@ export const routerCfg = async url => {
                           URL_PAGE: "page1",
                       },
                   ],
-              ],
+                  [
+                      { ...match, URL_PATH: ["admin", "collections"] },
+                      {
+                          // TODO
+                          // these async operations are not needed for the page
+                          // but without them, we cannot navigate to a deep link
+                          // without causing the page to stall
+                          URL_DATA: async () => {
+                              const list = await node.list({
+                                  type: API.NodeType.A_GEM,
+                                  status: API.NodeStatus.DRAFT,
+                              })
+                              return {
+                                  DOM_HEAD: {
+                                      title: "View Collections",
+                                      og_description: "Authoring side of COPE",
+                                  },
+                                  DOM_BODY: { type: match.URL_QERY.type },
+                              }
+                          },
+                          URL_PAGE: "admin/collections",
+                      },
+                  ],
+                  [
+                      { ...match, URL_PATH: ["admin", "collections", "edit"] },
+                      {
+                          // TODO
+                          // these async operations are not needed for the page
+                          // but without them, we cannot navigate to a deep link
+                          // without causing the page to stall
+                          URL_DATA: async () => {
+                              const list = await node.list({
+                                  type: API.NodeType.A_GEM,
+                                  status: API.NodeStatus.DRAFT,
+                              })
+                              return {
+                                  DOM_HEAD: {
+                                      title: "Edit",
+                                      og_description: "Authoring side of COPE",
+                                  },
+                                  DOM_BODY: { nodeId: match.URL_QERY.nodeId },
+                              }
+                          },
+                          URL_PAGE: "admin/collections/edit",
+                      },
+                  ],
+              ]
               // TODO: create actual 404 Page
           ).get(match) || {
               [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" } }),

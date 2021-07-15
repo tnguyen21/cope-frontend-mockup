@@ -1,8 +1,8 @@
 import React from "react"
 import styled from "styled-components"
-import { NavLink } from "react-router-dom"
 import { Card } from "@material-ui/core"
 import { NodeType } from "cope-client-utils/lib/graphql/API"
+import { Link } from ".."
 
 const SidebarCard = styled(Card)`
     max-width: 275px;
@@ -25,14 +25,12 @@ const SidebarNavList = styled.ul`
     overflow: auto;
 `
 
-const SidebarNavLink = styled(NavLink)`
+const SidebarNavLink = styled(Link)`
     display: flex;
     font-size: 14px;
     font-weight: 500;
     align-items: center;
     padding: 8px 0px;
-    border-left: 2px solid #fff;
-    z-index: -1;
     text-decoration: none;
 `
 
@@ -53,7 +51,8 @@ function Sidebar() {
                 <SidebarNavList>
                     {linksAndSlugs.map(type => (
                         <li key={type.typeSlug}>
-                            <SidebarNavLink to={`/collections/${type.typeSlug}`}>
+                            {/* to={`/collections/${type.typeSlug}` */}
+                            <SidebarNavLink to={`admin/collections?type=${type.typeSlug}`}>
                                 {type.typeName}
                             </SidebarNavLink>
                         </li>

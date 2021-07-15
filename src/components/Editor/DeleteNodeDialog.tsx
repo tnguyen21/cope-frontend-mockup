@@ -1,5 +1,4 @@
 import React from "react"
-import { useHistory } from "react-router"
 import {
     Dialog,
     DialogTitle,
@@ -9,6 +8,7 @@ import {
     Button,
 } from "@material-ui/core"
 import { node } from "cope-client-utils"
+import { DOMnavigated$ } from "@-0/browser"
 
 function DeleteNodeDialog({
     open,
@@ -19,8 +19,6 @@ function DeleteNodeDialog({
     setOpen: any
     nodeId?: string
 }) {
-    const history = useHistory()
-
     const handleClose = () => {
         setOpen(false)
     }
@@ -35,7 +33,10 @@ function DeleteNodeDialog({
         })
 
         handleClose()
-        history.push("/collections")
+        DOMnavigated$.next({
+            target: { location: { href: "admin/collections" } },
+            currentTarget: document,
+        })
     }
 
     return (

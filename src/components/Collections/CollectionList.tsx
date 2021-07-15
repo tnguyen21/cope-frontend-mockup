@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { Card } from "@material-ui/core"
-import { Link } from "react-router-dom"
 import { node, API } from "cope-client-utils"
+import { Link } from ".."
 
 const CollectionListCard = styled(Card)`
     margin: 8px 8px;
@@ -23,7 +23,7 @@ const CollectionListCardType = styled.div`
     float: right;
     color: gray;
 `
-
+// collection prop passed in from Collection.tsx
 function CollectionList({ collection }: { collection?: string }) {
     const [nodesList, setNodesList] = useState<any[]>([])
 
@@ -51,7 +51,10 @@ function CollectionList({ collection }: { collection?: string }) {
                 <div key={i}>
                     <CollectionListCard>
                         <CollectionListCardContent>
-                            <CollectionListCardHeading to={`/collections/edit/${data.id}`}>
+                            {/* to={`/collections/edit/${data.id}` */}
+                            <CollectionListCardHeading
+                                to={`admin/collections/edit?nodeId=${data.id}`}
+                            >
                                 {data.id}
                             </CollectionListCardHeading>
                             <CollectionListCardType>{data.type}</CollectionListCardType>
