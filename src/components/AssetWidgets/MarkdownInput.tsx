@@ -29,14 +29,16 @@ function MarkdownInput({
 
     useEffect(() => {
         // use an effect since value gets hydrated asynchronously
-        // and we don't want to try and parse content until it is ready
+        // and we don't want to try and parse content until it exists
         if (value) {
             const editorAsset = value.assets.items.filter((item: any) => item.id === assetId)[0]
-            // here for getting the content back from the database
-            // we need to parse out the string to an object, and then call convertFromRaw
-            const editorContent = JSON.parse(editorAsset.content)
-            const contentState = convertFromRaw(editorContent)
-            setEditorState(EditorState.createWithContent(contentState))
+            if (editorAsset.content) {
+                // here for getting the content back from the database
+                // we need to parse out the string to an object, and then call convertFromRaw
+                const editorContent = JSON.parse(editorAsset.content)
+                const contentState = convertFromRaw(editorContent)
+                setEditorState(EditorState.createWithContent(contentState))
+            }
         }
     }, [])
 
