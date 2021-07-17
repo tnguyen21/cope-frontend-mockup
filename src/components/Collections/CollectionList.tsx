@@ -43,7 +43,7 @@ function CollectionList({ collection }: { collection?: string }) {
                 .catch((error: any) => console.error(error))
         }
         fetchNodes()
-    })
+    }, [])
 
     return (
         <div>
