@@ -55,7 +55,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     // are displayed first
                     setNodeData({
                         ...res,
-                        assets: { ...res.assets, items: res.assets.items },
+                        assets: { ...res.assets, items: res.assets.items.reverse() },
                     })
                     setNodeStatus(res.status)
                     setNodeType(res.type)
