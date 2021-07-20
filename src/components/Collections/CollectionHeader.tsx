@@ -54,12 +54,13 @@ function CollectionHeader({ collection }: { collection?: string }) {
         node.create(data)
             .then((res: any) => {
                 if (res.type in TEMPLATES) {
-                    TEMPLATES[res.type].map(template => {
+                    TEMPLATES[res.type].map((template, i) => {
                         const assetData = {
                             name: template.name,
                             node_id: res.id,
                             type: template.type,
                             content: "",
+                            index: i,
                         }
                         // we fire off these async operations, and cannot guarantee the
                         // order of creation of these assets on the node

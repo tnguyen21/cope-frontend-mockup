@@ -54,11 +54,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     // are displayed first
                     let sortedItems = res.assets.items
                     if (res.type in TEMPLATES) {
-                        sortedItems = res.assets.items.sort(
-                            (a, b) =>
-                                TEMPLATES[res.type].indexOf(a.name) -
-                                TEMPLATES[res.type].indexOf(b.name)
-                        )
+                        sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
                     }
                     setNodeData({
                         ...res,
@@ -91,21 +87,9 @@ function Editor({ nodeId }: { nodeId?: string }) {
         node.update(nodeData).catch((error: any) => {
             console.error(error)
         })
-        for (const i in nodeData.assets.items) {
-            const _asset = nodeData.assets.items[i]
-            const data = {
-                id: _asset.id,
-                content: _asset.content,
-                createdAt: _asset.createdAt,
-                editors: _asset.editors,
-                name: _asset.name,
-                node_id: _asset.node_id,
-                owner: _asset.owner,
-                type: _asset.type,
-            }
-
-            asset.update(data).catch((error: any) => console.error(error))
-        }
+        nodeData.assets.items.forEach(_asset => {
+            asset.update(_asset).catch((error: any) => console.error(error))
+        })
     }
 
     return (
