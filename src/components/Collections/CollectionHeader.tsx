@@ -1,7 +1,11 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import { Card } from "@material-ui/core"
-import { Link } from ".."
+import Auth from "@aws-amplify/auth"
+import { Card, Button } from "@material-ui/core"
+import { node } from "cope-client-utils"
+import { NodeStatus } from "cope-client-utils/lib/graphql/API"
+import { DOMnavigated$ } from "@-0/browser"
+import { NODE_TYPES } from "./utils"
 
 const CollectionHeaderCard = styled(Card)`
     margin: 8px 8px 32px;
@@ -16,21 +20,59 @@ const SidebarCardHeading = styled.h1`
     margin: 0;
     font-size: 1.125rem;
 `
-const AddNewButton = styled(Link)`
-    display: inline-block;
-    font-size: 1.125rem;
-    float: right;
-`
-
 // collection prop passed in from Collection.tsx
 function CollectionHeader({ collection }: { collection?: string }) {
+    const [userData, setUserData] = useState<any>()
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                Auth.currentSession().then(res => setUserData(res.getIdToken().payload))
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        fetchUserData()
+    }, [])
+
+    const createNode = () => {
+        const data = {
+            id: null,
+            status: NodeStatus.DRAFT,
+            // this is hacky!!
+            // enums do not place nicely with strings, so we need to create
+            //  a dictionary of NodeTypes, which uses the enums values
+            type: NODE_TYPES[collection.toUpperCase()],
+            createdAt: null,
+            // getting user is async operation
+            // TODO: disable save draft button until all required info is loaded?
+            owner: userData ? userData.email : null,
+            updatedAt: null,
+        }
+
+        node.create(data)
+            .then((res: any) => {
+                DOMnavigated$.next({
+                    target: { location: { href: `/admin/collections/edit?nodeId=${res.id}` } },
+                    currentTarget: document,
+                })
+            })
+            .catch((error: any) => {
+                console.error(error)
+            })
+    }
+
     return (
         <CollectionHeaderCard>
             <CollectionHeaderCardContent>
                 <SidebarCardHeading>
-                    {collection ? collection.toUpperCase() : "Collection Name"}
+                    {collection ? collection.toUpperCase() : "All Nodes"}
                 </SidebarCardHeading>
-                <AddNewButton to={`admin/collections/edit`}>Add New</AddNewButton>
+                {collection && (
+                    <Button variant="outlined" onClick={createNode}>
+                        Create New Draft
+                    </Button>
+                )}
             </CollectionHeaderCardContent>
         </CollectionHeaderCard>
     )

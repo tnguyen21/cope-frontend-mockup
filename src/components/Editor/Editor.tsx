@@ -28,8 +28,6 @@ const PreviewHeading = styled.h2`
 `
 
 function Editor({ nodeId }: { nodeId?: string }) {
-    const [nodeStatus, setNodeStatus] = useState(NodeStatus.DRAFT)
-    const [nodeType, setNodeType] = useState(NodeType.A_ARTICLE)
     const [userData, setUserData] = useState<any>()
     const [nodeData, setNodeData] = useState<any>()
     const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false)
@@ -57,8 +55,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                         ...res,
                         assets: { ...res.assets, items: res.assets.items.reverse() },
                     })
-                    setNodeStatus(res.status)
-                    setNodeType(res.type)
                 })
             } catch (error) {
                 console.error(error)
@@ -67,21 +63,26 @@ function Editor({ nodeId }: { nodeId?: string }) {
         fetchNodeData()
         // conditionally call this hook every time add asset dialog is opened
         // or closed (i.e. a user has added an asset) to force re-render
+        // this is hacky!!
+        // if a user changes node type or status, then adds asset,
+        // then it will change back the draft and status back to what they are
+        // remotely. need to change functions that add asset/delete assets to
+        // change local nodeData object, then update remote accordingly
     }, [nodeId, addAssetDialogOpen, deleteAssetDialogOpen])
 
     const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
-        setNodeStatus(event.target.value)
+        setNodeData({ ...nodeData, status: event.target.value })
     }
 
     const onNodeTypeChange = (event: React.ChangeEvent<{ value: any }>) => {
-        setNodeType(event.target.value)
+        setNodeData({ ...nodeData, type: event.target.value })
     }
 
     const createNode = () => {
         const data = {
             id: null,
-            status: nodeStatus,
-            type: nodeType,
+            status: nodeData.status,
+            type: nodeData.type,
             createdAt: null,
             // getting user is async operation
             // TODO: disable save draft button until all required info is loaded?
@@ -129,7 +130,10 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     <Wrapper>
                         <Wrapper>
                             <InputLabel>Node Type</InputLabel>
-                            <Select value={nodeType} onChange={onNodeTypeChange}>
+                            <Select
+                                value={nodeData ? nodeData.type : "H_AUTHOR"}
+                                onChange={onNodeTypeChange}
+                            >
                                 <MenuItem value={NodeType.H_AUTHOR}>H_AUTHOR</MenuItem>
                                 <MenuItem value={NodeType.H_TEAM}>H_TEAM</MenuItem>
                                 <MenuItem value={NodeType.A_ARTICLE}>A_ARTICLE</MenuItem>
@@ -148,7 +152,10 @@ function Editor({ nodeId }: { nodeId?: string }) {
                         </Wrapper>
                         <Wrapper>
                             <InputLabel>Status</InputLabel>
-                            <Select value={nodeStatus} onChange={onStatusChange}>
+                            <Select
+                                value={nodeData ? nodeData.status : "DRAFT"}
+                                onChange={onStatusChange}
+                            >
                                 <MenuItem value={NodeStatus.DRAFT}>Draft</MenuItem>
                                 <MenuItem value={NodeStatus.REVIEWED}>Reviewed</MenuItem>
                                 <MenuItem value={NodeStatus.PUBLISHED}>Published</MenuItem>
