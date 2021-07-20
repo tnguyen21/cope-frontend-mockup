@@ -54,13 +54,18 @@ function CollectionHeader({ collection }: { collection?: string }) {
         node.create(data)
             .then((res: any) => {
                 if (res.type in TEMPLATES) {
-                    TEMPLATES[res.type].forEach(template => {
+                    TEMPLATES[res.type].map(template => {
                         const assetData = {
                             name: template.name,
                             node_id: res.id,
                             type: template.type,
                             content: "",
                         }
+                        // we fire off these async operations, and cannot guarantee the
+                        // order of creation of these assets on the node
+                        // as a result, we cannot order them based on creation date
+                        // in the editor and need to come up with some kind of logic that
+                        // will ensure the inputs and preview widgets are displayed in the correct order
                         asset.create(assetData).catch(err => console.error(err))
                     })
                 }

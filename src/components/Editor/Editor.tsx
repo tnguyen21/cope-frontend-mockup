@@ -8,6 +8,8 @@ import AddAssetDialog from "./AddAssetDialog"
 import DeleteNodeDialog from "./DeleteNodeDialog"
 import DeleteAssetDialog from "./DeleteAssetDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
+import RenderContentPreview from "../ContentPreview/RenderContentPreview"
+import { TEMPLATES } from "../Collections/templates"
 
 const Wrapper = styled.div`
     margin: 24px 8px;
@@ -50,9 +52,17 @@ function Editor({ nodeId }: { nodeId?: string }) {
                 node.read({ id: nodeId }).then((res: any) => {
                     // reverse items here such that oldest assets
                     // are displayed first
+                    let sortedItems = res.assets.items
+                    if (res.type in TEMPLATES) {
+                        sortedItems = res.assets.items.sort(
+                            (a, b) =>
+                                TEMPLATES[res.type].indexOf(a.name) -
+                                TEMPLATES[res.type].indexOf(b.name)
+                        )
+                    }
                     setNodeData({
                         ...res,
-                        assets: { ...res.assets, items: res.assets.items.reverse() },
+                        assets: { ...res.assets, items: sortedItems },
                     })
                 })
             } catch (error) {
@@ -205,6 +215,16 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             be able to parse out content from editor state and
                             convert to necessary HTML/Markdown to create content preview
                         */}
+                            {nodeData &&
+                                nodeData.assets.items
+                                    .filter((asset: any) => asset.content !== "")
+                                    .map((asset: any) => (
+                                        <Wrapper key={asset.id}>
+                                            {RenderContentPreview(asset, {
+                                                content: asset.content,
+                                            })}
+                                        </Wrapper>
+                                    ))}
                         </PreviewContent>
                     </Card>
                 </Wrapper>

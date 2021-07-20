@@ -17,6 +17,31 @@ const useStyles = makeStyles({
     },
 })
 
+const customContentStateConverter = contentState => {
+    // changes block type of images to 'atomic'
+    const newBlockMap = contentState.getBlockMap().map(block => {
+        const entityKey = block.getEntityAt(0)
+        if (entityKey !== null) {
+            const entityBlock = contentState.getEntity(entityKey)
+            const entityType = entityBlock.getType()
+            switch (entityType) {
+                case "IMAGE": {
+                    const newBlock = block.merge({
+                        type: "atomic",
+                        text: "img",
+                    })
+                    return newBlock
+                }
+                default:
+                    return block
+            }
+        }
+        return block
+    })
+    const newContentState = contentState.set("blockMap", newBlockMap)
+    return newContentState
+}
+
 function MarkdownInput({
     assetId,
     value,
@@ -35,7 +60,12 @@ function MarkdownInput({
         if (value) {
             const editorAsset = value.assets.items.filter((item: any) => item.id === assetId)[0]
             if (editorAsset.content) {
-                const contentState = stateFromMarkdown(editorAsset.content)
+                // convert image block types to atomic using custom content state converter
+                // https://stackoverflow.com/questions/59359445/not-able-to-display-image-in-editor
+                const contentState = customContentStateConverter(
+                    stateFromMarkdown(editorAsset.content)
+                )
+
                 setEditorState(EditorState.createWithContent(contentState))
             }
         }
