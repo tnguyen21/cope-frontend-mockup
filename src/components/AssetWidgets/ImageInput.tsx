@@ -39,7 +39,7 @@ function ImageInput({
         <>
             <TextField
                 id="standard-basic"
-                label={`Image: ${label}`}
+                label={label}
                 value={value.assets.items.filter((item: any) => item.id === assetId)[0].content}
                 onChange={handleValueChange}
             />

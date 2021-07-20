@@ -1,5 +1,8 @@
 import React from "react"
-import { MarkdownInput, TextInput, ImageInput, VideoInput } from "."
+import MarkdownInput from "./MarkdownInput"
+import TextInput from "./TextInput"
+import VideoInput from "./VideoInput"
+import ImageInput from "./ImageInput"
 
 const AssetTypesToComponentMap = {
     // image and video input only take links to existing content
@@ -23,7 +26,7 @@ const AssetTypesToComponentMap = {
 }
 
 function RenderAssetWidget(asset, nodeData, setNodeData) {
-    if (typeof AssetTypesToComponentMap[asset.type] !== "undefined") {
+    if (asset.type in AssetTypesToComponentMap) {
         return React.createElement(AssetTypesToComponentMap[asset.type], {
             label: asset.name,
             assetId: asset.id,

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import Auth from "@aws-amplify/auth"
 import { Card, Button } from "@material-ui/core"
-import { node } from "cope-client-utils"
+import { node, asset } from "cope-client-utils"
 import { NodeStatus } from "cope-client-utils/lib/graphql/API"
 import { DOMnavigated$ } from "@-0/browser"
 import { NODE_TYPES } from "./utils"
+import { TEMPLATES } from "./templates"
 
 const CollectionHeaderCard = styled(Card)`
     margin: 8px 8px 32px;
@@ -52,6 +53,17 @@ function CollectionHeader({ collection }: { collection?: string }) {
 
         node.create(data)
             .then((res: any) => {
+                if (res.type in TEMPLATES) {
+                    TEMPLATES[res.type].forEach(template => {
+                        const assetData = {
+                            name: template.name,
+                            node_id: res.id,
+                            type: template.type,
+                            content: "",
+                        }
+                        asset.create(assetData).catch(err => console.error(err))
+                    })
+                }
                 DOMnavigated$.next({
                     target: { location: { href: `/admin/collections/edit?nodeId=${res.id}` } },
                     currentTarget: document,

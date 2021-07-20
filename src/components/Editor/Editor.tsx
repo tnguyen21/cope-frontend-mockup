@@ -8,7 +8,6 @@ import AddAssetDialog from "./AddAssetDialog"
 import DeleteNodeDialog from "./DeleteNodeDialog"
 import DeleteAssetDialog from "./DeleteAssetDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
-import { DOMnavigated$ } from "@-0/browser"
 
 const Wrapper = styled.div`
     margin: 24px 8px;
@@ -76,30 +75,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
 
     const onNodeTypeChange = (event: React.ChangeEvent<{ value: any }>) => {
         setNodeData({ ...nodeData, type: event.target.value })
-    }
-
-    const createNode = () => {
-        const data = {
-            id: null,
-            status: nodeData.status,
-            type: nodeData.type,
-            createdAt: null,
-            // getting user is async operation
-            // TODO: disable save draft button until all required info is loaded?
-            owner: userData ? userData.email : null,
-            updatedAt: null,
-        }
-
-        node.create(data)
-            .then((res: any) => {
-                DOMnavigated$.next({
-                    target: { location: { href: `/admin/collections/edit?nodeId=${res.id}` } },
-                    currentTarget: document,
-                })
-            })
-            .catch((error: any) => {
-                console.error(error)
-            })
     }
 
     const updateNode = () => {
@@ -194,13 +169,9 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             )}
                         </Wrapper>
                         <Wrapper>
-                            {nodeId ? (
+                            {nodeId && (
                                 <StyledButton variant="contained" onClick={updateNode}>
                                     Update Node
-                                </StyledButton>
-                            ) : (
-                                <StyledButton variant="contained" onClick={createNode}>
-                                    Save Node
                                 </StyledButton>
                             )}
                             {nodeId && (
