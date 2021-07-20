@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { Editor } from "react-draft-wysiwyg"
-import { convertFromRaw, convertToRaw, EditorState, ContentState } from "draft-js"
+import { EditorState } from "draft-js"
 import { makeStyles, InputLabel } from "@material-ui/core"
+import { stateToMarkdown } from "draft-js-export-markdown"
+import { stateFromMarkdown } from "draft-js-import-markdown"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 const useStyles = makeStyles({
@@ -33,10 +35,7 @@ function MarkdownInput({
         if (value) {
             const editorAsset = value.assets.items.filter((item: any) => item.id === assetId)[0]
             if (editorAsset.content) {
-                // here for getting the content back from the database
-                // we need to parse out the string to an object, and then call convertFromRaw
-                const editorContent = JSON.parse(editorAsset.content)
-                const contentState = convertFromRaw(editorContent)
+                const contentState = stateFromMarkdown(editorAsset.content)
                 setEditorState(EditorState.createWithContent(contentState))
             }
         }
@@ -51,9 +50,7 @@ function MarkdownInput({
         let updatedAssetState = value.assets.items.filter((item: any) => item.id === assetId)[0]
         updatedAssetState = {
             ...updatedAssetState,
-            // we do this rough conversion using convertToRaw and then stringify it
-            // so we can save it to the database for later parsing
-            content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+            content: stateToMarkdown(editorState.getCurrentContent()),
         }
         const newValue = {
             ...value,

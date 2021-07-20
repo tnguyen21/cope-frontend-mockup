@@ -227,7 +227,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             be able to parse out content from editor state and
                             convert to necessary HTML/Markdown to create content preview
                         */}
-                            <div>Content Preview goes here</div>
                         </PreviewContent>
                     </Card>
                 </Wrapper>
