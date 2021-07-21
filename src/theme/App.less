@@ -1,0 +1,71 @@
+@import "~antd/dist/antd.less";
+//https://docs.amplify.aws/ui/customization/theming/q/framework/react
+
+:root {
+    // colors
+    --amplify-primary-color: #048392;
+    --amplify-primary-tint: #ff7359;
+    --amplify-primary-shade: #e0573e;
+    --amplify-primary-color: #ff9900;
+    --amplify-primary-contrast: var(–amplify-white);
+    --amplify-secondary-color: #152939;
+    --amplify-secondary-contrast: var(–amplify-white);
+    --amplify-secondary-tint: #31465f;
+    --amplify-secondary-shade: #1f2a37;
+    --amplify-tertiary-color: #5d8aff;
+    --amplify-tertiary-contrast: var(–amplify-white);
+    --amplify-tertiary-tint: #7da1ff;
+    --amplify-tertiary-shade: #537be5;
+    --amplify-grey: #828282;
+    --amplify-light-grey: #c4c4c4;
+    --amplify-white: #ffffff;
+    --amplify-red: #dd3f5b;
+
+    --amplify-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+        Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+    --amplify-text-xxs: 0.75rem;
+    --amplify-text-xs: 0.81rem;
+    --amplify-text-sm: 0.875rem;
+    --amplify-text-md: 1rem;
+    --amplify-text-lg: 1.5rem;
+    --amplify-text-xl: 2rem;
+    --amplify-text-xxl: 2.5rem;
+}
+
+// amplify-authenticator
+
+//amplify-sign-in
+
+amplify-sign-out {
+    padding: .5rem;
+    line-height: 1rem;
+    border-radius: 1rem;
+
+    amplify-button {
+        button {
+            padding: .5rem;
+        }
+    }
+}
+
+//amplify-confirm-sign-in
+//amplify-sign-up
+//amplify-confirm-sign-up
+//amplify-forgot-password
+//amplify-require-new-password
+//amplify-verify-contact
+//amplify-totp-setup
+
+.spinner_container {
+    height: 100%;
+    position: relative;
+}
+.spinner {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}

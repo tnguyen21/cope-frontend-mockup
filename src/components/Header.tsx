@@ -2,58 +2,126 @@ import React from "react"
 import styled from "styled-components"
 import { AmplifySignOut } from "@aws-amplify/ui-react"
 import { Link } from "./Link"
-const AppHeader = styled.header`
-    position: sticky;
-    width: 100%;
-    top: 0;
-    box-shadow: 0px 1px 3px;
-`
+import { primary_color } from "../theme/colors.js"
+import { SignOut } from "../components/Amplify"
+//import { StyledHeader, StyledNavbar, StyledLink, Logo } from "./style"
+import logo from "../assets/us-census-bureau-logo-white.svg"
 
-const AppHeaderContent = styled.div`
-    display: flex;
-    justify-content: space-between;
-    min-width: 800px;
-    max-width: 1440px;
-    padding: 0 12px;
-    margin: 0 auto;
-`
+import { Layout, Menu, Breadcrumb } from "antd"
 
-const AppHeaderNavList = styled.ul`
-    display: flex;
-    margin: 0;
-    list-style: none;
-`
+const { Header: HEADER, Content, Footer } = Layout
 
-const AppHeaderLink = styled(Link)`
-  font-size: 1rem;
-  display: inline-flex;
-  padding: 16px 20px;
-  align-items: center;
-  text-decoration: none;
+export const Header = () => (
+    <Layout>
+        <HEADER style={{ position: "fixed", zIndex: 1, width: "100%", padding: "0 1rem" }}>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[ "2" ]}>
+                <Menu.Item key="1">
+                    <img
+                        src={process.env.PUBLIC_URL + "us-census-bureau-logo-white.svg"}
+                        alt=""
+                        style={{ width: "6rem" }}
+                    />
+                </Menu.Item>
+                <Menu.Item key="2">nav 2</Menu.Item>
+                <Menu.Item key="3" style={{ marginLeft: "auto" }}>
+                    <SignOut style={{ backgroundColor: "transparent" }} />
+                </Menu.Item>
+            </Menu>
+        </HEADER>
+        <Content className="site-layout" style={{ padding: "0 50px", marginTop: 64 }}>
+            <Breadcrumb style={{ margin: "16px 0" }}>
+                <Breadcrumb.Item>Home</Breadcrumb.Item>
+                <Breadcrumb.Item>List</Breadcrumb.Item>
+                <Breadcrumb.Item>App</Breadcrumb.Item>
+            </Breadcrumb>
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
+                Content
+            </div>
+        </Content>
+        <Footer style={{ textAlign: "center" }}>Census Academy</Footer>
+    </Layout>
+)
 
-  &:hover,
-  &:active,
-  &:focus {
-      text-decoration: underline;
-    }
-  }
-`
+//function Header() {
+//  return (
+//    <StyledHeader>
+//      <Container>
+//        <Grid justify="space-between" container spacing={3}>
+//          <Grid item xs={4} role="banner">
+//            <Logo src={logo} alt="United States Census Bureau Logo" />
+//          </Grid>
+//          {/* TODO search bar logic + styles */}
+//          <Grid
+//            item
+//            xs={8}
+//            style={{
+//              fontSize: "1.25rem",
+//              color: "white",
+//              textAlign: "center",
+//              borderLeft: "thin solid hsl(213deg 28% 35%)",
+//            }}
+//          >
+//            Search Bar Here
+//          </Grid>
+//          <StyledNavbar item container xs={12}>
+//            <Grid
+//              item
+//              component="nav"
+//              justify="space-between"
+//              container
+//              role="navigation"
+//            >
+//              <Grid item component={StyledLink} to="/">
+//                Home
+//              </Grid>
+//              <Grid item component={StyledLink} to="/topics">
+//                Topics
+//              </Grid>
+//              <Grid item component={StyledLink} to="/courses">
+//                Courses
+//              </Grid>
+//              <Grid item component={StyledLink} to="/webinars">
+//                Webinars
+//              </Grid>
+//              <Grid item component={StyledLink} to="/data-gems">
+//                Data Gems
+//              </Grid>
+//              <Grid item component={StyledLink} to="/data-challenges">
+//                Data Challenges
+//              </Grid>
+//              {/* TODO set up user accounts, dashaboard only becomes visible when logged in */}
+//              {/* <Grid item>
+//                  <Link to="/">Dashboard</Link>
+//                </Grid> */}
+//              <Grid item component={StyledLink} to="/resources">
+//                Resources
+//              </Grid>
+//              <Grid item component={StyledLink} to="/about">
+//                About
+//              </Grid>
+//            </Grid>
+//          </StyledNavbar>
+//        </Grid>
+//      </Container>
+//    </StyledHeader>
+//  );
+//}
 
-export function Header() {
-    return (
-        <AppHeader>
-            <AppHeaderContent>
-                <nav>
-                    <AppHeaderNavList>
-                        <li>
-                            <AppHeaderLink to="/collections">Contents</AppHeaderLink>
-                        </li>
-                    </AppHeaderNavList>
-                </nav>
-                <AmplifySignOut />
-            </AppHeaderContent>
-        </AppHeader>
-    )
-}
+//export function Header() {
+//    return (
+//        <AppHeader>
+//            <AppHeaderContent>
+//                <nav>
+//                    <AppHeaderNavList>
+//                        <li>
+//                            <AppHeaderLink to="/collections">Contents</AppHeaderLink>
+//                        </li>
+//                    </AppHeaderNavList>
+//                </nav>
+//                <AmplifySignOut />
+//            </AppHeaderContent>
+//        </AppHeader>
+//    )
+//}
 
 //export default Header
