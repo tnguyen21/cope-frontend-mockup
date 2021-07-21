@@ -7,8 +7,9 @@ import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API"
 import AddAssetDialog from "./AddAssetDialog"
 import DeleteNodeDialog from "./DeleteNodeDialog"
 import DeleteAssetDialog from "./DeleteAssetDialog"
-import { RenderAssetWidget } from "../AssetWidgets"
+import EditorSnackbar from "./EditorSnackbar"
 import RenderContentPreview from "../ContentPreview/RenderContentPreview"
+import { RenderAssetWidget } from "../AssetWidgets"
 import { TEMPLATES } from "../Collections/templates"
 
 const Wrapper = styled.div`
@@ -34,6 +35,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
     const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false)
     const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState("")
     const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false)
+    const [snackbarState, setSnackbarState] = useState({ open: false, message: "" })
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -90,10 +92,16 @@ function Editor({ nodeId }: { nodeId?: string }) {
         nodeData.assets.items.forEach(_asset => {
             asset.update(_asset).catch((error: any) => console.error(error))
         })
+        setSnackbarState({ open: true, message: "Node has been updated successfully" })
     }
 
     return (
         <Grid container>
+            <EditorSnackbar
+                open={snackbarState.open}
+                message={snackbarState.message}
+                setSnackbarState={setSnackbarState}
+            />
             <Grid item md={6}>
                 <Wrapper>
                     <Wrapper>
