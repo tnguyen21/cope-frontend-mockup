@@ -9,6 +9,8 @@ import DeleteNodeDialog from "./DeleteNodeDialog"
 import DeleteAssetDialog from "./DeleteAssetDialog"
 import EditorSnackbar from "./EditorSnackbar"
 import RenderContentPreview from "../ContentPreview/RenderContentPreview"
+import EdgesList from "./EdgesList"
+import AddEdgeDialog from "./AddEdgeDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
 import { TEMPLATES } from "../Collections/templates"
 
@@ -33,6 +35,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
     const [userData, setUserData] = useState<any>()
     const [nodeData, setNodeData] = useState<any>()
     const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false)
+    const [addEdgeDialogOpen, setAddEdgeDialogOpen] = useState(false)
     const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState("")
     const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false)
     const [snackbarState, setSnackbarState] = useState({ open: false, message: "" })
@@ -54,7 +57,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                 node.read({ id: nodeId }).then((res: any) => {
                     // reverse items here such that oldest assets
                     // are displayed first
-                    let sortedItems = res.assets.items
+                    let sortedItems
                     if (res.type in TEMPLATES) {
                         sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
                     }
@@ -158,9 +161,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                 </Wrapper>
                             ))}
                         <Wrapper>
-                            <StyledButton variant="contained">Add Parent</StyledButton>
-                            <StyledButton variant="contained">Add Sibling</StyledButton>
-                            <StyledButton variant="contained">Add Child</StyledButton>
                             {nodeId && (
                                 <StyledButton
                                     variant="contained"
@@ -169,6 +169,17 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                     Add Asset
                                 </StyledButton>
                             )}
+                        </Wrapper>
+                        <Wrapper>
+                            {nodeData && (
+                                <EdgesList edges={nodeData.edges.items} nodeId={nodeData.id} />
+                            )}
+                            <StyledButton
+                                variant="contained"
+                                onClick={() => setAddEdgeDialogOpen(true)}
+                            >
+                                Add Edge
+                            </StyledButton>
                         </Wrapper>
                         <Wrapper>
                             {nodeId && (
@@ -185,6 +196,11 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                 </StyledButton>
                             )}
                         </Wrapper>
+                        <AddEdgeDialog
+                            open={addEdgeDialogOpen}
+                            setOpen={setAddEdgeDialogOpen}
+                            nodeId={nodeData ? nodeData.id : ""}
+                        />
                         <AddAssetDialog
                             open={addAssetDialogOpen}
                             setOpen={setAddAssetDialogOpen}
