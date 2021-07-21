@@ -1,4 +1,4 @@
-import { NodeStatus, NodeType, AssetType } from "cope-client-utils/lib/graphql/API"
+import { NodeStatus, NodeType, AssetType, EdgeType } from "cope-client-utils/lib/graphql/API"
 
 export const NODE_STATUSES = {
     DRAFT: NodeStatus.DRAFT,
@@ -45,4 +45,12 @@ export const ASSET_TYPES = {
     F_KML: AssetType.F_KML,
     F_SHP: AssetType.F_SHP,
     F_CSV: AssetType.F_CSV,
+}
+
+export const EDGE_TYPES = {
+    AUTHORED: EdgeType.AUTHORED,
+    HAS_NEXT: EdgeType.HAS_NEXT,
+    HAS_PREVIOUS: EdgeType.HAS_PREVIOUS,
+    HAS_PART: EdgeType.HAS_PART,
+    HAS_CHILD: EdgeType.HAS_CHILD,
 }
