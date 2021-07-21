@@ -60,7 +60,7 @@ function CollectionHeader({ collection }: { collection?: string }) {
                             node_id: res.id,
                             type: template.type,
                             content: "",
-                            index: i,
+                            index: i + 1,
                         }
                         // we fire off these async operations, and cannot guarantee the
                         // order of creation of these assets on the node

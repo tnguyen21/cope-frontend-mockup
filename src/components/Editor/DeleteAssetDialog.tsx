@@ -13,22 +13,28 @@ function DeleteNodeDialog({
     open,
     setOpen,
     assetId,
+    assetsList,
 }: {
     open: string
     setOpen: any
     assetId?: string
+    assetsList: Array<any>
 }) {
     const handleClose = () => {
         setOpen(false)
     }
 
     const deleteAsset = (assetId?: string) => {
-        const data = {
-            id: assetId,
-        }
-
-        asset.delete(data).catch((error: any) => {
-            console.error(error)
+        const data = { id: assetId }
+        let deletedYet = false
+        assetsList.forEach(a => {
+            if (a.id === assetId) {
+                deletedYet = true
+                asset.delete(data).catch((err: any) => console.error(err))
+            }
+            if (deletedYet) {
+                asset.update({ ...a, index: a.index - 1 }).catch((err: any) => console.error(err))
+            }
         })
 
         handleClose()

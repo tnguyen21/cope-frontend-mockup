@@ -20,12 +20,12 @@ function AddAssetDialog({
     open,
     setOpen,
     nodeId,
-    assetCount, // number of assets in the node, passed in from editor so we don't have to query in this component
+    assetsList, // list of assets associated with nodeId, passed in from editor so we don't have to re-do query
 }: {
     open: boolean
     setOpen: any
     nodeId?: string
-    assetCount: number
+    assetsList: Array<any>
 }) {
     const [assetType, setAssetType] = useState(ASSET_TYPES.A_IMAGE) // random default -- think of better way to set this
     const [assetName, setAssetName] = useState("")
@@ -44,7 +44,7 @@ function AddAssetDialog({
             type: assetType,
             node_id: nodeId,
             content: "",
-            index: assetCount++,
+            index: assetsList.length + 1,
         }
         asset.create(assetData).then(() => {
             handleClose()
