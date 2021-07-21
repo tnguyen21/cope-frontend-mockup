@@ -189,6 +189,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             open={addAssetDialogOpen}
                             setOpen={setAddAssetDialogOpen}
                             nodeId={nodeId}
+                            assetCount={nodeData ? nodeData.assets.items.length : 0}
                         />
                         <DeleteNodeDialog
                             open={deleteNodeDialogOpen}
