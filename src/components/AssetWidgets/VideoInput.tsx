@@ -39,7 +39,7 @@ function VideoInput({
         <>
             <TextField
                 id="standard-basic"
-                label={`Video: ${label}`}
+                label={label}
                 value={value.assets.items.filter((item: any) => item.id === assetId)[0].content}
                 onChange={handleValueChange}
             />
