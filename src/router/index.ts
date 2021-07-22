@@ -8,7 +8,6 @@ import { cmd_inject_head } from "@-0/browser"
 import { Auth } from "@aws-amplify/auth"
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api"
 //import { Chrome } from "../layout"
-import { log } from "../utils"
 import { node, API } from "cope-client-utils"
 
 // TODO: return types expected for routerCfg
@@ -130,7 +129,7 @@ export const routerCfg = async url => {
 
     const data = await RES[K.URL_DATA]()
     const page = RES[K.URL_PAGE]
-    log("routed:", { page, data })
+    // log("routed:", { page, data })
 
     return { [K.URL.DATA]: data, [K.URL.PAGE]: page }
 }

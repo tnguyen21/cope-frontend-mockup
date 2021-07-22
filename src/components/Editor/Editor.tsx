@@ -55,12 +55,8 @@ function Editor({ nodeId }: { nodeId?: string }) {
         const fetchNodeData = async () => {
             try {
                 node.read({ id: nodeId }).then((res: any) => {
-                    // reverse items here such that oldest assets
-                    // are displayed first
-                    let sortedItems
-                    if (res.type in TEMPLATES) {
-                        sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
-                    }
+                    // index field on assets determine "view order"
+                    const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
                     setNodeData({
                         ...res,
                         assets: { ...res.assets, items: sortedItems },
