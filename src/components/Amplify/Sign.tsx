@@ -24,7 +24,7 @@ const signOut = async () => {
 
 export const SignInButton = ({ style = {} }) => {
     return (
-        <Link to="sign_in" style={style}>
+        <Link to="sign-in" style={style}>
             Sign In
         </Link>
     )

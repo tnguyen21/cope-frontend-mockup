@@ -5573,10 +5573,10 @@
   "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.4.0.tgz"
   "version" "0.4.0"
 
-"cope-client-utils@^0.2.10":
-  "integrity" "sha512-5cpoLki5cmEEMpwzi/aRmC+E0+DBCJd9u5rRaftqtTCzC7XQuUS1v6PpX8PPA1WMRD5b/nqqmghOUMBkTpFf8w=="
-  "resolved" "https://registry.npmjs.org/cope-client-utils/-/cope-client-utils-0.2.10.tgz"
-  "version" "0.2.10"
+"cope-client-utils@^0.2.11":
+  "integrity" "sha512-pRSeryygbvfWU2870Bk2mIdroT5DAyvZMQc3iGImVee4GauY9nbKmLrSKIXIrcpJlcywdunSTbkuyvwArO4toA=="
+  "resolved" "https://registry.npmjs.org/cope-client-utils/-/cope-client-utils-0.2.11.tgz"
+  "version" "0.2.11"
   dependencies:
     "@-0/browser" "^0.3.12"
     "@aws-amplify/api" "^4.0.5"

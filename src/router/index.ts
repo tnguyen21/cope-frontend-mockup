@@ -58,7 +58,7 @@ export const routerCfg = async url => {
                       },
                   ],
                   [
-                      { ...match, URL_PATH: ["page1"] },
+                      { ...match, URL_PATH: [ "sign-in" ] },
                       {
                           URL_DATA: async () => {
                               const list = await node.list({
@@ -72,11 +72,11 @@ export const routerCfg = async url => {
                                   DOM_BODY: { data: list },
                               }
                           },
-                          URL_PAGE: "page1",
+                          URL_PAGE: "sign-in",
                       },
                   ],
                   [
-                      { ...match, URL_PATH: ["admin", "collections"] },
+                      { ...match, URL_PATH: [ "admin", "collections" ] },
                       {
                           // TODO
                           // these async operations are not needed for the page
@@ -99,7 +99,7 @@ export const routerCfg = async url => {
                       },
                   ],
                   [
-                      { ...match, URL_PATH: ["admin", "collections", "edit"] },
+                      { ...match, URL_PATH: [ "admin", "collections", "edit" ] },
                       {
                           // TODO
                           // these async operations are not needed for the page
@@ -121,7 +121,7 @@ export const routerCfg = async url => {
                           URL_PAGE: "admin/collections/edit",
                       },
                   ],
-              ]
+              ],
               // TODO: create actual 404 Page
           ).get(match) || {
               [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" } }),

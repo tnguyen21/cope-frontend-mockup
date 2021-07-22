@@ -2,7 +2,7 @@ import React, { useContext, useLayoutEffect, useEffect } from "react"
 import { getIn } from "@thi.ng/paths"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
-import { Page1, Page2, Page3, CollectionsPage, EditorPage } from "../pages"
+import { Page1, Page2, Page3, CollectionsPage, EditorPage, SignIn } from "../pages"
 import {} from "../hooks"
 
 /**
@@ -43,6 +43,7 @@ export const View = () => {
         </div>
     )
 
+    console.log({ page })
     const RenderedPage =
         {
             home: Page1,
@@ -51,6 +52,7 @@ export const View = () => {
             page3: Page3,
             "admin/collections": CollectionsPage,
             "admin/collections/edit": EditorPage,
+            "sign-in": SignIn
         }[page] || Page1
 
     const is_home = store[K.$$_PATH]?.length === 0
