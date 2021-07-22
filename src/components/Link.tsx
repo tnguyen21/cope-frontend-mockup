@@ -5,11 +5,12 @@ import { NAV } from "../commands"
 export const Link = ({ to, style = {}, children }) => {
     const { run$ } = useContext(CTX)
     const path = `/${to}`
-    //log({ path })
+    //console.log({  })
     return (
         <a
             href={path}
             onClick={e => {
+                console.log({ e })
                 e.preventDefault()
                 run$.next({ ...NAV, args: e })
             }}

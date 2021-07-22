@@ -2,36 +2,36 @@
 # yarn lockfile v1
 
 
-"@-0/browser@^0.3.12", "@-0/browser@^0.3.16":
-  "integrity" "sha512-ZeOW/aKor81ZRSwAmSdKHA9nI+Uyo3vCkJfp7KimAWKHeNqVmWXIrN+ZmqREzGAjFYqcSYYN5FtVYRNZrPITog=="
-  "resolved" "https://registry.npmjs.org/@-0/browser/-/browser-0.3.16.tgz"
-  "version" "0.3.16"
+"@-0/browser@^0.3.12", "@-0/browser@^0.3.17":
+  "integrity" "sha512-8KR0Ngfilt2oly8PGproWQUPOOffLT5+kxgFeGCaONgGUmgUm3tXeRLz+xVZSiMNJC23deRF1A8U4ZepPKhA1w=="
+  "resolved" "https://registry.npmjs.org/@-0/browser/-/browser-0.3.17.tgz"
+  "version" "0.3.17"
   dependencies:
-    "@-0/keys" "^0.3.15"
-    "@-0/spool" "^0.3.13"
-    "@-0/utils" "^0.3.15"
+    "@-0/keys" "^0.3.17"
+    "@-0/spool" "^0.3.14"
+    "@-0/utils" "^0.3.17"
     "@thi.ng/paths" "^4.2.9"
     "@thi.ng/rstream" "^6.0.10"
 
-"@-0/keys@^0.3.15":
-  "integrity" "sha512-QnTZMqXo7rkcIhrrB6tyGVp7ANRj5ojTLIHu6vKT1hzVJtCrGME8Ax8rx+U0f5XmRbvrmNOVkerI9dNIFu9t2A=="
-  "resolved" "https://registry.npmjs.org/@-0/keys/-/keys-0.3.15.tgz"
-  "version" "0.3.15"
+"@-0/keys@^0.3.17":
+  "integrity" "sha512-QwBpZWA989tgQjPgMItEhyhYR1odu7vI2i0c30PPIxlTquRj0j+liGtnUe1DkZHEld6J61Y2SCADm2RlW+4phA=="
+  "resolved" "https://registry.npmjs.org/@-0/keys/-/keys-0.3.17.tgz"
+  "version" "0.3.17"
 
-"@-0/spool@^0.3.13":
-  "integrity" "sha512-aGosJnKsFcA0jHh2zjyq7wRfUeX/Mo1mwve7gaJNkiZHgxyhiijkgT9jjfUYxPB8L8tSd02ucQlk83J4W6hMTQ=="
-  "resolved" "https://registry.npmjs.org/@-0/spool/-/spool-0.3.13.tgz"
-  "version" "0.3.13"
+"@-0/spool@^0.3.14":
+  "integrity" "sha512-f+w1jCYTTmsrCBeOx7LiIomtDZHN4LuChmcED6jKnPt4t8UwiexH+6rj0/NLieuNmf5/W9O0mDnxu63dTgrvSQ=="
+  "resolved" "https://registry.npmjs.org/@-0/spool/-/spool-0.3.14.tgz"
+  "version" "0.3.14"
   dependencies:
-    "@-0/keys" "^0.3.15"
-    "@-0/utils" "^0.3.15"
+    "@-0/keys" "^0.3.17"
+    "@-0/utils" "^0.3.17"
 
-"@-0/utils@^0.3.15":
-  "integrity" "sha512-5mOJZWB9/FJYRSkWiNIpM83tSBSbaPF0Oh6qbKfotW1sXm6AIhMkxBYTshFxmn9CY5LKE0fFqW7f2PMfy2u91w=="
-  "resolved" "https://registry.npmjs.org/@-0/utils/-/utils-0.3.15.tgz"
-  "version" "0.3.15"
+"@-0/utils@^0.3.17":
+  "integrity" "sha512-kNWU3BOiOtqyuWN3YDM7r1na7J+MqBysNITJZZS38Hub9Z2XCDmgeD5n+c6psPOm6xzfY9mXjxBuyhXYXoOUIw=="
+  "resolved" "https://registry.npmjs.org/@-0/utils/-/utils-0.3.17.tgz"
+  "version" "0.3.17"
   dependencies:
-    "@-0/keys" "^0.3.15"
+    "@-0/keys" "^0.3.17"
     "querystring" "^0.2.1"
 
 "@ant-design/colors@^6.0.0":

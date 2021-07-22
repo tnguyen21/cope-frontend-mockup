@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from "@aws-amplify/ui-react"
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
-
+import { trace } from "@thi.ng/rstream"
 import { DOMnavigated$ } from "@-0/browser"
-import { out$ } from "@-0/spool"
+import { out$, log$ } from "@-0/spool"
 //import * as K from "@-0/keys"
 
 import { log } from "./utils"
@@ -12,6 +12,7 @@ import { router } from "./router"
 
 // default value ({ run$  }) is applied when no Provider is found in the inheritance tree of the component (orphans)
 
+log$.subscribe(trace("log$:"))
 const {
     ConfirmSignIn,
     ConfirmSignUp,
