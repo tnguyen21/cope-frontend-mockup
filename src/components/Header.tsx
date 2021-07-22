@@ -3,13 +3,35 @@ import styled from "styled-components"
 import { AmplifySignOut } from "@aws-amplify/ui-react"
 import { Link } from "./Link"
 import { primary_color } from "../theme/colors.js"
-import { SignOut } from "../components/Amplify"
+import { SignInButton, SignOutButton } from "../components/Amplify"
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
+
 //import { StyledHeader, StyledNavbar, StyledLink, Logo } from "./style"
 import logo from "../assets/us-census-bureau-logo-white.svg"
 
 import { Layout, Menu, Breadcrumb } from "antd"
 
 const { Header: HEADER, Content, Footer } = Layout
+const {
+    ConfirmSignIn,
+    ConfirmSignUp,
+    CustomConfirmSignIn,
+    ForgotPassword,
+    Loading,
+    ResetPassword,
+    SettingMFA,
+    SignIn,
+    SignOut,
+    SignUp,
+    SignedIn,
+    SignedOut,
+    SigningUp,
+    TOTPSetup,
+    VerifyContact,
+    VerifyingAttributes,
+    confirmingSignInCustomFlow,
+    confirmingSignUpCustomFlow,
+} = AuthState
 
 export const Header = () => (
     <Layout>
@@ -24,7 +46,9 @@ export const Header = () => (
                 </Menu.Item>
                 <Menu.Item key="2">nav 2</Menu.Item>
                 <Menu.Item key="3" style={{ marginLeft: "auto" }}>
-                    <SignOut style={{ backgroundColor: "transparent" }} />
+                    {(SignedIn && (
+                        <SignOutButton style={{ display: "block", padding: "5rem" }} />
+                    )) || <SignInButton style={{ display: "block", padding: "5rem" }} />}
                 </Menu.Item>
             </Menu>
         </HEADER>

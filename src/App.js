@@ -12,6 +12,27 @@ import { router } from "./router"
 
 // default value ({ run$  }) is applied when no Provider is found in the inheritance tree of the component (orphans)
 
+const {
+    ConfirmSignIn,
+    ConfirmSignUp,
+    CustomConfirmSignIn,
+    ForgotPassword,
+    Loading,
+    ResetPassword,
+    SettingMFA,
+    SignIn,
+    SignOut,
+    SignUp,
+    SignedIn,
+    SignedOut,
+    SigningUp,
+    TOTPSetup,
+    VerifyContact,
+    VerifyingAttributes,
+    confirmingSignInCustomFlow,
+    confirmingSignUpCustomFlow,
+} = AuthState
+
 const App = () => {
     const [ authState, setAuthState ] = useState()
     const [ user, setUser ] = useState()
@@ -48,24 +69,25 @@ const App = () => {
     const SignIn = () => <AmplifySignIn slot="sign-in" formFields={required_fields} />
     const SignUp = () => <AmplifySignUp slot="sign-up" formFields={required_fields} />
 
-    const SignedIn = () => {
-        console.log("user.username:", user.username)
+    const Ready = () => {
+        console.log("user.username:", user?.username)
         return (
             <div className="App">
-                <Chrome>
+                <Chrome authState={authState}>
                     <View />
                 </Chrome>
             </div>
         )
     }
     // prettier-ignore
-    return <AmplifyAuthenticator>
-        {
-            !authState || authState === AuthState.SignedOut || authState === AuthState.SignIn ? <SignIn />
-            : authState === AuthState.SignedIn && user ? <SignedIn /> 
-            : <SignUp />
-        }
-    </AmplifyAuthenticator>
+    return <Ready/>
+    //<AmplifyAuthenticator>
+    //    {
+    //        !authState || authState === SignedOut || authState === SignIn ? <SignIn />
+    //        : authState === SignedIn && user ? <Ready />
+    //        : <SignUp />
+    //    }
+    //</AmplifyAuthenticator>
 }
 
 log("registered Commands:", out$.topics.entries())

@@ -3,6 +3,23 @@ import { storeObject, API } from "cope-client-utils"
 import { AssetType } from "cope-client-utils/lib/graphql/API"
 
 // read: https://dev.to/dabit3/graphql-tutorial-how-to-manage-image-file-uploads-downloads-with-aws-appsync-aws-amplify-hga
+// read: https://www.sufle.io/blog/aws-amplify-storage-part-3
+/*
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::cope-storage-bucket180042-dev/protected/*"
+        }
+    ]
+}
+
+*/
+
 export const FormInput = () => {
     const [ file, setFile ] = useState(null)
     const [ name, setName ] = useState("a horse with no name")
