@@ -66,7 +66,8 @@ export const routerCfg = async url => {
                         URL_DATA: async () => {
                             console.log("sign-in Page")
                             const list = await utils.CRUD({
-                                query: `
+                                // prettier-ignore
+                                query: /* GraphQL */ `
                                     query getNode($id: ID!){
                                         getNode(id: $id){
                                             id
