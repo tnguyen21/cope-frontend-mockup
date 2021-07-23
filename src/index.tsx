@@ -3,7 +3,6 @@ import ReactDOM from "react-dom"
 //import { Route, Router } from "react-router-dom"
 //import { history } from "./routing/history"
 import { ThemeProvider } from "@material-ui/styles"
-import theme from "./theme"
 //import App from "./components/App";
 import App from "./App"
 import awsconfig from "./aws-exports"
@@ -12,6 +11,7 @@ import * as K from "@-0/keys"
 import { router } from "./router"
 import { Provider } from "./components"
 import { configureWith } from "cope-client-utils"
+import ThemeConfig from "./theme"
 
 // additional configurations in cope-client-utils provided
 // to properly assign ownership to created Nodes/Assets
@@ -23,9 +23,9 @@ ReactDOM.render(
             [K.CFG_RUTR]: router,
         }}
     >
-        <ThemeProvider theme={theme}>
+        <ThemeConfig>
             <App />
-        </ThemeProvider>
+        </ThemeConfig>
     </Provider>,
-    document.getElementById("root"),
+    document.getElementById("root")
 )

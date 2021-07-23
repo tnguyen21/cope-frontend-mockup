@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import Auth from "@aws-amplify/auth"
 import { Card, Button } from "@material-ui/core"
 import { node, asset } from "cope-client-utils"

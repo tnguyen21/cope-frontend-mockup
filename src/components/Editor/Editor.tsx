@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import Auth from "@aws-amplify/auth"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import { Grid, Card, Button, Select, InputLabel, MenuItem } from "@material-ui/core"
 import { node, asset } from "cope-client-utils"
 import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API"

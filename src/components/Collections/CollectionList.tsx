@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import { Card } from "@material-ui/core"
 import { node, API } from "cope-client-utils"
 import { Link } from ".."

@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import { AmplifySignOut } from "@aws-amplify/ui-react"
 import { Link } from "./Link"
 const AppHeader = styled.header`

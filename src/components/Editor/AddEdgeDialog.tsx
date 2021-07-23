@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { node, edge } from "cope-client-utils"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import {
     Dialog,
     DialogActions,

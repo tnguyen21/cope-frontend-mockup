@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import { Card } from "@material-ui/core"
 import { NodeType } from "cope-client-utils/lib/graphql/API"
 import { Link } from ".."

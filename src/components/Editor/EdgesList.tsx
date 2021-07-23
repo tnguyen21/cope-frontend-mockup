@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import styled from "styled-components"
+import styled from "@emotion/styled"
 import { node, edge } from "cope-client-utils"
 import { CRUD } from "cope-client-utils/lib/utils"
 import { Card, Button } from "@material-ui/core"
