@@ -5,13 +5,11 @@ import { URL2obj } from "@-0/utils"
 import { useCursor } from "../hooks"
 import { Pre } from "../components"
 
-export const CTX = createContext({
-    run$,
-    useCursor,
+export const default_context = {
     $store$,
-    parse: URL2obj,
-    DefaultView: Pre,
-    page: null,
-    loading: true,
-    path: [],
-})
+    parse: () => URL2obj(window.location.href),
+    authState: null,
+    user: null,
+}
+
+export const CTX = createContext(default_context)

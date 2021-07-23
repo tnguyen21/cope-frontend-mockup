@@ -7,9 +7,24 @@ import { registerCMD } from "@-0/spool"
 import { cmd_inject_head } from "@-0/browser"
 import { Auth } from "@aws-amplify/auth"
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api"
+import { node, API, utils } from "cope-client-utils"
 //import { Chrome } from "../layout"
 import { log } from "../utils"
-import { node, API, utils } from "cope-client-utils"
+import { Page1, Page2, Page3, SignIn } from "../pages"
+
+const dummy_query = {
+    // prettier-ignore
+    query: /* GraphQL */ `
+        query getNode($id: ID!){
+            getNode(id: $id){
+                id
+                type
+            }
+        }
+        `,
+    variables: { id: "testNode1" },
+    authMode: GRAPHQL_AUTH_MODE.API_KEY,
+}
 
 // TODO: return types expected for routerCfg
 export const routerCfg = async url => {
@@ -39,13 +54,8 @@ export const routerCfg = async url => {
                     { ...match, [K.URL_PATH]: [] },
                     {
                         [K.URL_DATA]: async () => {
-                            const list = await node.list(
-                                {
-                                    type: API.NodeType.A_GEM,
-                                    status: API.NodeStatus.DRAFT,
-                                },
-                                GRAPHQL_AUTH_MODE.API_KEY,
-                            )
+                            const list = await utils.CRUD(dummy_query)
+
                             //  console.log({ list })
                             console.log(match)
                             return {
@@ -57,27 +67,14 @@ export const routerCfg = async url => {
                                 [K.DOM_BODY]: { data: list },
                             }
                         },
-                        [K.URL_PAGE]: "home",
+                        [K.URL_PAGE]: () => Page1,
                     },
                 ],
                 [
                     { ...match, URL_PATH: [ "sign-in" ] },
                     {
                         URL_DATA: async () => {
-                            console.log("sign-in Page")
-                            const list = await utils.CRUD({
-                                // prettier-ignore
-                                query: /* GraphQL */ `
-                                    query getNode($id: ID!){
-                                        getNode(id: $id){
-                                            id
-                                            type
-                                        }
-                                    }
-                                    `,
-                                variables: { id: "testNode1" },
-                                authMode: GRAPHQL_AUTH_MODE.API_KEY,
-                            })
+                            const list = await utils.CRUD(dummy_query)
                             return {
                                 DOM_HEAD: {
                                     title: "Page 1",
@@ -86,60 +83,30 @@ export const routerCfg = async url => {
                                 DOM_BODY: { data: list },
                             }
                         },
-                        URL_PAGE: "sign-in",
+                        URL_PAGE: () => SignIn,
                     },
                 ],
                 [
-                    { ...match, URL_PATH: [ "admin", "collections" ] },
+                    { ...match, URL_PATH: [ "page2" ] },
                     {
-                        // TODO
-                        // these async operations are not needed for the page
-                        // but without them, we cannot navigate to a deep link
-                        // without causing the page to stall
                         URL_DATA: async () => {
-                            const list = await node.list({
-                                type: API.NodeType.A_GEM,
-                                status: API.NodeStatus.DRAFT,
-                            })
+                            const list = await utils.CRUD(dummy_query)
                             return {
                                 DOM_HEAD: {
-                                    title: "View Collections",
-                                    og_description: "Authoring side of COPE",
+                                    title: "Page 1",
+                                    og_description: "Description for Open Graph/sharing",
                                 },
-                                DOM_BODY: { type: match.URL_QERY.type },
+                                DOM_BODY: { data: list },
                             }
                         },
-                        URL_PAGE: "admin/collections",
-                    },
-                ],
-                [
-                    { ...match, URL_PATH: [ "admin", "collections", "edit" ] },
-                    {
-                        // TODO
-                        // these async operations are not needed for the page
-                        // but without them, we cannot navigate to a deep link
-                        // without causing the page to stall
-                        URL_DATA: async () => {
-                            const list = await node.list({
-                                type: API.NodeType.A_GEM,
-                                status: API.NodeStatus.DRAFT,
-                            })
-                            return {
-                                DOM_HEAD: {
-                                    title: "Edit",
-                                    og_description: "Authoring side of COPE",
-                                },
-                                DOM_BODY: { nodeId: match.URL_QERY.nodeId },
-                            }
-                        },
-                        URL_PAGE: "admin/collections/edit",
+                        URL_PAGE: () => Page2,
                     },
                 ],
             ],
             // TODO: create actual 404 Page
         ).get(match) || {
             [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" } }),
-            [K.URL_PAGE]: "test",
+            [K.URL_PAGE]: () => Page1({ data: 404 }),
         }
 
     const data = await RES[K.URL_DATA]()

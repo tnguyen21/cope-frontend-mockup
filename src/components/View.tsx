@@ -1,9 +1,9 @@
 import React, { useContext, useLayoutEffect, useEffect } from "react"
 import { getIn } from "@thi.ng/paths"
+import { isFunction } from "@thi.ng/checks"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
-import { Page1, Page2, Page3, CollectionsPage, EditorPage, SignIn } from "../pages"
-import {} from "../hooks"
+import { useCursor } from "../hooks"
 
 /**
  * TODO: Abstract away
@@ -14,26 +14,29 @@ import {} from "../hooks"
  * }
  */
 export const View = () => {
-    const { $store$, useCursor } = useContext(CTX)
-    const [page, pageCursor] = useCursor([K.$$_VIEW], "View Page")
-    const [loading, loadingCursor] = useCursor([K.$$_LOAD], "View loading")
-    const [path, pathCursor] = useCursor([K.$$_PATH], "Route Path")
+    const { $store$, page: DefaultPage } = useContext(CTX)
+    const [ Page, pageCursor ] = useCursor([ K.$$_VIEW ], "View Page")
+    const [ loading, loadingCursor ] = useCursor([ K.$$_LOAD ], "View loading")
+    const [ path, pathCursor ] = useCursor([ K.$$_PATH ], "Route Path")
 
-    useLayoutEffect(() => {
-        // re-render when loading state changes
-        //console.log("re-rendered Page:", { loading })
-        // cleanup
-        return () => {
-            //log("cleaning up:", { loading, Page })
-            loadingCursor.release()
-            pathCursor.release()
-            pageCursor.release()
-        }
-    }, [loadingCursor, pathCursor, pageCursor, page, loading, path])
+    useLayoutEffect(
+        () => {
+            // re-render when loading state changes
+            //console.log("re-rendered Page:", { loading })
+            // cleanup
+            return () => {
+                //log("cleaning up:", { loading, Page })
+                loadingCursor.release()
+                pathCursor.release()
+                pageCursor.release()
+            }
+        },
+        [ loadingCursor, pathCursor, pageCursor, Page, loading, path ],
+    )
 
     const store = $store$.deref()
 
-    //console.log({ store })
+    console.log({ store })
 
     const loader = (
         <div className="spinner_container">
@@ -43,27 +46,13 @@ export const View = () => {
         </div>
     )
 
-    console.log({ page })
-    const RenderedPage =
-        {
-            home: Page1,
-            page1: Page1,
-            page2: Page2,
-            page3: Page3,
-            "admin/collections": CollectionsPage,
-            "admin/collections/edit": EditorPage,
-            "sign-in": SignIn
-        }[page] || Page1
+    const is_home = !store[K.$$_PATH].length
+    const data =
+        //@ts-ignore
+        (is_home && getIn(store, [ "data" ])) || getIn(store, path)
+    console.log({ Page, data })
 
-    const is_home = store[K.$$_PATH]?.length === 0
+    const RenderedPage = Page || DefaultPage
 
-    // prettier-ignore
-    return loading ? loader :
-        <RenderedPage
-            data={
-                // @ts-ignore
-                is_home ? getIn(store, [ "data" ]) :
-                getIn(store, path)
-            }
-        />
+    return loading || !Page || !data ? loader : <RenderedPage data={data} />
 }

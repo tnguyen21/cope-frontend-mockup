@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
 import { run$ } from "@-0/spool"
-import { $store$, registerRouterDOM } from "@-0/browser"
+import { $store$, registerRouterDOM, DOMnavigated$ } from "@-0/browser"
 import { URL2obj, diff_keys } from "@-0/utils"
 import * as K from "@-0/keys"
 
@@ -26,6 +27,8 @@ export const Provider = ({ children, CFG = {} }) => {
     const escaped     = str => str.replace(escRGX, "\\$&")
     const RGX         = prfx ? new RegExp(escaped(prfx || ""), "g") : null
 
+
+
     if (router) registerRouterDOM(router)
     else throw new Error(`no \`${K.CFG_RUTR}\`: router found in Provider CFG`)
     
@@ -33,16 +36,14 @@ export const Provider = ({ children, CFG = {} }) => {
     $store$.swap(x => ({...CFG, ...x}))
 
     // FIXME: log
-    log("$store$.deref():", $store$.deref() )
+    //log("$store$.deref():", $store$.deref() )
 
     return (
         <CTX.Provider value={{
-            run$,
-            useCursor,
             $store$,
             parse: () => URL2obj(window.location.href, RGX),
-            DefaultView,
-            ...others
+            authState: null,
+            user: null
           }}>
             { children }
         </CTX.Provider>
