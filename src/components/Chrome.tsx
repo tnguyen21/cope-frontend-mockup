@@ -8,6 +8,7 @@ import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components"
 
 //import { StyledHeader, StyledNavbar, StyledLink, Logo } from "./style"
 import logo from "../assets/us-census-bureau-logo-white.svg"
+import { CensusAcademyFooter } from "./CensusAcademyFooter"
 
 import { Layout, Menu, Breadcrumb } from "antd"
 
@@ -36,7 +37,7 @@ const {
 export const Chrome = ({ authState }) => (
     <Layout>
         <HEADER style={{ position: "fixed", zIndex: 1, width: "100%", padding: "0 1rem" }}>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={[ "2" ]}>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
                 <Menu.Item key="1">
                     <img
                         src={process.env.PUBLIC_URL + "us-census-bureau-logo-white.svg"}
@@ -60,7 +61,9 @@ export const Chrome = ({ authState }) => (
                 Content
             </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>Census Academy</Footer>
+        <Footer style={{ backgroundColor: primary_color }}>
+            <CensusAcademyFooter />
+        </Footer>
     </Layout>
 )
 
