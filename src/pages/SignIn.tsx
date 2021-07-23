@@ -11,11 +11,12 @@ const required_fields = [
     { type: "password", required: true },
 ]
 
-export const SignIn = () => {
-    console.log("SIGN IN PAGE")
+export const SignIn = ({ data }) => {
+    console.log("SignIn page data:", data)
     return (
         <AmplifyAuthenticator>
             <AmplifySignIn slot="sign-in" formFields={required_fields} />
+            <pre>{JSON.stringify(data, null, 4)}</pre>
         </AmplifyAuthenticator>
     )
 }

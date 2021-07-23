@@ -1,11 +1,11 @@
 import React, { useContext } from "react"
 import { CTX } from "../context"
 import { NAV } from "../commands"
+import { run$ } from "@-0/spool"
 
 export const Link = ({ to, style = {}, children }) => {
-    const { run$ } = useContext(CTX)
     const path = `/${to}`
-    //console.log({  })
+    //log({ path })
     return (
         <a
             href={path}
