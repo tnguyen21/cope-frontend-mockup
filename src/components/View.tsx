@@ -14,7 +14,7 @@ import { useCursor } from "../hooks"
  * }
  */
 export const View = () => {
-    const { $store$, page: DefaultPage } = useContext(CTX)
+    const { $store$ } = useContext(CTX)
     const [ Page, pageCursor ] = useCursor([ K.$$_VIEW ], "View Page")
     const [ loading, loadingCursor ] = useCursor([ K.$$_LOAD ], "View loading")
     const [ path, pathCursor ] = useCursor([ K.$$_PATH ], "Route Path")
@@ -36,7 +36,7 @@ export const View = () => {
 
     const store = $store$.deref()
 
-    console.log({ store })
+    //console.log({ store })
 
     const loader = (
         <div className="spinner_container">
@@ -50,9 +50,7 @@ export const View = () => {
     const data =
         //@ts-ignore
         (is_home && getIn(store, [ "data" ])) || getIn(store, path)
-    console.log({ Page, data })
+    //console.log({ Page, data })
 
-    const RenderedPage = Page || DefaultPage
-
-    return loading || !Page || !data ? loader : <RenderedPage data={data} />
+    return loading || !Page || !data ? loader : <Page data={data} />
 }
