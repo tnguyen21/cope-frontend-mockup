@@ -13,8 +13,8 @@ import { router } from "./router"
 // default value ({ run$  }) is applied when no Provider is found in the inheritance tree of the component (orphans)
 
 const App = () => {
-    const [ authState, setAuthState ] = useState()
-    const [ user, setUser ] = useState()
+    const [authState, setAuthState] = useState()
+    const [user, setUser] = useState()
 
     console.log({ authState, user })
     useEffect(
@@ -22,8 +22,8 @@ const App = () => {
             // PRIORITY: API
             console.log("App useEffect Triggered ⚠")
             DOMnavigated$.next({
-                target        : document,
-                currentTarget : document,
+                target: document,
+                currentTarget: document,
             })
             return onAuthUIStateChange((nextAuthState, authData) => {
                 setAuthState(nextAuthState)
@@ -32,15 +32,15 @@ const App = () => {
         },
         // authState is a string, so equality checks don't
         // fire arbitrary rerenderings
-        [ authState ],
+        [authState]
     )
 
     const required_fields = [
         {
-            type        : "username",
-            placeholder : "john@email.com",
-            required    : true,
-            label       : "Email Address",
+            type: "username",
+            placeholder: "john@email.com",
+            required: true,
+            label: "Email Address",
         },
         { type: "password", required: true },
     ]
@@ -68,8 +68,8 @@ const App = () => {
     </AmplifyAuthenticator>
 }
 
-log("registered Commands:", out$.topics.entries())
+// log("registered Commands:", out$.topics.entries())
 
-log("starting...")
+// log("starting...")
 
 export default App

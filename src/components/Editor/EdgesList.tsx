@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { node, edge } from "cope-client-utils"
+import { CRUD } from "cope-client-utils/lib/utils"
 import { Card, Button } from "@material-ui/core"
 import { Link } from ".."
+import { collapse } from "cope-client-utils/lib/utils"
 
 const EdgesListCard = styled(Card)`
     margin: 8px 8px;
@@ -30,15 +32,43 @@ const EdgesListCardType = styled.div`
     color: gray;
 `
 
-function EdgesList({ edges, nodeId }: { edges: Array<any>; nodeId: string }) {
+const getConnectedNodes = `
+query getConnectedNodes($id: ID!) {
+    getNode(id: $id) {
+        edges {
+            items {
+                edge {
+                    id
+                    type
+                    nodes {
+                        items {
+                            node_id
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+`
+
+function EdgesList({ nodeId }: { nodeId: string }) {
     const [linkedNodesList, setLinkedNodesList] = useState<any>([])
 
     useEffect(() => {
-        edges.forEach(e => {
-            edge.read({ id: e.edge_id }).then(res => {
-                setLinkedNodesList([...linkedNodesList, res])
+        const crud = async () => {
+            CRUD({
+                query: getConnectedNodes,
+                variables: { id: nodeId },
             })
-        })
+                .then(res => {
+                    setLinkedNodesList(res.data.getNode.edges.items)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+        crud()
     }, [])
 
     const deleteEdge = (edgeId: string) => {
@@ -49,7 +79,7 @@ function EdgesList({ edges, nodeId }: { edges: Array<any>; nodeId: string }) {
         <div>
             <EdgesListCardHeading>Edges</EdgesListCardHeading>
             {linkedNodesList.map((edge, i) => {
-                const toNode = edge.nodes.items.filter(n => n.id !== nodeId)[0]
+                const toNode = edge.edge.nodes.items.filter(n => n.id !== nodeId)[0]
                 return (
                     <div key={i}>
                         <EdgesListCard>
@@ -59,8 +89,10 @@ function EdgesList({ edges, nodeId }: { edges: Array<any>; nodeId: string }) {
                                 >
                                     {toNode.node_id}
                                 </EdgesListCardText>
-                                <EdgesListCardType>{edge.type}</EdgesListCardType>
-                                <Button onClick={() => deleteEdge(edge.id)}>Delete Edge</Button>
+                                <EdgesListCardType>{edge.edge.type}</EdgesListCardType>
+                                <Button onClick={() => deleteEdge(edge.edge.id)}>
+                                    Delete Edge
+                                </Button>
                             </EdgesListCardContent>
                         </EdgesListCard>
                     </div>
