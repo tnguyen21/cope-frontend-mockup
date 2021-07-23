@@ -9,8 +9,11 @@ import { Auth } from "@aws-amplify/auth"
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api"
 import { node, API, utils } from "cope-client-utils"
 //import { Chrome } from "../layout"
+import { queries } from "../graphql"
 import { log } from "../utils"
-import { Page1, Page2, Page3, SignIn } from "../pages"
+import { Page1, Page2, Page3, SignIn, Gems } from "../pages"
+import { CRUD } from "cope-client-utils/lib/utils"
+import { NodeStatus, NodeType } from "cope-client-utils/lib/graphql/API"
 
 const dummy_query = {
     // prettier-ignore
@@ -33,6 +36,7 @@ export const routerCfg = async url => {
     const match = URL2obj(url)
     //const { URL_DOMN, URL_FULL, URL_HASH, URL_PATH, URL_QERY, URL_SUBD } = match
 
+    console.log({ match })
     //let { } = URL_QERY
 
     //limit = parseInt(limit)
@@ -50,6 +54,26 @@ export const routerCfg = async url => {
         new EquivMap(
             [
                 [
+                    { ...match, URL_PATH: [ "gems" ] },
+                    {
+                        URL_DATA: async () => {
+                            const res = await CRUD({
+                                query: queries.getNodesByType,
+                                variables: { type: NodeType.A_GEM, status: NodeStatus.DRAFT },
+                                authMode: GRAPHQL_AUTH_MODE.API_KEY,
+                            })
+                            return {
+                                DOM_HEAD: {
+                                    title: "Data Gems",
+                                    og_description: "Bite-sized courses for Census data users",
+                                },
+                                DOM_BODY: res?.data?.nodesByStatusType?.items,
+                            }
+                        },
+                        URL_PAGE: () => Gems,
+                    },
+                ],
+                [
                     // home page (path = [])
                     { ...match, [K.URL_PATH]: [] },
                     {
@@ -57,7 +81,6 @@ export const routerCfg = async url => {
                             const list = await utils.CRUD(dummy_query)
 
                             //  console.log({ list })
-                            console.log(match)
                             return {
                                 [K.DOM_HEAD]: {
                                     [K.HD_TITL]: "COPE frontend",
@@ -105,8 +128,8 @@ export const routerCfg = async url => {
             ],
             // TODO: create actual 404 Page
         ).get(match) || {
-            [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" } }),
-            [K.URL_PAGE]: () => Page1({ data: 404 }),
+            [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" }, DOM_BODY: { data: 404 } }),
+            [K.URL_PAGE]: () => Page1,
         }
 
     const data = await RES[K.URL_DATA]()
@@ -115,15 +138,6 @@ export const routerCfg = async url => {
 
     return { [K.URL.DATA]: data, [K.URL.PAGE]: page }
 }
-
-//const Page2 = ({ data }) => {
-//    return h(
-//        "pre",
-//        { className: "boobs" },
-//        h("h1", null, `PAGE 2:`),
-//        JSON.stringify(data, null, 2)
-//    )
-//}
 
 export const INJECT_HEAD = registerCMD(cmd_inject_head)
 
