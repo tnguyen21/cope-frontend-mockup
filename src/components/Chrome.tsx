@@ -40,10 +40,10 @@ export const Chrome = ({ children }) => {
         () => {
             // PRIORITY: API
             console.log("App useEffect Triggered ⚠")
-            //DOMnavigated$.next({
-            //    target: document,
-            //    currentTarget: document,
-            //})
+            DOMnavigated$.next({
+                target: document,
+                currentTarget: document,
+            })
             return onAuthUIStateChange((nextAuthState, authData) => {
                 //@ts-ignore
                 setAuthState(nextAuthState)
@@ -60,7 +60,6 @@ export const Chrome = ({ children }) => {
         <Layout>
             <Header authState={authState} user={user} />
             <Content className="site-layout" style={{ padding: "0 50px", marginTop: 64 }}>
-                <Breadcrumbs />
                 <div className="site-layout-background" style={{ padding: 24, minHeight: 380 }}>
                     <CTX.Provider
                         value={{
