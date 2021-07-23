@@ -167,9 +167,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             )}
                         </Wrapper>
                         <Wrapper>
-                            {nodeData && (
-                                <EdgesList edges={nodeData.edges.items} nodeId={nodeData.id} />
-                            )}
+                            {nodeData && <EdgesList nodeId={nodeData.id} />}
                             <StyledButton
                                 variant="contained"
                                 onClick={() => setAddEdgeDialogOpen(true)}

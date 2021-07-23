@@ -52,7 +52,7 @@ query getConnectedNodes($id: ID!) {
 }
 `
 
-function EdgesList({ edges, nodeId }: { edges: Array<any>; nodeId: string }) {
+function EdgesList({ nodeId }: { nodeId: string }) {
     const [linkedNodesList, setLinkedNodesList] = useState<any>([])
 
     useEffect(() => {
