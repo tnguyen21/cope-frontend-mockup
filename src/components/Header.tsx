@@ -40,7 +40,7 @@ export const Header = ({ authState, user }) => {
                     />
                 </Menu.Item>
                 <Menu.Item key="2" style={{}}>
-                    <Link to="page2">Page 2</Link>
+                    <Link to="gems">Gems</Link>
                 </Menu.Item>
                 <Menu.Item key="3" style={{ marginLeft: "auto" }}>
                     {(authState === SignedIn && <SignOutButton />) || <SignInButton />}
