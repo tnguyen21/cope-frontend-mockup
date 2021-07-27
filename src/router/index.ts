@@ -120,6 +120,30 @@ export const routerCfg = async url => {
                           URL_PAGE: "admin/collections/edit",
                       },
                   ],
+                  [
+                      { ...match, URL_PATH: ["magic"] },
+                      {
+                          // TODO
+                          // these async operations are not needed for the page
+                          // but without them, we cannot navigate to a deep link
+                          // without causing the page to stall
+                          URL_DATA: async () => {
+                              const list = await node.list({
+                                  type: API.NodeType.A_GEM,
+                                  status: API.NodeStatus.DRAFT,
+                              })
+                              return {
+                                  DOM_HEAD: {
+                                      title: "Magic Creation Page",
+                                      og_description:
+                                          "Mock page for writing dummy functions and testing things out",
+                                  },
+                                  DOM_BODY: { nodeId: match.URL_QERY.nodeId },
+                              }
+                          },
+                          URL_PAGE: "magic",
+                      },
+                  ],
               ]
               // TODO: create actual 404 Page
           ).get(match) || {

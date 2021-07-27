@@ -3,6 +3,7 @@ import { getIn } from "@thi.ng/paths"
 import * as K from "@-0/keys"
 import { CTX } from "../context"
 import { Page1, Page2, Page3, CollectionsPage, EditorPage } from "../pages"
+import { MagicCreationPage } from "../pages"
 import {} from "../hooks"
 
 /**
@@ -51,6 +52,7 @@ export const View = () => {
             page3: Page3,
             "admin/collections": CollectionsPage,
             "admin/collections/edit": EditorPage,
+            magic: MagicCreationPage,
         }[page] || (() => loader)
 
     const is_home = store[K.$$_PATH]?.length === 0
