@@ -51,13 +51,14 @@ function CollectionList({ collection }: { collection?: string }) {
                 <div key={i}>
                     <CollectionListCard>
                         <CollectionListCardContent>
-                            {/* to={`/collections/edit/${data.id}` */}
                             <CollectionListCardHeading
                                 to={`admin/collections/edit?nodeId=${data.id}`}
                             >
                                 {data.id}
                             </CollectionListCardHeading>
-                            <CollectionListCardType>{data.type}</CollectionListCardType>
+                            <CollectionListCardType>
+                                {data.type} | {data.status}
+                            </CollectionListCardType>
                         </CollectionListCardContent>
                     </CollectionListCard>
                 </div>

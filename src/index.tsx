@@ -3,7 +3,8 @@ import ReactDOM from "react-dom"
 //import { Route, Router } from "react-router-dom"
 //import { history } from "./routing/history"
 import { ThemeProvider } from "@material-ui/styles"
-import theme from "./theme"
+import { CssBaseline } from "@material-ui/core"
+import Themes from "./themes"
 //import App from "./components/App";
 import App from "./App"
 import awsconfig from "./aws-exports"
@@ -23,9 +24,10 @@ ReactDOM.render(
             [K.CFG_RUTR]: router,
         }}
     >
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={Themes.default}>
+            <CssBaseline />
             <App />
         </ThemeProvider>
     </Provider>,
-    document.getElementById("root"),
+    document.getElementById("root")
 )

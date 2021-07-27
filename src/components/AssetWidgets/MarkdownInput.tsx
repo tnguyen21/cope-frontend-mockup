@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { Editor } from "react-draft-wysiwyg"
-import { convertFromRaw, convertToRaw, EditorState, ContentState } from "draft-js"
+import { EditorState } from "draft-js"
 import { makeStyles, InputLabel } from "@material-ui/core"
+import { stateToMarkdown } from "draft-js-export-markdown"
+import { stateFromMarkdown } from "draft-js-import-markdown"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 const useStyles = makeStyles({
@@ -14,6 +16,31 @@ const useStyles = makeStyles({
         maxHeight: "400px",
     },
 })
+
+const customContentStateConverter = contentState => {
+    // changes block type of images to 'atomic'
+    const newBlockMap = contentState.getBlockMap().map(block => {
+        const entityKey = block.getEntityAt(0)
+        if (entityKey !== null) {
+            const entityBlock = contentState.getEntity(entityKey)
+            const entityType = entityBlock.getType()
+            switch (entityType) {
+                case "IMAGE": {
+                    const newBlock = block.merge({
+                        type: "atomic",
+                        text: "img",
+                    })
+                    return newBlock
+                }
+                default:
+                    return block
+            }
+        }
+        return block
+    })
+    const newContentState = contentState.set("blockMap", newBlockMap)
+    return newContentState
+}
 
 function MarkdownInput({
     assetId,
@@ -33,10 +60,12 @@ function MarkdownInput({
         if (value) {
             const editorAsset = value.assets.items.filter((item: any) => item.id === assetId)[0]
             if (editorAsset.content) {
-                // here for getting the content back from the database
-                // we need to parse out the string to an object, and then call convertFromRaw
-                const editorContent = JSON.parse(editorAsset.content)
-                const contentState = convertFromRaw(editorContent)
+                // convert image block types to atomic using custom content state converter
+                // https://stackoverflow.com/questions/59359445/not-able-to-display-image-in-editor
+                const contentState = customContentStateConverter(
+                    stateFromMarkdown(editorAsset.content)
+                )
+
                 setEditorState(EditorState.createWithContent(contentState))
             }
         }
@@ -51,9 +80,7 @@ function MarkdownInput({
         let updatedAssetState = value.assets.items.filter((item: any) => item.id === assetId)[0]
         updatedAssetState = {
             ...updatedAssetState,
-            // we do this rough conversion using convertToRaw and then stringify it
-            // so we can save it to the database for later parsing
-            content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+            content: stateToMarkdown(editorState.getCurrentContent()),
         }
         const newValue = {
             ...value,

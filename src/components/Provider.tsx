@@ -5,7 +5,6 @@ import { URL2obj, diff_keys } from "@-0/utils"
 import * as K from "@-0/keys"
 
 import { CTX } from "../context"
-import { log } from "../utils"
 import { Page1 } from "../pages"
 import { useCursor } from "../hooks"
 
@@ -31,9 +30,6 @@ export const Provider = ({ children, CFG = {} }) => {
     
     // Prime store with CFG state
     $store$.swap(x => ({...CFG, ...x}))
-
-    // FIXME: log
-    log("$store$.deref():", $store$.deref() )
 
     return (
         <CTX.Provider value={{

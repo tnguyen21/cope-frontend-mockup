@@ -7,8 +7,12 @@ import { NodeType, NodeStatus } from "cope-client-utils/lib/graphql/API"
 import AddAssetDialog from "./AddAssetDialog"
 import DeleteNodeDialog from "./DeleteNodeDialog"
 import DeleteAssetDialog from "./DeleteAssetDialog"
+import EditorSnackbar from "./EditorSnackbar"
+import RenderContentPreview from "../ContentPreview/RenderContentPreview"
+import EdgesList from "./EdgesList"
+import AddEdgeDialog from "./AddEdgeDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
-import { DOMnavigated$ } from "@-0/browser"
+import { TEMPLATES } from "../Collections/templates"
 
 const Wrapper = styled.div`
     margin: 24px 8px;
@@ -28,13 +32,13 @@ const PreviewHeading = styled.h2`
 `
 
 function Editor({ nodeId }: { nodeId?: string }) {
-    const [nodeStatus, setNodeStatus] = useState(NodeStatus.DRAFT)
-    const [nodeType, setNodeType] = useState(NodeType.A_ARTICLE)
     const [userData, setUserData] = useState<any>()
     const [nodeData, setNodeData] = useState<any>()
     const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false)
+    const [addEdgeDialogOpen, setAddEdgeDialogOpen] = useState(false)
     const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState("")
     const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false)
+    const [snackbarState, setSnackbarState] = useState({ open: false, message: "" })
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -51,14 +55,12 @@ function Editor({ nodeId }: { nodeId?: string }) {
         const fetchNodeData = async () => {
             try {
                 node.read({ id: nodeId }).then((res: any) => {
-                    // reverse items here such that oldest assets
-                    // are displayed first
+                    // index field on assets determine "view order"
+                    const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
                     setNodeData({
                         ...res,
-                        assets: { ...res.assets, items: res.assets.items },
+                        assets: { ...res.assets, items: sortedItems },
                     })
-                    setNodeStatus(res.status)
-                    setNodeType(res.type)
                 })
             } catch (error) {
                 console.error(error)
@@ -67,69 +69,47 @@ function Editor({ nodeId }: { nodeId?: string }) {
         fetchNodeData()
         // conditionally call this hook every time add asset dialog is opened
         // or closed (i.e. a user has added an asset) to force re-render
+        // this is hacky!!
+        // if a user changes node type or status, then adds asset,
+        // then it will change back the draft and status back to what they are
+        // remotely. need to change functions that add asset/delete assets to
+        // change local nodeData object, then update remote accordingly
     }, [nodeId, addAssetDialogOpen, deleteAssetDialogOpen])
 
     const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
-        setNodeStatus(event.target.value)
+        setNodeData({ ...nodeData, status: event.target.value })
     }
 
     const onNodeTypeChange = (event: React.ChangeEvent<{ value: any }>) => {
-        setNodeType(event.target.value)
-    }
-
-    const createNode = () => {
-        const data = {
-            id: null,
-            status: nodeStatus,
-            type: nodeType,
-            createdAt: null,
-            // getting user is async operation
-            // TODO: disable save draft button until all required info is loaded?
-            owner: userData ? userData.email : null,
-            updatedAt: null,
-        }
-
-        node.create(data)
-            .then((res: any) => {
-                DOMnavigated$.next({
-                    target: { location: { href: `/admin/collections/edit?nodeId=${res.id}` } },
-                    currentTarget: document,
-                })
-            })
-            .catch((error: any) => {
-                console.error(error)
-            })
+        setNodeData({ ...nodeData, type: event.target.value })
     }
 
     const updateNode = () => {
         node.update(nodeData).catch((error: any) => {
             console.error(error)
         })
-        for (const i in nodeData.assets.items) {
-            const _asset = nodeData.assets.items[i]
-            const data = {
-                id: _asset.id,
-                content: _asset.content,
-                createdAt: _asset.createdAt,
-                editors: _asset.editors,
-                name: _asset.name,
-                node_id: _asset.node_id,
-                owner: _asset.owner,
-                type: _asset.type,
-            }
-
-            asset.update(data).catch((error: any) => console.error(error))
-        }
+        nodeData.assets.items.forEach(_asset => {
+            asset.update(_asset).catch((error: any) => console.error(error))
+        })
+        setSnackbarState({ open: true, message: "Node has been updated successfully" })
     }
 
     return (
         <Grid container>
+            <EditorSnackbar
+                open={snackbarState.open}
+                message={snackbarState.message}
+                setSnackbarState={setSnackbarState}
+            />
             <Grid item md={6}>
                 <Wrapper>
                     <Wrapper>
                         <Wrapper>
                             <InputLabel>Node Type</InputLabel>
-                            <Select value={nodeType} onChange={onNodeTypeChange}>
+                            <Select
+                                value={nodeData ? nodeData.type : "H_AUTHOR"}
+                                onChange={onNodeTypeChange}
+                            >
                                 <MenuItem value={NodeType.H_AUTHOR}>H_AUTHOR</MenuItem>
                                 <MenuItem value={NodeType.H_TEAM}>H_TEAM</MenuItem>
                                 <MenuItem value={NodeType.A_ARTICLE}>A_ARTICLE</MenuItem>
@@ -148,7 +128,10 @@ function Editor({ nodeId }: { nodeId?: string }) {
                         </Wrapper>
                         <Wrapper>
                             <InputLabel>Status</InputLabel>
-                            <Select value={nodeStatus} onChange={onStatusChange}>
+                            <Select
+                                value={nodeData ? nodeData.status : "DRAFT"}
+                                onChange={onStatusChange}
+                            >
                                 <MenuItem value={NodeStatus.DRAFT}>Draft</MenuItem>
                                 <MenuItem value={NodeStatus.REVIEWED}>Reviewed</MenuItem>
                                 <MenuItem value={NodeStatus.PUBLISHED}>Published</MenuItem>
@@ -174,9 +157,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                 </Wrapper>
                             ))}
                         <Wrapper>
-                            <StyledButton variant="contained">Add Parent</StyledButton>
-                            <StyledButton variant="contained">Add Sibling</StyledButton>
-                            <StyledButton variant="contained">Add Child</StyledButton>
                             {nodeId && (
                                 <StyledButton
                                     variant="contained"
@@ -187,13 +167,18 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             )}
                         </Wrapper>
                         <Wrapper>
-                            {nodeId ? (
+                            {nodeData && <EdgesList nodeId={nodeData.id} />}
+                            <StyledButton
+                                variant="contained"
+                                onClick={() => setAddEdgeDialogOpen(true)}
+                            >
+                                Add Edge
+                            </StyledButton>
+                        </Wrapper>
+                        <Wrapper>
+                            {nodeId && (
                                 <StyledButton variant="contained" onClick={updateNode}>
                                     Update Node
-                                </StyledButton>
-                            ) : (
-                                <StyledButton variant="contained" onClick={createNode}>
-                                    Save Node
                                 </StyledButton>
                             )}
                             {nodeId && (
@@ -205,6 +190,11 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                 </StyledButton>
                             )}
                         </Wrapper>
+                        <AddEdgeDialog
+                            open={addEdgeDialogOpen}
+                            setOpen={setAddEdgeDialogOpen}
+                            nodeId={nodeData ? nodeData.id : ""}
+                        />
                         <AddAssetDialog
                             open={addAssetDialogOpen}
                             setOpen={setAddAssetDialogOpen}
@@ -227,7 +217,16 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             be able to parse out content from editor state and
                             convert to necessary HTML/Markdown to create content preview
                         */}
-                            <div>Content Preview goes here</div>
+                            {nodeData &&
+                                nodeData.assets.items
+                                    .filter((asset: any) => asset.content !== "")
+                                    .map((asset: any) => (
+                                        <Wrapper key={asset.id}>
+                                            {RenderContentPreview(asset, {
+                                                content: asset.content,
+                                            })}
+                                        </Wrapper>
+                                    ))}
                         </PreviewContent>
                     </Card>
                 </Wrapper>
