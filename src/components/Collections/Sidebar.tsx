@@ -9,9 +9,7 @@ const SidebarCard = styled(Card)`
     margin-top: 8px;
 `
 
-const SidebarCardContent = styled.div`
-    padding: 8px;
-`
+const SidebarCardContent = styled.div`padding: 8px;`
 
 const SidebarCardHeading = styled.h2`
     margin: 0;
@@ -52,7 +50,7 @@ function Sidebar() {
                     {linksAndSlugs.map(type => (
                         <li key={type.typeSlug}>
                             {/* to={`/collections/${type.typeSlug}` */}
-                            <SidebarNavLink to={`admin/collections?type=${type.typeSlug}`}>
+                            <SidebarNavLink href={`admin/collections?type=${type.typeSlug}`}>
                                 {type.typeName}
                             </SidebarNavLink>
                         </li>

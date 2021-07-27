@@ -14,15 +14,15 @@ import AddEdgeDialog from "./AddEdgeDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
 import { TEMPLATES } from "../Collections/templates"
 
-const Wrapper = styled.div`
-    margin: 24px 8px;
-`
+const Wrapper = styled.div`margin: 24px 8px;`
 
 const StyledButton = styled(Button)`
     margin: 0px 8px;
 `
 
 const PreviewContent = styled.div`
+    list-style-position: inside;
+    list-style-type: circle;
     padding: 16px 8px;
 `
 
@@ -32,13 +32,13 @@ const PreviewHeading = styled.h2`
 `
 
 function Editor({ nodeId }: { nodeId?: string }) {
-    const [userData, setUserData] = useState<any>()
-    const [nodeData, setNodeData] = useState<any>()
-    const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false)
-    const [addEdgeDialogOpen, setAddEdgeDialogOpen] = useState(false)
-    const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState("")
-    const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false)
-    const [snackbarState, setSnackbarState] = useState({ open: false, message: "" })
+    const [ userData, setUserData ] = useState<any>()
+    const [ nodeData, setNodeData ] = useState<any>()
+    const [ addAssetDialogOpen, setAddAssetDialogOpen ] = useState(false)
+    const [ addEdgeDialogOpen, setAddEdgeDialogOpen ] = useState(false)
+    const [ deleteAssetDialogOpen, setDeleteAssetDialogOpen ] = useState("")
+    const [ deleteNodeDialogOpen, setDeleteNodeDialogOpen ] = useState(false)
+    const [ snackbarState, setSnackbarState ] = useState({ open: false, message: "" })
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -51,30 +51,33 @@ function Editor({ nodeId }: { nodeId?: string }) {
         fetchUserData()
     }, [])
 
-    useEffect(() => {
-        const fetchNodeData = async () => {
-            try {
-                node.read({ id: nodeId }).then((res: any) => {
-                    // index field on assets determine "view order"
-                    const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
-                    setNodeData({
-                        ...res,
-                        assets: { ...res.assets, items: sortedItems },
+    useEffect(
+        () => {
+            const fetchNodeData = async () => {
+                try {
+                    node.read({ id: nodeId }).then((res: any) => {
+                        // index field on assets determine "view order"
+                        const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
+                        setNodeData({
+                            ...res,
+                            assets: { ...res.assets, items: sortedItems },
+                        })
                     })
-                })
-            } catch (error) {
-                console.error(error)
+                } catch (error) {
+                    console.error(error)
+                }
             }
-        }
-        fetchNodeData()
-        // conditionally call this hook every time add asset dialog is opened
-        // or closed (i.e. a user has added an asset) to force re-render
-        // this is hacky!!
-        // if a user changes node type or status, then adds asset,
-        // then it will change back the draft and status back to what they are
-        // remotely. need to change functions that add asset/delete assets to
-        // change local nodeData object, then update remote accordingly
-    }, [nodeId, addAssetDialogOpen, deleteAssetDialogOpen])
+            fetchNodeData()
+            // conditionally call this hook every time add asset dialog is opened
+            // or closed (i.e. a user has added an asset) to force re-render
+            // this is hacky!!
+            // if a user changes node type or status, then adds asset,
+            // then it will change back the draft and status back to what they are
+            // remotely. need to change functions that add asset/delete assets to
+            // change local nodeData object, then update remote accordingly
+        },
+        [ nodeId, addAssetDialogOpen, deleteAssetDialogOpen ],
+    )
 
     const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
         setNodeData({ ...nodeData, status: event.target.value })

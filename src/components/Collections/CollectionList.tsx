@@ -52,7 +52,7 @@ function CollectionList({ collection }: { collection?: string }) {
                     <CollectionListCard>
                         <CollectionListCardContent>
                             <CollectionListCardHeading
-                                to={`admin/collections/edit?nodeId=${data.id}`}
+                                href={`admin/collections/edit?nodeId=${data.id}`}
                             >
                                 {data.id}
                             </CollectionListCardHeading>

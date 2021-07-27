@@ -16,23 +16,23 @@ const AssetTypesToComponentMap = {
     // is flexible. this just based on my judgement and should spend more
     // time building custom widgets that make more sense for the particular
     // asset type
-    A_OG_IMAGE: FileInput,
-    A_OG_VIDEO: VideoInput,
-    T_OG_TITLE: TextInput,
-    T_OG_DESCRIPTION: MarkdownInput,
-    A_IMAGE: FileInput,
-    A_VIDEO: VideoInput,
-    T_LEDE: MarkdownInput,
-    T_BODY: MarkdownInput,
+    A_OG_IMAGE       : FileInput,
+    A_OG_VIDEO       : VideoInput,
+    T_OG_TITLE       : TextInput,
+    T_OG_DESCRIPTION : TextInput,
+    A_IMAGE          : FileInput,
+    A_VIDEO          : VideoInput,
+    T_LEDE           : MarkdownInput,
+    T_BODY           : MarkdownInput,
 }
 
 function RenderAssetWidget(asset, nodeData, setNodeData) {
     if (asset.type in AssetTypesToComponentMap) {
         return React.createElement(AssetTypesToComponentMap[asset.type], {
-            label: asset.name,
-            assetId: asset.id,
-            value: nodeData,
-            setValue: setNodeData,
+            label    : asset.name,
+            assetId  : asset.id,
+            value    : nodeData,
+            setValue : setNodeData,
         })
     }
 }

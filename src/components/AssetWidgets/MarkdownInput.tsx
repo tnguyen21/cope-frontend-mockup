@@ -65,7 +65,7 @@ function MarkdownInput({
                 const contentState = customContentStateConverter(
                     stateFromMarkdown(editorAsset.content)
                 )
-
+                //console.log({ contentState })
                 setEditorState(EditorState.createWithContent(contentState))
             }
         }
@@ -78,10 +78,12 @@ function MarkdownInput({
 
     const handleValueChange = () => {
         let updatedAssetState = value.assets.items.filter((item: any) => item.id === assetId)[0]
-        updatedAssetState = {
+        const state = {
             ...updatedAssetState,
             content: stateToMarkdown(editorState.getCurrentContent()),
         }
+        console.log({ state })
+        updatedAssetState = state
         const newValue = {
             ...value,
             assets: {
