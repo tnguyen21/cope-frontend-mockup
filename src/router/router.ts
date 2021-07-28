@@ -7,7 +7,8 @@ import { registerCMD } from "@-0/spool"
 import { cmd_inject_head } from "@-0/browser"
 import { Auth } from "@aws-amplify/auth"
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api"
-//import { Chrome } from "../layout"
+import { Page1, Page2, Page3, CollectionsPage, EditorPage } from "../pages"
+
 import { node, API } from "cope-client-utils"
 
 // TODO: return types expected for routerCfg
@@ -43,7 +44,7 @@ export const routerCfg = async url => {
                                   status: API.NodeStatus.DRAFT,
                               })
                               //  console.log({ list })
-                              console.log(match)
+                              //  console.log(match)
                               return {
                                   [K.DOM_HEAD]: {
                                       [K.HD_TITL]: "COPE frontend",
@@ -53,7 +54,7 @@ export const routerCfg = async url => {
                                   [K.DOM_BODY]: { data: list },
                               }
                           },
-                          [K.URL_PAGE]: "home",
+                          [K.URL_PAGE]: () => Page1,
                       },
                   ],
                   [
@@ -71,7 +72,7 @@ export const routerCfg = async url => {
                                   DOM_BODY: { data: list },
                               }
                           },
-                          URL_PAGE: "page1",
+                          URL_PAGE: () => Page1,
                       },
                   ],
                   [
@@ -94,7 +95,7 @@ export const routerCfg = async url => {
                                   DOM_BODY: { type: match.URL_QERY.type },
                               }
                           },
-                          URL_PAGE: "admin/collections",
+                          URL_PAGE: () => CollectionsPage,
                       },
                   ],
                   [
@@ -117,14 +118,14 @@ export const routerCfg = async url => {
                                   DOM_BODY: { nodeId: match.URL_QERY.nodeId },
                               }
                           },
-                          URL_PAGE: "admin/collections/edit",
+                          URL_PAGE: () => EditorPage,
                       },
                   ],
               ],
               // TODO: create actual 404 Page
           ).get(match) || {
               [K.URL_DATA]: () => ({ DOM_HEAD: { title: "404" } }),
-              [K.URL_PAGE]: "test",
+              [K.URL_PAGE]: () => Page1,
           }
 
     const data = await RES[K.URL_DATA]()

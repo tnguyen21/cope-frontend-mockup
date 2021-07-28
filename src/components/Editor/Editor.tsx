@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Auth from "@aws-amplify/auth"
+import { Auth } from "@aws-amplify/auth"
+import { API, GRAPHQL_AUTH_MODE } from "@aws-amplify/api"
+import { EquivMap } from "@thi.ng/associative"
 import styled from "styled-components"
 import { Grid, Card, Button, Select, InputLabel, MenuItem } from "@material-ui/core"
 import { node, asset } from "cope-client-utils"
@@ -12,6 +14,8 @@ import RenderContentPreview from "../ContentPreview/RenderContentPreview"
 import EdgesList from "./EdgesList"
 import AddEdgeDialog from "./AddEdgeDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
+import { DropDownNodeTypes, DropDownNodeStatus } from "../DropDown"
+import { updateAsset, updateNode } from "../../graphql/mutations"
 import { TEMPLATES } from "../Collections/templates"
 
 const Wrapper = styled.div`margin: 24px 8px;`
@@ -68,6 +72,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                 }
             }
             fetchNodeData()
+            console.log("Editor rerendered")
             // conditionally call this hook every time add asset dialog is opened
             // or closed (i.e. a user has added an asset) to force re-render
             // this is hacky!!
@@ -78,6 +83,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
         },
         [ nodeId, addAssetDialogOpen, deleteAssetDialogOpen ],
     )
+    console.log({ nodeData })
 
     const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
         setNodeData({ ...nodeData, status: event.target.value })
@@ -87,13 +93,21 @@ function Editor({ nodeId }: { nodeId?: string }) {
         setNodeData({ ...nodeData, type: event.target.value })
     }
 
-    const updateNode = () => {
-        node.update(nodeData).catch((error: any) => {
+    const sendNodeUpdate = async e => {
+        const updated_node = await node.update(nodeData).catch((error: any) => {
             console.error(error)
         })
-        nodeData.assets.items.forEach(_asset => {
-            asset.update(_asset).catch((error: any) => console.error(error))
-        })
+        console.log({ updated_node })
+        const updated_assets = await Promise.all(
+            nodeData.assets.items.map(async _asset => {
+                const updated_asset = await asset
+                    .update(_asset)
+                    .catch((error: any) => console.error(error))
+                console.log({ _asset })
+                console.log({ updated_asset })
+            }),
+        )
+        console.log({ updated_assets })
         setSnackbarState({ open: true, message: "Node has been updated successfully" })
     }
 
@@ -109,38 +123,17 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     <Wrapper>
                         <Wrapper>
                             <InputLabel>Node Type</InputLabel>
-                            <Select
-                                value={nodeData ? nodeData.type : "H_AUTHOR"}
+                            <DropDownNodeTypes
                                 onChange={onNodeTypeChange}
-                            >
-                                <MenuItem value={NodeType.H_AUTHOR}>H_AUTHOR</MenuItem>
-                                <MenuItem value={NodeType.H_TEAM}>H_TEAM</MenuItem>
-                                <MenuItem value={NodeType.A_ARTICLE}>A_ARTICLE</MenuItem>
-                                <MenuItem value={NodeType.A_PAGE}>A_PAGE</MenuItem>
-                                <MenuItem value={NodeType.A_APPLICATION}>A_APPLICATION</MenuItem>
-                                <MenuItem value={NodeType.A_GEM}>A_GEM</MenuItem>
-                                <MenuItem value={NodeType.S_ACS}>S_ACS</MenuItem>
-                                <MenuItem value={NodeType.S_CBP}>S_CBP</MenuItem>
-                                <MenuItem value={NodeType.V_1990}>V_1990</MenuItem>
-                                <MenuItem value={NodeType.V_2000}>V_2000</MenuItem>
-                                <MenuItem value={NodeType.V_2010}>V_2010</MenuItem>
-                                <MenuItem value={NodeType.V_2020}>V_2020</MenuItem>
-                                <MenuItem value={NodeType.C_SERIES}>C_SERIES</MenuItem>
-                                <MenuItem value={NodeType.C_LIST}>C_LIST</MenuItem>
-                            </Select>
+                                defaultValue={nodeData ? nodeData.type : "H_AUTHOR"}
+                            />
                         </Wrapper>
                         <Wrapper>
                             <InputLabel>Status</InputLabel>
-                            <Select
-                                value={nodeData ? nodeData.status : "DRAFT"}
+                            <DropDownNodeStatus
                                 onChange={onStatusChange}
-                            >
-                                <MenuItem value={NodeStatus.DRAFT}>Draft</MenuItem>
-                                <MenuItem value={NodeStatus.REVIEWED}>Reviewed</MenuItem>
-                                <MenuItem value={NodeStatus.PUBLISHED}>Published</MenuItem>
-                                <MenuItem value={NodeStatus.EDITED}>Edited</MenuItem>
-                                <MenuItem value={NodeStatus.DELETED}>Deleted</MenuItem>
-                            </Select>
+                                defaultValue={nodeData ? nodeData.status : "DRAFT"}
+                            />
                         </Wrapper>
                         {nodeData &&
                             nodeData.assets.items.map((asset: any) => (
@@ -180,7 +173,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                         </Wrapper>
                         <Wrapper>
                             {nodeId && (
-                                <StyledButton variant="contained" onClick={updateNode}>
+                                <StyledButton variant="contained" onClick={sendNodeUpdate}>
                                     Update Node
                                 </StyledButton>
                             )}

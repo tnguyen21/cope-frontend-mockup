@@ -28,5 +28,5 @@ const overrides = {
 const themes = {
   default: createMuiTheme({ ...defaultTheme, ...overrides }),
 };
-
+export * from "./styles"
 export default themes;

@@ -69,7 +69,7 @@ function MarkdownInput({
                 setEditorState(EditorState.createWithContent(contentState))
             }
         }
-    }, [])
+    }, [assetId])
 
     const onEditorStateChange = (editorState: any) => {
         setEditorState(editorState)
@@ -82,7 +82,7 @@ function MarkdownInput({
             ...updatedAssetState,
             content: stateToMarkdown(editorState.getCurrentContent()),
         }
-        console.log({ state })
+        //console.log({ state })
         updatedAssetState = state
         const newValue = {
             ...value,

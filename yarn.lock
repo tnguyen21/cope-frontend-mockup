@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@-0/browser@^0.3.12", "@-0/browser@^0.3.17":
+"@-0/browser@^0.3.17":
   "integrity" "sha512-8KR0Ngfilt2oly8PGproWQUPOOffLT5+kxgFeGCaONgGUmgUm3tXeRLz+xVZSiMNJC23deRF1A8U4ZepPKhA1w=="
   "resolved" "https://registry.npmjs.org/@-0/browser/-/browser-0.3.17.tgz"
   "version" "0.3.17"
@@ -71,7 +71,7 @@
     "@aws-amplify/core" "4.2.1"
     "axios" "0.21.1"
 
-"@aws-amplify/api@^4.0.5", "@aws-amplify/api@4.0.7":
+"@aws-amplify/api@^4.0.6", "@aws-amplify/api@4.0.7":
   "integrity" "sha512-ifd5GCuM8nUfogCX2ig2UfH35N62WxmtSPOx4G8XoPD10KA7jBbMogyGL3ijNBnfdJXyMtHnv9iV8e1FCnHlGA=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/api/-/api-4.0.7.tgz"
   "version" "4.0.7"
@@ -79,7 +79,7 @@
     "@aws-amplify/api-graphql" "2.0.7"
     "@aws-amplify/api-rest" "2.0.7"
 
-"@aws-amplify/auth@^4.1.1", "@aws-amplify/auth@4.1.3":
+"@aws-amplify/auth@^4.1.2", "@aws-amplify/auth@4.1.3":
   "integrity" "sha512-SCHn0l9v6kWhqHfa+WEvBhGq3el7z1iyW+hJJFmwPhxnQEYU69yFn4n7J3VAyk2zyvOssh6CYWsBIbgHqdM52Q=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/auth/-/auth-4.1.3.tgz"
   "version" "4.1.3"
@@ -96,7 +96,7 @@
   dependencies:
     "@aws-amplify/core" "4.2.1"
 
-"@aws-amplify/core@^4.1.3", "@aws-amplify/core@4.2.1":
+"@aws-amplify/core@^4.2.0", "@aws-amplify/core@4.2.1":
   "integrity" "sha512-iY4+mD9R5yLxS5gikCJO0TxXI9oSZewbE/teZ6Ja08vN1RV3M70QQthcKIpL4wUmEFReQfmcnxyQLBkS0RUS6w=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/core/-/core-4.2.1.tgz"
   "version" "4.2.1"
@@ -110,7 +110,7 @@
     "universal-cookie" "^4.0.4"
     "zen-observable-ts" "0.8.19"
 
-"@aws-amplify/datastore@^3.2.0", "@aws-amplify/datastore@3.2.2":
+"@aws-amplify/datastore@^3.2.1", "@aws-amplify/datastore@3.2.2":
   "integrity" "sha512-XxJ5BY1uxQFJ0c6qEo9vy8ej7ZvZFEHiLnEtlB2M9fh2jKy9sZ117VfF9Kh1dgv4XwNyIlz6rNWD4Hj87eabHg=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/datastore/-/datastore-3.2.2.tgz"
   "version" "3.2.2"
@@ -164,7 +164,7 @@
     "uuid" "^3.2.1"
     "zen-observable-ts" "0.8.19"
 
-"@aws-amplify/storage@^4.3.0", "@aws-amplify/storage@4.3.2":
+"@aws-amplify/storage@^4.3.1", "@aws-amplify/storage@4.3.2":
   "integrity" "sha512-n40CI4e7fDnqmJBqZJGDA8A3RMVy4QMXDWSe11qoFf95bv/8duLHa08ec3/dpKQmw2yGxaQj133Hn1SOpY8dDQ=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/storage/-/storage-4.3.2.tgz"
   "version" "4.3.2"
@@ -3475,15 +3475,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*":
-  "integrity" "sha512-ZHLmWMJ9jJ9PTiT58juykZpL7KjwJywFN3Rr2pTSkyQfydf/rk22yS7W8p5DaVUMQ2BQC7oYiU3FjbTM/mYrOA=="
-  "resolved" "https://registry.npmjs.org/@types/jest/-/jest-26.0.23.tgz"
-  "version" "26.0.23"
-  dependencies:
-    "jest-diff" "^26.0.0"
-    "pretty-format" "^26.0.0"
-
-"@types/jest@^26.0.24":
+"@types/jest@*", "@types/jest@^26.0.24":
   "integrity" "sha512-E/X5Vib8BWqZNRlDxj9vYXhsDwPYbPINqKF9BsnSoon4RQ0D9moEuLD8txgyypFLH7J4+Lho9Nr/c8H0Fi+17w=="
   "resolved" "https://registry.npmjs.org/@types/jest/-/jest-26.0.24.tgz"
   "version" "26.0.24"
@@ -3513,10 +3505,10 @@
   "resolved" "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.4.tgz"
   "version" "3.0.4"
 
-"@types/node@*", "@types/node@^16.4.3":
-  "integrity" "sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.4.3.tgz"
-  "version" "16.4.3"
+"@types/node@*", "@types/node@^16.4.6":
+  "integrity" "sha512-FKyawK3o5KL16AwbeFajen8G4K3mmqUrQsehn5wNKs8IzlKHE8TfnSmILXVMVziAEcnB23u1RCFU1NT6hSyr7Q=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.4.6.tgz"
+  "version" "16.4.6"
 
 "@types/normalize-package-data@^2.4.0":
   "integrity" "sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA=="
@@ -5488,17 +5480,17 @@
   "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.4.0.tgz"
   "version" "0.4.0"
 
-"cope-client-utils@^0.2.11":
-  "integrity" "sha512-pRSeryygbvfWU2870Bk2mIdroT5DAyvZMQc3iGImVee4GauY9nbKmLrSKIXIrcpJlcywdunSTbkuyvwArO4toA=="
-  "resolved" "https://registry.npmjs.org/cope-client-utils/-/cope-client-utils-0.2.11.tgz"
-  "version" "0.2.11"
+"cope-client-utils@^0.2.17":
+  "integrity" "sha512-9sjgS96qWyIeTBzZmnyYP+9LobZhwyFmKGntjwyD53xALHEuuFl8qNTcr9vxppgAMPS2ynFRQSbgQMbG8IJpQQ=="
+  "resolved" "https://registry.npmjs.org/cope-client-utils/-/cope-client-utils-0.2.17.tgz"
+  "version" "0.2.17"
   dependencies:
-    "@-0/browser" "^0.3.12"
-    "@aws-amplify/api" "^4.0.5"
-    "@aws-amplify/auth" "^4.1.1"
-    "@aws-amplify/core" "^4.1.3"
-    "@aws-amplify/datastore" "^3.2.0"
-    "@aws-amplify/storage" "^4.3.0"
+    "@-0/browser" "^0.3.17"
+    "@aws-amplify/api" "^4.0.6"
+    "@aws-amplify/auth" "^4.1.2"
+    "@aws-amplify/core" "^4.2.0"
+    "@aws-amplify/datastore" "^3.2.1"
+    "@aws-amplify/storage" "^4.3.1"
     "@thi.ng/associative" "^5.2.6"
     "@thi.ng/checks" "^2.9.8"
     "uuid" "^8.3.2"
