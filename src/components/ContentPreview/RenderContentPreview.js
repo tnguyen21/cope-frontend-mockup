@@ -12,6 +12,7 @@ const AssetTypesToComponentMap = {
     A_VIDEO          : RenderVideo,
     T_LEDE           : RenderMarkdown,
     T_BODY           : RenderMarkdown,
+    F_IMAGE          : RenderImage,
 }
 
 function RenderContentPreview(asset, props) {

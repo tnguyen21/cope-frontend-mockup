@@ -3,6 +3,7 @@ import { storeObject, API } from "cope-client-utils"
 import { AssetType } from "cope-client-utils/lib/graphql/API"
 import { genAssetChangeHandler } from "./handleValueChange"
 import RenderImage from "../ContentPreview/RenderImage"
+
 export const FileInput = ({ label, assetId, value, setValue }) => {
     const [ file, setFile ] = useState(null)
     const [ loading, setLoading ] = useState(false)
@@ -12,6 +13,7 @@ export const FileInput = ({ label, assetId, value, setValue }) => {
 
     const handleChange = genAssetChangeHandler({ assetId, value, setValue })
 
+    console.log({ file, size: file?.size }) // this will be valid right after file selection dialog is confirmed
     useEffect(
         () => {
             handleChange(content)
@@ -27,11 +29,11 @@ export const FileInput = ({ label, assetId, value, setValue }) => {
     }
     const submitObject = async e => {
         e.preventDefault()
-        if (file) {
+        if (file && file.size) {
             try {
                 setLoading(true)
                 await storeObject({
-                    fileForUpload: file,
+                    content: file,
                     name: name || label,
                     node_id,
                     // may deal with this automatically in the future (using file extension)
@@ -53,9 +55,11 @@ export const FileInput = ({ label, assetId, value, setValue }) => {
             {(!content && (
                 <>
                     <input type="file" onChange={handler} />
-                    <button style={{ cursor: "pointer" }} type="submit" onClick={submitObject}>
-                        { loading ? "loading..." : "UPLOAD" }
-                    </button>
+                    { loading ? <div><code>loading ...</code></div> : 
+                        <button style={{ cursor: "pointer" }} type="submit" onClick={submitObject}>
+                            UPLOAD
+                        </button>
+                    }
                 </>
             )) || <RenderImage content={content} name={name }/>}
         </form>

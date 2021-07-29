@@ -3505,10 +3505,10 @@
   "resolved" "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.4.tgz"
   "version" "3.0.4"
 
-"@types/node@*", "@types/node@^16.4.6":
-  "integrity" "sha512-FKyawK3o5KL16AwbeFajen8G4K3mmqUrQsehn5wNKs8IzlKHE8TfnSmILXVMVziAEcnB23u1RCFU1NT6hSyr7Q=="
-  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.4.6.tgz"
-  "version" "16.4.6"
+"@types/node@*", "@types/node@^16.4.7":
+  "integrity" "sha512-aDDY54sst8sx47CWT6QQqIZp45yURq4dic0+HCYfYNcY5Ejlb/CLmFnRLfy3wQuYafOeh3lB/DAKaqRKBtcZmA=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-16.4.7.tgz"
+  "version" "16.4.7"
 
 "@types/normalize-package-data@^2.4.0":
   "integrity" "sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA=="
@@ -5480,10 +5480,10 @@
   "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.4.0.tgz"
   "version" "0.4.0"
 
-"cope-client-utils@^0.2.18":
-  "integrity" "sha512-aw1yUOuMxKM+Xqd1S+REIJbr85Vtiofj01gzUbZonmL0YYhgYNqcfiGdCiv/eYBDmkvApA4AftYH4LpnaUymyA=="
-  "resolved" "https://registry.npmjs.org/cope-client-utils/-/cope-client-utils-0.2.18.tgz"
-  "version" "0.2.18"
+"cope-client-utils@^0.2.23":
+  "integrity" "sha512-UdHabZa0VWC4Y6NZeVOLSUn1xqzkLR8HqrWq0ID+N8uClN9LhC/cnJS+eZ3XJM1qDQH88Hy3iqtm5svUlYaVLw=="
+  "resolved" "https://registry.npmjs.org/cope-client-utils/-/cope-client-utils-0.2.23.tgz"
+  "version" "0.2.23"
   dependencies:
     "@-0/browser" "^0.3.17"
     "@aws-amplify/api" "^4.0.6"

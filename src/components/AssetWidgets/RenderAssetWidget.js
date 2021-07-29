@@ -24,6 +24,7 @@ const AssetTypesToComponentMap = {
     A_VIDEO          : VideoInput,
     T_LEDE           : MarkdownInput,
     T_BODY           : MarkdownInput,
+    F_IMAGE          : FileInput,
 }
 
 function RenderAssetWidget(asset, nodeData, setNodeData) {

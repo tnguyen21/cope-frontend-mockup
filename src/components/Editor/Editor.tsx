@@ -108,10 +108,9 @@ function Editor({ nodeId }: { nodeId?: string }) {
 
         const updated_assets = await Promise.all(
             nodeData.assets.items.map(async (_asset, idx) => {
-                console.log({ _asset })
                 console.time(`asset ${idx} update`)
                 const updated_asset = await asset
-                    .update({ ..._asset, index: idx })
+                    .update({ ..._asset })
                     .then(r => {
                         console.timeEnd(`asset ${idx} update`)
                         return r
@@ -162,6 +161,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                         open={deleteAssetDialogOpen}
                                         setOpen={setDeleteAssetDialogOpen}
                                         assetId={asset.id}
+                                        assetType={asset.type}
                                     />
                                 </Wrapper>
                             ))}

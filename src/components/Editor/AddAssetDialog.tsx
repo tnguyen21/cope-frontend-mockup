@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { asset } from "cope-client-utils"
+import { asset, API } from "cope-client-utils"
 import styled from "styled-components"
 import {
     Dialog,
@@ -51,7 +51,7 @@ function AddAssetDialog({ open, setOpen, nodeId, assets }) {
             <DialogContent dividers={true}>
                 <Wrapper>
                     <SelectInput
-                        itemsAndValues={ASSET_TYPES}
+                        itemsAndValues={API.AssetType}
                         inputLabel={"Asset Type"}
                         selectState={assetType}
                         setSelectState={setAssetType}

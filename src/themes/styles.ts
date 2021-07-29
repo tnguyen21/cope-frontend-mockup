@@ -24,8 +24,11 @@ const heading = {
 export const styles = {
     root: {
         fontFamily: fonts.body,
-        lineHeight: "1rem",
+        lineHeight: "2rem",
         //  fontWeight: font.body
+    },
+    p: {
+        lineHeight: "2rem",
     },
     //p: {
     //  lineHeight: [1.75, 2],
@@ -55,6 +58,7 @@ export const styles = {
     },
     h1: {
         ...heading,
+        padding: "1rem 0",
         //  fontSize: [6, 7],
         //  mt: 6
     },
@@ -87,7 +91,7 @@ export const styles = {
         //  mx: -2
     },
     code: {
-        padding: "1rem",
+        margin: "1rem",
         boxShadow: "inner",
         color: "dark",
         fontSize: [ 0, 1 ],
@@ -104,6 +108,7 @@ export const styles = {
         left: "50%",
     },
     blockquote: {
+        padding: "1rem 0",
         fontFamily: "mono",
         fontStyle: "italic",
         //  fontSize: [3, 4],
