@@ -13,7 +13,7 @@ export const FileInput = ({ label, assetId, value, setValue }) => {
 
     const handleChange = genAssetChangeHandler({ assetId, value, setValue })
 
-    console.log({ file, size: file?.size }) // this will be valid right after file selection dialog is confirmed
+    //console.log({ file, size: file?.size }) // this will be valid right after file selection dialog is confirmed
     useEffect(
         () => {
             handleChange(content)

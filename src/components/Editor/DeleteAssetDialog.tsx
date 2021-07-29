@@ -15,29 +15,27 @@ function DeleteAssetDialog({
     open,
     setOpen,
     assetId,
-    assetType,
 }: {
     open: string
     setOpen: any
     assetId?: string
-    assetType: AssetType
 }) {
     const handleClose = () => {
         setOpen(false)
     }
 
-    useEffect(() => {
-        const list = async () => {
-            const stored = await Storage.list("jpg", {
-                level: "protected",
-            })
-            console.log({ stored })
-            const deleted = await Storage.remove(
-                "jpg/c36a0c06-143d-4737-98ae-4f1b576625ab--sad robot.jpg",
-            )
-        }
-        list()
-    }, [])
+    //useEffect(() => {
+    //    const list = async () => {
+    //        const stored = await Storage.list("jpg", {
+    //            level: "protected",
+    //        })
+    //        console.log({ stored })
+    //        const deleted = await Storage.remove(
+    //            "jpg/c36a0c06-143d-4737-98ae-4f1b576625ab--sad robot.jpg",
+    //        )
+    //    }
+    //    list()
+    //}, [])
     // "https://cope-storage-bucket180042-dev.s3.us-east-1.amazonaws.com/protected/us-east-1:92a4c58a-36ff-44ca-8f04-ae3cf469c3ec/jpg/99b318a9-9902-4fcb-87a3-fce9c05b6f51--jimi.jpg"
     const deleteAsset = async (assetId?: string) => {
         const data = {

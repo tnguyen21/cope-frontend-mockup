@@ -161,7 +161,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                         open={deleteAssetDialogOpen}
                                         setOpen={setDeleteAssetDialogOpen}
                                         assetId={asset.id}
-                                        assetType={asset.type}
                                     />
                                 </Wrapper>
                             ))}
