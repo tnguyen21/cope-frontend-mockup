@@ -59,20 +59,21 @@ function Editor({ nodeId }: { nodeId?: string }) {
         () => {
             const fetchNodeData = async () => {
                 try {
-                    node.read({ id: nodeId }).then((res: any) => {
-                        // index field on assets determine "view order"
-                        const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
-                        setNodeData({
-                            ...res,
-                            assets: { ...res.assets, items: sortedItems },
+                    nodeId &&
+                        node.read({ id: nodeId }).then((res: any) => {
+                            // index field on assets determine "view order"
+                            const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
+                            setNodeData({
+                                ...res,
+                                assets: { ...res.assets, items: sortedItems },
+                            })
                         })
-                    })
                 } catch (error) {
                     console.error(error)
                 }
             }
             fetchNodeData()
-            console.log("Editor rerendered")
+            //console.log("Editor rerendered")
             // conditionally call this hook every time add asset dialog is opened
             // or closed (i.e. a user has added an asset) to force re-render
             // this is hacky!!
@@ -83,7 +84,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
         },
         [ nodeId, addAssetDialogOpen, deleteAssetDialogOpen ],
     )
-    console.log({ nodeData })
+    //console.log({ nodeData })
 
     const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
         setNodeData({ ...nodeData, status: event.target.value })
@@ -94,17 +95,29 @@ function Editor({ nodeId }: { nodeId?: string }) {
     }
 
     const sendNodeUpdate = async e => {
-        const updated_node = await node.update(nodeData).catch((error: any) => {
-            console.error(error)
-        })
-        console.log({ updated_node })
+        console.time("node update")
+        const updated_node = await node
+            .update(nodeData)
+            .then(r => {
+                console.timeEnd("node update")
+                return r
+            })
+            .catch((error: any) => {
+                console.error(error)
+            })
+
         const updated_assets = await Promise.all(
-            nodeData.assets.items.map(async _asset => {
-                const updated_asset = await asset
-                    .update(_asset)
-                    .catch((error: any) => console.error(error))
+            nodeData.assets.items.map(async (_asset, idx) => {
                 console.log({ _asset })
-                console.log({ updated_asset })
+                console.time(`asset ${idx} update`)
+                const updated_asset = await asset
+                    .update({ ..._asset, index: idx })
+                    .then(r => {
+                        console.timeEnd(`asset ${idx} update`)
+                        return r
+                    })
+                    .catch((error: any) => console.error(error))
+                return updated_asset
             }),
         )
         console.log({ updated_assets })
@@ -195,6 +208,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             open={addAssetDialogOpen}
                             setOpen={setAddAssetDialogOpen}
                             nodeId={nodeId}
+                            assets={nodeData?.assets}
                         />
                         <DeleteNodeDialog
                             open={deleteNodeDialogOpen}
@@ -209,10 +223,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     <Card>
                         <PreviewContent>
                             <PreviewHeading>Content Preview</PreviewHeading>
-                            {/* TODO: look into `remark.js` and `draft.js` APIs to
-                            be able to parse out content from editor state and
-                            convert to necessary HTML/Markdown to create content preview
-                        */}
                             {nodeData &&
                                 nodeData.assets.items
                                     .filter((asset: any) => asset.content !== "")
@@ -220,6 +230,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                         <Wrapper key={asset.id}>
                                             {RenderContentPreview(asset, {
                                                 content: asset.content,
+                                                name: asset.name,
                                             })}
                                         </Wrapper>
                                     ))}

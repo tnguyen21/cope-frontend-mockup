@@ -4,6 +4,7 @@ import { EditorState } from "draft-js"
 import { makeStyles, InputLabel } from "@material-ui/core"
 import { stateToMarkdown } from "draft-js-export-markdown"
 import { stateFromMarkdown } from "draft-js-import-markdown"
+import { genAssetChangeHandler } from "./handleValueChange"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 const useStyles = makeStyles({
@@ -42,6 +43,10 @@ const customContentStateConverter = contentState => {
     return newContentState
 }
 
+/**
+ * FIXME: this is currently rerendered on every action taken
+ * on the MarkdownInput component. useEffect might be redundant..
+ */
 function MarkdownInput({
     assetId,
     value,
@@ -54,49 +59,27 @@ function MarkdownInput({
     const classes = useStyles()
     const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
+
     useEffect(() => {
         // use an effect since value gets hydrated asynchronously
         // and we don't want to try and parse content until it exists
-        if (value) {
-            const editorAsset = value.assets.items.filter((item: any) => item.id === assetId)[0]
-            if (editorAsset.content) {
-                // convert image block types to atomic using custom content state converter
-                // https://stackoverflow.com/questions/59359445/not-able-to-display-image-in-editor
-                const contentState = customContentStateConverter(
-                    stateFromMarkdown(editorAsset.content)
-                )
-                //console.log({ contentState })
-                setEditorState(EditorState.createWithContent(contentState))
-            }
+        const editorAsset = value?.assets?.items.filter((item: any) => item.id === assetId)[0]
+        if (editorAsset.content) {
+            // convert image block types to atomic using custom content state converter
+            // https://stackoverflow.com/questions/59359445/not-able-to-display-image-in-editor
+            const contentState = customContentStateConverter(
+                stateFromMarkdown(editorAsset.content)
+            )
+            setEditorState(EditorState.createWithContent(contentState))
+            
         }
-    }, [assetId])
+    }, [assetId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleChange = genAssetChangeHandler({ assetId, value, setValue })
 
     const onEditorStateChange = (editorState: any) => {
         setEditorState(editorState)
-        handleValueChange()
-    }
-
-    const handleValueChange = () => {
-        let updatedAssetState = value.assets.items.filter((item: any) => item.id === assetId)[0]
-        const state = {
-            ...updatedAssetState,
-            content: stateToMarkdown(editorState.getCurrentContent()),
-        }
-        //console.log({ state })
-        updatedAssetState = state
-        const newValue = {
-            ...value,
-            assets: {
-                ...value.assets,
-                items: value.assets.items.map((item: any) => {
-                    if (item.id === assetId) {
-                        return updatedAssetState
-                    }
-                    return item
-                }),
-            },
-        }
-        setValue(newValue)
+        handleChange(stateToMarkdown(editorState.getCurrentContent()))
     }
 
     return (

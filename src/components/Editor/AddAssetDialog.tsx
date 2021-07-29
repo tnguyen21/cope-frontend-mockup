@@ -12,21 +12,11 @@ import {
 import { ASSET_TYPES } from "./utils"
 import { SelectInput } from "../AssetWidgets"
 
-const Wrapper = styled.div`
-    margin: 24px 8px;
-`
+const Wrapper = styled.div`margin: 24px 8px;`
 
-function AddAssetDialog({
-    open,
-    setOpen,
-    nodeId,
-}: {
-    open: boolean
-    setOpen: any
-    nodeId?: string
-}) {
-    const [assetType, setAssetType] = useState(ASSET_TYPES.A_IMAGE) // random default -- think of better way to set this
-    const [assetName, setAssetName] = useState("")
+function AddAssetDialog({ open, setOpen, nodeId, assets }) {
+    const [ assetType, setAssetType ] = useState(ASSET_TYPES.A_IMAGE) // random default -- think of better way to set this
+    const [ assetName, setAssetName ] = useState("")
 
     const handleClose = () => {
         setOpen(false)
@@ -42,6 +32,7 @@ function AddAssetDialog({
             type: assetType,
             node_id: nodeId,
             content: "",
+            index: assets?.items?.length,
         }
         asset.create(assetData).then(() => {
             handleClose()

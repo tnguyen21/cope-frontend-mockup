@@ -1,5 +1,6 @@
 import React from "react"
 import { TextField } from "@material-ui/core"
+import { genAssetChangeHandler } from "./handleValueChange"
 
 function TextInput({
     label,
@@ -12,23 +13,7 @@ function TextInput({
     value: any
     setValue: any
 }) {
-    const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let updatedAssetState = value.assets.items.filter((item: any) => item.id === assetId)[0]
-        updatedAssetState = { ...updatedAssetState, content: event.target.value }
-        const newValue = {
-            ...value,
-            assets: {
-                ...value.assets,
-                items: value.assets.items.map((item: any) => {
-                    if (item.id === assetId) {
-                        return updatedAssetState
-                    }
-                    return item
-                }),
-            },
-        }
-        setValue(newValue)
-    }
+    const handleChange = genAssetChangeHandler({ assetId, setValue, value})
 
     return (
         <>
@@ -36,7 +21,7 @@ function TextInput({
                 id="standard-basic"
                 label={label}
                 value={value.assets.items.filter((item: any) => item.id === assetId)[0].content}
-                onChange={handleValueChange}
+                onChange={e => handleChange(e.target.value)}
             />
         </>
     )

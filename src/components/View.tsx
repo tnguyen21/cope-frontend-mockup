@@ -12,11 +12,7 @@ export const View = () => {
     const [path, pathCursor] = useCursor([K.$$_PATH], "Route Path")
 
     useLayoutEffect(() => {
-        // re-render when loading state changes
-        //console.log("re-rendered Page:", { loading })
-        // cleanup
         return () => {
-            //log("cleaning up:", { loading, Page })
             loadingCursor.release()
             pathCursor.release()
             pageCursor.release()
@@ -24,8 +20,6 @@ export const View = () => {
     }, [loadingCursor, pathCursor, pageCursor, loading, path, Page])
 
     const store = $store$.deref()
-
-    //console.log({ store })
 
     const loader = (
         <div className="spinner_container">
