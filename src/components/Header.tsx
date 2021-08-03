@@ -46,7 +46,7 @@ export function Header() {
                 <nav>
                     <AppHeaderNavList>
                         <li>
-                            <AppHeaderLink to="/collections">Contents</AppHeaderLink>
+                            <AppHeaderLink href="/collections">Contents</AppHeaderLink>
                         </li>
                     </AppHeaderNavList>
                 </nav>

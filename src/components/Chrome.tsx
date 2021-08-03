@@ -13,10 +13,10 @@ export const Chrome = ({ children }) => {
                 <div style={{ minHeight: "100vh" }}>
                     <Header />
                     <ul>
-                        <Link to="page1">page1</Link>
-                        <Link to="page2">page2</Link>
-                        <Link to="page3">page3</Link>
-                        <Link to="admin/collections">collections</Link>
+                        <Link href="page1">page1</Link>
+                        <Link href="page2">page2</Link>
+                        <Link href="page3">page3</Link>
+                        <Link href="admin/collections">collections</Link>
                     </ul>
                     <div
                         style={{

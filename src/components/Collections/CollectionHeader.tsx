@@ -12,9 +12,7 @@ const CollectionHeaderCard = styled(Card)`
     margin: 8px 8px 32px;
 `
 
-const CollectionHeaderCardContent = styled.div`
-    padding: 16px 8px;
-`
+const CollectionHeaderCardContent = styled.div`padding: 16px 8px;`
 
 const SidebarCardHeading = styled.h1`
     display: inline-block;
@@ -23,7 +21,7 @@ const SidebarCardHeading = styled.h1`
 `
 // collection prop passed in from Collection.tsx
 function CollectionHeader({ collection }: { collection?: string }) {
-    const [userData, setUserData] = useState<any>()
+    const [ userData, setUserData ] = useState<any>()
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -51,10 +49,11 @@ function CollectionHeader({ collection }: { collection?: string }) {
             updatedAt: null,
         }
 
-        node.create(data)
+        node
+            .create(data)
             .then((res: any) => {
                 if (res.type in TEMPLATES) {
-                    TEMPLATES[res.type].map((template, i) => {
+                    TEMPLATES[res.type].forEach((template, i) => {
                         const assetData = {
                             name: template.name,
                             node_id: res.id,

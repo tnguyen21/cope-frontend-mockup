@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Auth from "@aws-amplify/auth"
+import { Auth } from "@aws-amplify/auth"
+import { API, GRAPHQL_AUTH_MODE } from "@aws-amplify/api"
+import { EquivMap } from "@thi.ng/associative"
 import styled from "styled-components"
 import { Grid, Card, Button, Select, InputLabel, MenuItem } from "@material-ui/core"
 import { node, asset } from "cope-client-utils"
@@ -12,17 +14,19 @@ import RenderContentPreview from "../ContentPreview/RenderContentPreview"
 import EdgesList from "./EdgesList"
 import AddEdgeDialog from "./AddEdgeDialog"
 import { RenderAssetWidget } from "../AssetWidgets"
+import { DropDownNodeTypes, DropDownNodeStatus } from "../DropDown"
+import { updateAsset, updateNode } from "../../graphql/mutations"
 import { TEMPLATES } from "../Collections/templates"
 
-const Wrapper = styled.div`
-    margin: 24px 8px;
-`
+const Wrapper = styled.div`margin: 24px 8px;`
 
 const StyledButton = styled(Button)`
     margin: 0px 8px;
 `
 
 const PreviewContent = styled.div`
+    list-style-position: inside;
+    list-style-type: circle;
     padding: 16px 8px;
 `
 
@@ -32,13 +36,13 @@ const PreviewHeading = styled.h2`
 `
 
 function Editor({ nodeId }: { nodeId?: string }) {
-    const [userData, setUserData] = useState<any>()
-    const [nodeData, setNodeData] = useState<any>()
-    const [addAssetDialogOpen, setAddAssetDialogOpen] = useState(false)
-    const [addEdgeDialogOpen, setAddEdgeDialogOpen] = useState(false)
-    const [deleteAssetDialogOpen, setDeleteAssetDialogOpen] = useState("")
-    const [deleteNodeDialogOpen, setDeleteNodeDialogOpen] = useState(false)
-    const [snackbarState, setSnackbarState] = useState({ open: false, message: "" })
+    const [ userData, setUserData ] = useState<any>()
+    const [ nodeData, setNodeData ] = useState<any>()
+    const [ addAssetDialogOpen, setAddAssetDialogOpen ] = useState(false)
+    const [ addEdgeDialogOpen, setAddEdgeDialogOpen ] = useState(false)
+    const [ deleteAssetDialogOpen, setDeleteAssetDialogOpen ] = useState("")
+    const [ deleteNodeDialogOpen, setDeleteNodeDialogOpen ] = useState(false)
+    const [ snackbarState, setSnackbarState ] = useState({ open: false, message: "" })
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -51,30 +55,36 @@ function Editor({ nodeId }: { nodeId?: string }) {
         fetchUserData()
     }, [])
 
-    useEffect(() => {
-        const fetchNodeData = async () => {
-            try {
-                node.read({ id: nodeId }).then((res: any) => {
-                    // index field on assets determine "view order"
-                    const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
-                    setNodeData({
-                        ...res,
-                        assets: { ...res.assets, items: sortedItems },
-                    })
-                })
-            } catch (error) {
-                console.error(error)
+    useEffect(
+        () => {
+            const fetchNodeData = async () => {
+                try {
+                    nodeId &&
+                        node.read({ id: nodeId }).then((res: any) => {
+                            // index field on assets determine "view order"
+                            const sortedItems = res.assets.items.sort((a, b) => a.index - b.index)
+                            setNodeData({
+                                ...res,
+                                assets: { ...res.assets, items: sortedItems },
+                            })
+                        })
+                } catch (error) {
+                    console.error(error)
+                }
             }
-        }
-        fetchNodeData()
-        // conditionally call this hook every time add asset dialog is opened
-        // or closed (i.e. a user has added an asset) to force re-render
-        // this is hacky!!
-        // if a user changes node type or status, then adds asset,
-        // then it will change back the draft and status back to what they are
-        // remotely. need to change functions that add asset/delete assets to
-        // change local nodeData object, then update remote accordingly
-    }, [nodeId, addAssetDialogOpen, deleteAssetDialogOpen])
+            fetchNodeData()
+            //console.log("Editor rerendered")
+            // conditionally call this hook every time add asset dialog is opened
+            // or closed (i.e. a user has added an asset) to force re-render
+            // this is hacky!!
+            // if a user changes node type or status, then adds asset,
+            // then it will change back the draft and status back to what they are
+            // remotely. need to change functions that add asset/delete assets to
+            // change local nodeData object, then update remote accordingly
+        },
+        [ nodeId, addAssetDialogOpen, deleteAssetDialogOpen ],
+    )
+    //console.log({ nodeData })
 
     const onStatusChange = (event: React.ChangeEvent<{ value: any }>) => {
         setNodeData({ ...nodeData, status: event.target.value })
@@ -84,13 +94,32 @@ function Editor({ nodeId }: { nodeId?: string }) {
         setNodeData({ ...nodeData, type: event.target.value })
     }
 
-    const updateNode = () => {
-        node.update(nodeData).catch((error: any) => {
-            console.error(error)
-        })
-        nodeData.assets.items.forEach(_asset => {
-            asset.update(_asset).catch((error: any) => console.error(error))
-        })
+    const sendNodeUpdate = async e => {
+        console.time("node update")
+        const updated_node = await node
+            .update(nodeData)
+            .then(r => {
+                console.timeEnd("node update")
+                return r
+            })
+            .catch((error: any) => {
+                console.error(error)
+            })
+
+        const updated_assets = await Promise.all(
+            nodeData.assets.items.map(async (_asset, idx) => {
+                console.time(`asset ${idx} update`)
+                const updated_asset = await asset
+                    .update({ ..._asset })
+                    .then(r => {
+                        console.timeEnd(`asset ${idx} update`)
+                        return r
+                    })
+                    .catch((error: any) => console.error(error))
+                return updated_asset
+            }),
+        )
+        console.log({ updated_assets })
         setSnackbarState({ open: true, message: "Node has been updated successfully" })
     }
 
@@ -106,38 +135,17 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     <Wrapper>
                         <Wrapper>
                             <InputLabel>Node Type</InputLabel>
-                            <Select
-                                value={nodeData ? nodeData.type : "H_AUTHOR"}
+                            <DropDownNodeTypes
                                 onChange={onNodeTypeChange}
-                            >
-                                <MenuItem value={NodeType.H_AUTHOR}>H_AUTHOR</MenuItem>
-                                <MenuItem value={NodeType.H_TEAM}>H_TEAM</MenuItem>
-                                <MenuItem value={NodeType.A_ARTICLE}>A_ARTICLE</MenuItem>
-                                <MenuItem value={NodeType.A_PAGE}>A_PAGE</MenuItem>
-                                <MenuItem value={NodeType.A_APPLICATION}>A_APPLICATION</MenuItem>
-                                <MenuItem value={NodeType.A_GEM}>A_GEM</MenuItem>
-                                <MenuItem value={NodeType.S_ACS}>S_ACS</MenuItem>
-                                <MenuItem value={NodeType.S_CBP}>S_CBP</MenuItem>
-                                <MenuItem value={NodeType.V_1990}>V_1990</MenuItem>
-                                <MenuItem value={NodeType.V_2000}>V_2000</MenuItem>
-                                <MenuItem value={NodeType.V_2010}>V_2010</MenuItem>
-                                <MenuItem value={NodeType.V_2020}>V_2020</MenuItem>
-                                <MenuItem value={NodeType.C_SERIES}>C_SERIES</MenuItem>
-                                <MenuItem value={NodeType.C_LIST}>C_LIST</MenuItem>
-                            </Select>
+                                defaultValue={nodeData ? nodeData.type : "H_AUTHOR"}
+                            />
                         </Wrapper>
                         <Wrapper>
                             <InputLabel>Status</InputLabel>
-                            <Select
-                                value={nodeData ? nodeData.status : "DRAFT"}
+                            <DropDownNodeStatus
                                 onChange={onStatusChange}
-                            >
-                                <MenuItem value={NodeStatus.DRAFT}>Draft</MenuItem>
-                                <MenuItem value={NodeStatus.REVIEWED}>Reviewed</MenuItem>
-                                <MenuItem value={NodeStatus.PUBLISHED}>Published</MenuItem>
-                                <MenuItem value={NodeStatus.EDITED}>Edited</MenuItem>
-                                <MenuItem value={NodeStatus.DELETED}>Deleted</MenuItem>
-                            </Select>
+                                defaultValue={nodeData ? nodeData.status : "DRAFT"}
+                            />
                         </Wrapper>
                         {nodeData &&
                             nodeData.assets.items.map((asset: any) => (
@@ -177,7 +185,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                         </Wrapper>
                         <Wrapper>
                             {nodeId && (
-                                <StyledButton variant="contained" onClick={updateNode}>
+                                <StyledButton variant="contained" onClick={sendNodeUpdate}>
                                     Update Node
                                 </StyledButton>
                             )}
@@ -199,6 +207,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                             open={addAssetDialogOpen}
                             setOpen={setAddAssetDialogOpen}
                             nodeId={nodeId}
+                            assets={nodeData?.assets}
                         />
                         <DeleteNodeDialog
                             open={deleteNodeDialogOpen}
@@ -213,10 +222,6 @@ function Editor({ nodeId }: { nodeId?: string }) {
                     <Card>
                         <PreviewContent>
                             <PreviewHeading>Content Preview</PreviewHeading>
-                            {/* TODO: look into `remark.js` and `draft.js` APIs to
-                            be able to parse out content from editor state and
-                            convert to necessary HTML/Markdown to create content preview
-                        */}
                             {nodeData &&
                                 nodeData.assets.items
                                     .filter((asset: any) => asset.content !== "")
@@ -224,6 +229,7 @@ function Editor({ nodeId }: { nodeId?: string }) {
                                         <Wrapper key={asset.id}>
                                             {RenderContentPreview(asset, {
                                                 content: asset.content,
+                                                name: asset.name,
                                             })}
                                         </Wrapper>
                                     ))}
