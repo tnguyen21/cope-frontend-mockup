@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { node, edge } from "cope-client-utils"
+import { node, edge, API } from "cope-client-utils"
 import styled from "styled-components"
 import {
     Dialog,
@@ -12,9 +12,7 @@ import {
 import { EDGE_TYPES } from "./utils"
 import { SelectInput } from "../AssetWidgets"
 
-const Wrapper = styled.div`
-    margin: 24px 8px;
-`
+const Wrapper = styled.div`margin: 24px 8px;`
 
 function AddEdgeDialog({
     open,
@@ -25,9 +23,9 @@ function AddEdgeDialog({
     setOpen: any
     nodeId?: string
 }) {
-    const [nodesList, setNodesList] = useState<any>({})
-    const [edgeType, setEdgeType] = useState(EDGE_TYPES.AUTHORED) // random default
-    const [toNodeId, setToNodeId] = useState("")
+    const [ nodesList, setNodesList ] = useState<any>({})
+    const [ edgeType, setEdgeType ] = useState(EDGE_TYPES.AUTHORED) // random default
+    const [ toNodeId, setToNodeId ] = useState("")
 
     useEffect(() => {
         const fetchNodes = async () => {
@@ -72,7 +70,7 @@ function AddEdgeDialog({
             <DialogContent dividers={true}>
                 <Wrapper>
                     <SelectInput
-                        itemsAndValues={EDGE_TYPES}
+                        itemsAndValues={API.EdgeType}
                         inputLabel={"Edge Type"}
                         selectState={edgeType}
                         setSelectState={setEdgeType}

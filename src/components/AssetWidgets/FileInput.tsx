@@ -1,47 +1,48 @@
 import React, { useEffect, useState } from "react"
 import { storeObject, API } from "cope-client-utils"
 import { AssetType } from "cope-client-utils/lib/graphql/API"
+import { genAssetChangeHandler } from "./handleValueChange"
+import RenderImage from "../ContentPreview/RenderImage"
 
-// read: https://dev.to/dabit3/graphql-tutorial-how-to-manage-image-file-uploads-downloads-with-aws-appsync-aws-amplify-hga
-// read: https://www.sufle.io/blog/aws-amplify-storage-part-3
-/*
+export const FileInput = ({ label, assetId, value, setValue }) => {
+    const [ file, setFile ] = useState(null)
+    const [ loading, setLoading ] = useState(false)
+    const { node_id, type, index, name, content } = value.assets.items.filter(
+        (item: any) => item.id === assetId,
+    )[0]
 
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::cope-storage-bucket180042-dev/protected/*"
-        }
-    ]
-}
+    const handleChange = genAssetChangeHandler({ assetId, value, setValue })
 
-*/
+    //console.log({ file, size: file?.size }) // this will be valid right after file selection dialog is confirmed
+    useEffect(
+        () => {
+            handleChange(content)
+        },
+        [ content ],// eslint-disable-line react-hooks/exhaustive-deps
+    )
 
-export const FileInput = () => {
-    const [file, setFile] = useState(null)
-    const [name, setName] = useState("a horse with no name")
-
-    const handleChange = e => {
+    const handler = e => {
         e.preventDefault()
-        const {
-            target: { value, files },
-        } = e
+        const { target: { value, files } } = e
         setFile(files[0] || value)
+        handleChange(content)
     }
     const submitObject = async e => {
         e.preventDefault()
-        if (file) {
+        if (file && file.size) {
             try {
+                setLoading(true)
                 await storeObject({
-                    fileForUpload: file,
-                    name,
-                    node_id: "testNode1",
+                    content: file,
+                    name: name || label,
+                    node_id,
                     // may deal with this automatically in the future (using file extension)
-                    type: API.AssetType.A_IMAGE,
-                    index: 1,
+                    type,
+                    index,
+                }).then(payload => {
+                    setLoading(false)
+                    console.log({ payload })
+                    handleChange(payload.content)
                 })
             } catch (error) {
                 console.warn({ error })
@@ -50,11 +51,17 @@ export const FileInput = () => {
     }
     return (
         <form>
-            <input type="file" onChange={handleChange} />
-            <input type="text" placeholder="asset name" onChange={e => setName(e.target.value)} />
-            <button type="submit" onClick={submitObject}>
-                upload
-            </button>
+            
+            {(!content && (
+                <>
+                    <input type="file" onChange={handler} />
+                    { loading ? <div><code>loading ...</code></div> : 
+                        <button style={{ cursor: "pointer" }} type="submit" onClick={submitObject}>
+                            UPLOAD
+                        </button>
+                    }
+                </>
+            )) || <RenderImage content={content} name={name }/>}
         </form>
     )
 }

@@ -27,12 +27,13 @@ const CollectionListCardType = styled.div`
 function CollectionList({ collection }: { collection?: string }) {
     const [nodesList, setNodesList] = useState<any[]>([])
 
-    const query = {
-        status: API.NodeStatus.DRAFT,
-        type: collection?.toUpperCase(),
-    }
 
     useEffect(() => {
+        const query = {
+            status: API.NodeStatus.DRAFT,
+            type: collection?.toUpperCase(),
+        }
+    
         const fetchNodes = async () => {
             node
                 //@ts-ignore
@@ -43,7 +44,7 @@ function CollectionList({ collection }: { collection?: string }) {
                 .catch((error: any) => console.error(error))
         }
         fetchNodes()
-    }, [])
+    }, [collection])
 
     return (
         <div>
@@ -52,7 +53,7 @@ function CollectionList({ collection }: { collection?: string }) {
                     <CollectionListCard>
                         <CollectionListCardContent>
                             <CollectionListCardHeading
-                                to={`admin/collections/edit?nodeId=${data.id}`}
+                                href={`admin/collections/edit?nodeId=${data.id}`}
                             >
                                 {data.id}
                             </CollectionListCardHeading>

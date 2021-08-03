@@ -16,9 +16,7 @@ const EdgesListCardHeading = styled(Card)`
     font-weight: 400;
 `
 
-const EdgesListCardContent = styled.div`
-    padding: 8px;
-`
+const EdgesListCardContent = styled.div`padding: 8px;`
 
 const EdgesListCardText = styled(Link)`
     margin: 0;
@@ -53,23 +51,26 @@ query getConnectedNodes($id: ID!) {
 `
 
 function EdgesList({ nodeId }: { nodeId: string }) {
-    const [linkedNodesList, setLinkedNodesList] = useState<any>([])
+    const [ linkedNodesList, setLinkedNodesList ] = useState<any>([])
 
-    useEffect(() => {
-        const crud = async () => {
-            CRUD({
-                query: getConnectedNodes,
-                variables: { id: nodeId },
-            })
-                .then(res => {
-                    setLinkedNodesList(res.data.getNode.edges.items)
+    useEffect(
+        () => {
+            const crud = async () => {
+                CRUD({
+                    query: getConnectedNodes,
+                    variables: { id: nodeId },
                 })
-                .catch(err => {
-                    console.error(err)
-                })
-        }
-        crud()
-    }, [])
+                    .then(res => {
+                        setLinkedNodesList(res.data.getNode.edges.items)
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            }
+            crud()
+        },
+        [ nodeId ],
+    )
 
     const deleteEdge = (edgeId: string) => {
         edge.delete({ id: edgeId }).catch((err: any) => console.error(err))
@@ -85,7 +86,7 @@ function EdgesList({ nodeId }: { nodeId: string }) {
                         <EdgesListCard>
                             <EdgesListCardContent>
                                 <EdgesListCardText
-                                    to={`admin/collections/edit?nodeId=${toNode.node_id}`}
+                                    href={`admin/collections/edit?nodeId=${toNode.node_id}`}
                                 >
                                     {toNode.node_id}
                                 </EdgesListCardText>

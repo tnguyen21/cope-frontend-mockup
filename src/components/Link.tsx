@@ -2,9 +2,9 @@ import React, { useContext } from "react"
 import { CTX } from "../context"
 import { NAV } from "../commands"
 
-export const Link = ({ to, children }) => {
+export const Link = ({ href, children }) => {
     const { run$ } = useContext(CTX)
-    const path = `/${to}`
+    const path = `/${href}`
     //log({ path })
     return (
         <a
