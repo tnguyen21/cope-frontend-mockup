@@ -12,7 +12,9 @@ import {
 import { EDGE_TYPES } from "./utils"
 import { SelectInput } from "../AssetWidgets"
 
-const Wrapper = styled.div`margin: 24px 8px;`
+const Wrapper = styled.div`
+    margin: 24px 8px;
+`
 
 function AddEdgeDialog({
     open,
@@ -23,15 +25,13 @@ function AddEdgeDialog({
     setOpen: any
     nodeId?: string
 }) {
-    const [ nodesList, setNodesList ] = useState<any>({})
-    const [ edgeType, setEdgeType ] = useState(EDGE_TYPES.AUTHORED) // random default
-    const [ toNodeId, setToNodeId ] = useState("")
+    const [nodesList, setNodesList] = useState<any>({})
+    const [edgeType, setEdgeType] = useState(EDGE_TYPES.AUTHORED) // random default
+    const [toNodeId, setToNodeId] = useState("")
 
     useEffect(() => {
         const fetchNodes = async () => {
-            node
-                //@ts-ignore
-                .list({})
+            node.list({})
                 .then((result: any) => {
                     const nodes = {}
                     result.forEach((node: any) => {

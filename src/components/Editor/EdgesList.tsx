@@ -16,7 +16,9 @@ const EdgesListCardHeading = styled(Card)`
     font-weight: 400;
 `
 
-const EdgesListCardContent = styled.div`padding: 8px;`
+const EdgesListCardContent = styled.div`
+    padding: 8px;
+`
 
 const EdgesListCardText = styled(Link)`
     margin: 0;
@@ -51,26 +53,21 @@ query getConnectedNodes($id: ID!) {
 `
 
 function EdgesList({ nodeId }: { nodeId: string }) {
-    const [ linkedNodesList, setLinkedNodesList ] = useState<any>([])
+    const [linkedNodesList, setLinkedNodesList] = useState<any>([])
 
-    useEffect(
-        () => {
-            const crud = async () => {
-                CRUD({
-                    query: getConnectedNodes,
-                    variables: { id: nodeId },
+    useEffect(() => {
+        const crud = async () => {
+            node.connections({ id: nodeId })
+                .then(res => {
+                    console.log("connections")
+                    setLinkedNodesList(res)
                 })
-                    .then(res => {
-                        setLinkedNodesList(res.data.getNode.edges.items)
-                    })
-                    .catch(err => {
-                        console.error(err)
-                    })
-            }
-            crud()
-        },
-        [ nodeId ],
-    )
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+        crud()
+    }, [nodeId])
 
     const deleteEdge = (edgeId: string) => {
         edge.delete({ id: edgeId }).catch((err: any) => console.error(err))
@@ -80,20 +77,18 @@ function EdgesList({ nodeId }: { nodeId: string }) {
         <div>
             <EdgesListCardHeading>Edges</EdgesListCardHeading>
             {linkedNodesList.map((edge, i) => {
-                const toNode = edge.edge.nodes.items.filter(n => n.id !== nodeId)[0]
+                const toNode = edge.node
                 return (
                     <div key={i}>
                         <EdgesListCard>
                             <EdgesListCardContent>
                                 <EdgesListCardText
-                                    href={`admin/collections/edit?nodeId=${toNode.node_id}`}
+                                    href={`admin/collections/edit?nodeId=${toNode.id}`}
                                 >
-                                    {toNode.node_id}
+                                    {toNode.id}
                                 </EdgesListCardText>
-                                <EdgesListCardType>{edge.edge.type}</EdgesListCardType>
-                                <Button onClick={() => deleteEdge(edge.edge.id)}>
-                                    Delete Edge
-                                </Button>
+                                <EdgesListCardType>{edge.type}</EdgesListCardType>
+                                <Button onClick={() => deleteEdge(edge.id)}>Delete Edge</Button>
                             </EdgesListCardContent>
                         </EdgesListCard>
                     </div>
