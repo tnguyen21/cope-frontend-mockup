@@ -9,7 +9,9 @@ const SidebarCard = styled(Card)`
     margin-top: 8px;
 `
 
-const SidebarCardContent = styled.div`padding: 8px;`
+const SidebarCardContent = styled.div`
+    padding: 16px;
+`
 
 const SidebarCardHeading = styled.h2`
     margin: 0;
@@ -23,7 +25,7 @@ const SidebarNavList = styled.ul`
     overflow: auto;
 `
 
-const SidebarNavLink = styled(Link)`
+const SidebarNavLink = styled.li`
     display: flex;
     font-size: 14px;
     font-weight: 500;
@@ -48,12 +50,12 @@ function Sidebar() {
                 <SidebarCardHeading>Collections</SidebarCardHeading>
                 <SidebarNavList>
                     {linksAndSlugs.map(type => (
-                        <li key={type.typeSlug}>
+                        <SidebarNavLink key={type.typeSlug}>
                             {/* to={`/collections/${type.typeSlug}` */}
-                            <SidebarNavLink href={`admin/collections?type=${type.typeSlug}`}>
+                            <Link href={`admin/collections?type=${type.typeSlug}`}>
                                 {type.typeName}
-                            </SidebarNavLink>
-                        </li>
+                            </Link>
+                        </SidebarNavLink>
                     ))}
                 </SidebarNavList>
             </SidebarCardContent>
