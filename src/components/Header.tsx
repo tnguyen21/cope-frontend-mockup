@@ -2,8 +2,8 @@ import React from "react"
 import styled from "styled-components"
 import { AmplifySignOut } from "@aws-amplify/ui-react"
 import { Link } from "./Link"
+
 const AppHeader = styled.header`
-    position: sticky;
     width: 100%;
     top: 0;
     box-shadow: 0px 1px 3px;
@@ -24,7 +24,7 @@ const AppHeaderNavList = styled.ul`
     list-style: none;
 `
 
-const AppHeaderLink = styled(Link)`
+const AppHeaderLink = styled.li`
   font-size: 1rem;
   display: inline-flex;
   padding: 16px 20px;
@@ -39,15 +39,26 @@ const AppHeaderLink = styled(Link)`
   }
 `
 
+const LinkStyles = {
+    fontSize: "1rem",
+    display: "inline-flex",
+    padding: "16px 20px",
+    alignItems: "center",
+    textDecoration: "none",
+}
+
 export function Header() {
     return (
         <AppHeader>
             <AppHeaderContent>
                 <nav>
                     <AppHeaderNavList>
-                        <li>
-                            <AppHeaderLink href="/collections">Contents</AppHeaderLink>
-                        </li>
+                        <AppHeaderLink>
+                            <Link href="#">Home</Link>
+                        </AppHeaderLink>
+                        <AppHeaderLink>
+                            <Link href="admin/collections">Collections</Link>
+                        </AppHeaderLink>
                     </AppHeaderNavList>
                 </nav>
                 <AmplifySignOut />
@@ -55,5 +66,3 @@ export function Header() {
         </AppHeader>
     )
 }
-
-//export default Header
