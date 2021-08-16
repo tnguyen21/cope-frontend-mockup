@@ -10,7 +10,7 @@ import { styles } from "../../themes"
 const MarkdownRendered = styled.div(styles)
 function RenderMarkdown({ content }: { content: string }) {
     //console.log({ content })
-    const parsed = unified().use(parse).use(remark2react).processSync(content).result
+    const parsed = unified().use(parse).use(remark2react, React).processSync(content).result
     return <MarkdownRendered>{parsed}</MarkdownRendered>
 }
 
